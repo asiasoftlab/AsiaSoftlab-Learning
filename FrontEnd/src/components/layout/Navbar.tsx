@@ -16,7 +16,7 @@ export function Navbar() {
         <Link href="/" className="mr-8 flex items-center space-x-2 shrink-0">
          
           <span className="hidden font-bold text-xl sm:inline-block text-slate-900">
-            AsiaSoftlab Learning
+            AsiaSoftlab
           </span>
         </Link>
         

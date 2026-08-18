@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { BookOpen, Map, Target, Award, PlayCircle, ShieldCheck, Clock, CheckCircle2, ArrowUpRight, Star } from "lucide-react";
+import { BookOpen, Map, Target, Award, PlayCircle, ShieldCheck, Clock, CheckCircle2, ArrowUpRight, Star, Globe, Mail } from "lucide-react";
 
 export default function Home() {
   return (
@@ -46,11 +46,12 @@ export default function Home() {
       <section className="py-20 bg-slate-50 border-t border-slate-100">
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-16">
+             <h3 className="text-emerald-500 font-semibold mb-2">Journey</h3>
             <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">How to begin our Jouney</h2>
+            <p className="mt-4 text-lg text-slate-600">lskdjf nwofknwo fneowjfb oeiwjfoi nqefoi wenoifnq;ef oiwnoif qnoiw</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {[
-             
               { num: "01", title: "Choose a Course", desc: "Browse our catalog of professional technical courses." },
               { num: "02", title: "Enroll & Start", desc: "Get instant access to structured video lessons and materials." },
               { num: "03", title: "Complete Lessons", desc: "Watch videos, download resources, and track your progress." },
@@ -66,23 +67,20 @@ export default function Home() {
         </div>
       </section>
 
-      
-
       {/* Featured Courses Section */}
       <section className="py-20 bg-slate-50">
         <div className="container mx-auto px-4 md:px-6">
-          <div className="mb-12 text-center md:text-left">
+          <div className="text-center mb-16">
+            <h3 className="text-emerald-500 font-semibold mb-2">Featured Courses</h3>
             <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Our Most Popular Classes</h2>
-            <p className="mt-4 text-lg text-slate-600">
-              Learn from structured, practical courses designed by AsiaSoftlab.
-            </p>
+            <p className="mt-4 text-lg text-slate-600">lskdjf nwofknwo fneowjfb oeiwjfoi nqefoi wenoifnq;ef oiwnoif qnoiw</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
                 category: "",
-                title: "Figma UI UX Design..",
+                title: "bfjwqbfjlql",
                 desc: "Use Figma to get a job in UI Design, User Interface, User Experience design.",
                 rating: "4.3",
                 reviews: "(16,325)",
@@ -94,7 +92,7 @@ export default function Home() {
               },
               {
                 category: "",
-                title: "Learn With Shoaib",
+                title: "bfvqklbvkl nef;kqnv",
                 desc: "Design Web Sites and Mobile Apps that Your Users Love and Return to Again.",
                 rating: "3.9",
                 reviews: "(832)",
@@ -106,7 +104,7 @@ export default function Home() {
               },
               {
                 category: "",
-                title: "Building User Interface..",
+                title: "lhfqhf hfhlf ohfnk hfipqb",
                 desc: "Learn how to apply User Experience (UX) principles to your website designs.",
                 rating: "4.2",
                 reviews: "(125)",
@@ -168,14 +166,27 @@ export default function Home() {
               </div>
             ))}
           </div>
+          <div className="mt-12 flex flex-col items-center gap-6">
+            <div className="flex items-center gap-2">
+              <div className="h-2 w-8 rounded-full bg-emerald-400"></div>
+              <div className="h-2 w-2 rounded-full bg-slate-200"></div>
+              <div className="h-2 w-2 rounded-full bg-slate-200"></div>
+            </div>
+            <Link href="/courses">
+              <Button variant="outline" className="border-slate-200 text-slate-700 hover:bg-slate-50 font-medium rounded-lg px-6 py-2 h-auto">
+                Explore All Courses
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 
       {/* Why Choose Us */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-slate-50">
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Why AsiaSoftlab Learning</h2>
+            <p className="mt-4 text-lg text-slate-600">lskdjf nwofknwo fneowjfb oeiwjfoi nqefoi wenoifnq;ef oiwnoif qnoiw</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="flex flex-col items-center text-center">
@@ -188,53 +199,64 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* Our Faculties */}
-      <section className="py-24 bg-slate-50 overflow-hidden">
-        <div className="container mx-auto px-4 md:px-6 mb-12">
-          <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl mb-4">Our Faculties</h2>
-          <p className="text-slate-600 text-lg max-w-2xl">Learn from industry veterans and recognized experts in Drone Technology, Surveying, and ROV systems.</p>
-        </div>
-        
-        {/* Premium Horizontal Scroll */}
-        <div className="flex overflow-x-auto gap-6 px-4 md:px-6 pb-12 snap-x snap-mandatory" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-          {/* spacer for alignment */}
-          <div className="w-4 shrink-0 md:w-[calc((100vw-1536px)/2)]"></div>
+      {/* Tutors Section */}
+      <section className="py-24 bg-slate-50">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="text-center mb-16">
+            <h3 className="text-emerald-500 font-semibold mb-2">Faculties</h3>
+            <h2 className="text-3xl font-bold text-slate-900 sm:text-4xl mb-4">Meet the Heroes</h2>
+            <p className="max-w-2xl mx-auto text-slate-500 text-sm md:text-base leading-relaxed">
+              On Weekend UX, instructors from all over the world instruct millions of students. <br className="hidden md:block" /> We offer the knowledge and abilities.
+            </p>
+          </div>
           
-          {[
-            { name: "Dr. Aris Thorne", position: "Lead Surveyor", expertIn: ["Drone Mapping", "LiDAR", "GIS"], color: "bg-slate-200" },
-            { name: "Elena Rostova", position: "Chief Drone Pilot", expertIn: ["Flight Dynamics", "Regulatory", "FPV"], color: "bg-slate-300" },
-            { name: "Marcus Chen", position: "ROV Specialist", expertIn: ["Underwater Robotics", "Sonar", "Maintenance"], color: "bg-slate-200" },
-            { name: "Sarah Jenkins", position: "Agriculture Tech Lead", expertIn: ["Crop Spraying", "NDVI Analysis"], color: "bg-slate-300" },
-            { name: "David Alaba", position: "Software Architect", expertIn: ["Pix4D", "AutoCAD", "Data Processing"], color: "bg-slate-200" }
-          ].map((faculty, i) => (
-            <div key={i} className="snap-center shrink-0 w-[300px] bg-white rounded-2xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 group hover:-translate-y-1 transition-transform duration-300 cursor-pointer">
-              <div className={`h-64 w-full ${faculty.color} relative overflow-hidden flex items-end justify-center`}>
-                {/* Image Placeholder */}
-                <div className="w-32 h-32 rounded-full bg-white/20 backdrop-blur-sm mb-8"></div>
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              </div>
-              <div className="p-6">
-                <h3 className="font-bold text-xl text-slate-900 mb-1">{faculty.name}</h3>
-                <p className="text-brand-600 font-medium text-sm mb-4">{faculty.position}</p>
-                <div>
-                  <div className="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-2">Expert In</div>
-                  <div className="flex flex-wrap gap-2">
-                    {faculty.expertIn.map((skill, j) => (
-                      <span key={j} className="px-2.5 py-1 bg-slate-50 text-slate-600 rounded-md text-xs font-medium border border-slate-100">{skill}</span>
-                    ))}
-                  </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              {
+                name: "Vishnu Rohit",
+                role: "Application Support Analyst",
+                desc: "Former co-founder of Opendoor. Early staff at Spotify and Clearbit.",
+                image: "/Home/hari-crop.jpeg"
+              },
+              {
+                name: "Adarsh",
+                role: "Director, Undergraduate\nAnalytics and Planning",
+                desc: "Lead engineering teams at Figma, Pitch, and Protocol Labs.",
+                image: "/Home/hari-crop.jpeg"
+              },
+              {
+                name: "Hrishikesh",
+                role: "Career Educator",
+                desc: "Former PM for Linear, Lambda School, and On Deck.",
+                image: "/Home/hari-crop.jpeg"
+              },
+              {
+                name: "Nishadh",
+                role: "Co-op & Internships Program\n& Operations Manager",
+                desc: "Former frontend dev for Linear, Coinbase, and Postscript.",
+                image: "/Home/hari-crop.jpeg"
+              }
+            ].map((tutor, i) => (
+              <div key={i} className="bg-slate-100/80 rounded-lg p-10 flex flex-col items-center text-center transition-transform hover:-translate-y-1 hover:shadow-sm">
+                <div className="w-35 h-35 rounded-full overflow-hidden mb-5 relative">
+                  <Image src={tutor.image} alt={tutor.name} fill sizes="(max-width: 768px) 140px, 140px" className="object-cover" />
+                </div>
+                <h4 className="font-semibold text-slate-900 text-md md:text-base mb-1">{tutor.name}</h4>
+                <p className="text-emerald-500 text-sm whitespace-pre-line leading-relaxed mb-4">{tutor.role}</p>
+                <p className="text-slate-500 text-sm leading-relaxed mb-6 flex-grow px-2">{tutor.desc}</p>
+                
+                <div className="flex items-center gap-4 text-slate-400 mt-auto">
+                  <TwitterIcon className="w-4 h-4 hover:text-emerald-500 cursor-pointer transition-colors" />
+                  <LinkedinIcon className="w-4 h-4 hover:text-emerald-500 cursor-pointer transition-colors" />
+                  <Mail className="w-4 h-4 hover:text-emerald-500 cursor-pointer transition-colors" />
                 </div>
               </div>
-            </div>
-          ))}
-          
-          <div className="w-4 shrink-0 md:w-[calc((100vw-1536px)/2)]"></div>
+            ))}
+          </div>
         </div>
       </section>
-
       {/* Our Success */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-slate-50">
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-20 max-w-2xl mx-auto">
             <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl mb-6">Our Success</h2>
@@ -258,9 +280,117 @@ export default function Home() {
           </div>
         </div>
       </section>
+      {/* Blog Section */}
+      <section className="py-24 bg-slate-50">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="text-center mb-16">
+            <h3 className="text-emerald-500 font-semibold mb-2">Blog & News</h3>
+            <h2 className="text-3xl font-bold text-slate-900 sm:text-4xl mb-4">Our recent blogs</h2>
+            <p className="max-w-2xl mx-auto text-slate-500 text-sm md:text-base leading-relaxed">
+              Stay updated with the latest news, industry insights, and educational resources from our expert instructors.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+            {/* Left Column - Small Posts */}
+            <div className="flex flex-col gap-8">
+              {/* Small Post 1 */}
+              <div className="flex flex-col sm:flex-row gap-6 group cursor-pointer">
+                <div className="w-full sm:w-2/5 aspect-[4/3] relative rounded-lg overflow-hidden shrink-0">
+                  <Image src="/Home/College.webp" alt="Blog" fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
+                </div>
+                <div className="flex flex-col justify-center flex-1">
+                  <p className="text-emerald-500 text-sm font-semibold mb-2">November 16, 2014</p>
+                  <h3 className="font-bold text-lg text-slate-900 mb-2 group-hover:text-brand-600 transition-colors">Three Pillars of User Delight</h3>
+                  <p className="text-slate-500 text-sm leading-relaxed mb-4 line-clamp-3">
+                    Delight can be experienced viscerally, behaviourally, and reflectively. A great design is ...
+                  </p>
+                  <div className="flex flex-wrap gap-2 mt-auto">
+                    <span className="px-3 py-1 bg-pink-50 text-pink-600 rounded-lg text-[12px] font-medium">Research</span>
+                    <span className="px-3 py-1 bg-blue-50 text-blue-500 rounded-lg text-[12px] font-medium">UI UX</span>
+                  </div>
+                </div>
+              </div>
 
-      
+              {/* Small Post 2 */}
+              <div className="flex flex-col sm:flex-row gap-6 group cursor-pointer">
+                <div className="w-full sm:w-2/5 aspect-[4/3] relative rounded-lg overflow-hidden shrink-0">
+                  <Image src="/Home/Health.webp" alt="Blog" fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
+                </div>
+                <div className="flex flex-col justify-center flex-1">
+                  <p className="text-emerald-500 text-sm font-semibold mb-2">September 24, 2017</p>
+                  <h3 className="font-bold text-lg text-slate-900 mb-2 group-hover:text-brand-600 transition-colors">UX Mapping Methods</h3>
+                  <p className="text-slate-500 text-sm leading-relaxed mb-4 line-clamp-3">
+                    Visual-design principles can be applied consistently throughout the process of creating a polished UX map...
+                  </p>
+                  <div className="flex flex-wrap gap-2 mt-auto">
+                    <span className="px-3 py-1 bg-pink-50 text-pink-600 rounded-lg text-[12px] font-medium">Research</span>
+                    <span className="px-3 py-1 bg-blue-50 text-blue-500 rounded-lg text-[12px] font-medium">UI Design</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column - Large Post */}
+            <div className="flex flex-col group cursor-pointer">
+              <div className="w-full aspect-[16/9] lg:aspect-auto lg:h-[260px] relative rounded-lg overflow-hidden mb-6">
+                <Image src="/Home/School.webp" alt="Blog" fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
+              </div>
+              <p className="text-emerald-500 text-sm font-semibold mb-3">March 13, 2014</p>
+              <h3 className="font-bold text-2xl text-slate-900 mb-3 group-hover:text-brand-600 transition-colors">Agile Development Projects and Usability</h3>
+              <p className="text-slate-500 text-sm leading-relaxed mb-6">
+                Agile methods aim to overcome usability barriers in traditional development, but post new threats to user experience quality.
+              </p>
+              <div className="flex flex-wrap gap-2 mt-auto">
+                <span className="px-3 py-1 bg-orange-50 text-orange-500 rounded-full text-[12px] font-medium">Programming</span>
+                <span className="px-3 py-1 bg-blue-50 text-blue-500 rounded-full text-[12px] font-medium">Research</span>
+                <span className="px-3 py-1 bg-pink-50 text-pink-600 rounded-full text-[12px] font-medium">Developments</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
     </div>
+  );
+}
+
+function LinkedinIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+      <rect width="4" height="12" x="2" y="9" />
+      <circle cx="4" cy="4" r="2" />
+    </svg>
+  );
+}
+
+function TwitterIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
+    </svg>
   );
 }
