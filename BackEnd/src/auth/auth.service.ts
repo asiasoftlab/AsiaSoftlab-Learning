@@ -67,18 +67,32 @@ export class AuthService {
         throw new UnauthorizedException(data.error?.message || 'Invalid credentials');
       }
 
+      // Create session cookie
+      // Set session expiration to 5 days.
+      const expiresIn = 60 * 60 * 24 * 5 * 1000;
+      const sessionCookie = await this.firebaseService.getAuth().createSessionCookie(data.idToken, { expiresIn });
+
       return {
         message: 'Login successful',
-        idToken: data.idToken,
+        sessionCookie,
         email: data.email,
         userId: data.localId,
-        expiresIn: data.expiresIn,
+        expiresIn,
       };
     } catch (error: any) {
       if (error instanceof UnauthorizedException || error instanceof BadRequestException) {
         throw error;
       }
       throw new UnauthorizedException('Authentication failed');
+    }
+  }
+
+  async logout(sessionCookie: string) {
+    try {
+      const decodedClaims = await this.firebaseService.getAuth().verifySessionCookie(sessionCookie);
+      await this.firebaseService.getAuth().revokeRefreshTokens(decodedClaims.sub);
+    } catch (error) {
+      // Ignore errors if token is already invalid
     }
   }
 }

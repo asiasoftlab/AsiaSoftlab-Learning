@@ -15,6 +15,8 @@ export class FirebaseService implements OnModuleInit {
       const projectId = this.configService.get<string>('FIREBASE_PROJECT_ID');
       const clientEmail = this.configService.get<string>('FIREBASE_CLIENT_EMAIL');
       const privateKey = this.configService.get<string>('FIREBASE_PRIVATE_KEY')?.replace(/\\n/g, '\n');
+      
+      this.logger.log(`projectId: ${!!projectId}, clientEmail: ${!!clientEmail}, privateKey: ${!!privateKey}`);
 
       if (projectId && clientEmail && privateKey) {
         initializeApp({

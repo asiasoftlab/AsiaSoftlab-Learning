@@ -1,14 +1,33 @@
 "use client";
 import * as React from 'react';
 import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/auth.store';
 import { Button } from '@/components/ui/button';
 import { Menu, X, BookOpen, GraduationCap, Search, ChevronDown } from 'lucide-react';
+import { api } from '@/lib/api';
 
 export function Navbar() {
+  const pathname = usePathname();
+  const router = useRouter();
   const { isAuthenticated, user, logout } = useAuthStore();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
   const [isExploreOpen, setIsExploreOpen] = React.useState(false);
+
+  const handleLogout = async () => {
+    try {
+      await api.post('/auth/logout');
+    } catch (e) {
+      console.error('Logout failed', e);
+    } finally {
+      logout();
+      router.push('/login');
+    }
+  };
+
+  if (pathname === '/login' || pathname === '/register') {
+    return null;
+  }
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-white backdrop-blur supports-[backdrop-filter]:bg-white/100">
@@ -72,7 +91,7 @@ export function Navbar() {
                 <Link href="/dashboard">
                   <Button variant="ghost">Dashboard</Button>
                 </Link>
-                <Button variant="outline" onClick={logout}>
+                <Button variant="outline" onClick={handleLogout}>
                   Logout
                 </Button>
               </>
@@ -114,7 +133,7 @@ export function Navbar() {
                 <Link href="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>
                   <Button variant="outline" className="w-full justify-start">Dashboard</Button>
                 </Link>
-                <Button variant="ghost" className="w-full justify-start" onClick={() => { logout(); setIsMobileMenuOpen(false); }}>
+                <Button variant="ghost" className="w-full justify-start" onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }}>
                   Logout
                 </Button>
               </div>

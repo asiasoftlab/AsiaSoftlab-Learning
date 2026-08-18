@@ -7,7 +7,7 @@ import { FirebaseStrategy } from './firebase.strategy';
 import { UsersModule } from '../users/users.module';
 
 @Module({
-  imports: [FirebaseModule, PassportModule.register({ defaultStrategy: 'bearer' }), forwardRef(() => UsersModule)],
+  imports: [FirebaseModule, PassportModule.register({ defaultStrategy: 'firebase' }), forwardRef(() => UsersModule)],
   providers: [AuthService, FirebaseStrategy],
   controllers: [AuthController],
   exports: [AuthService],
