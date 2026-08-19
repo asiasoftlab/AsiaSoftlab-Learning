@@ -44,4 +44,36 @@ export class UsersRepository {
       throw new InternalServerErrorException('Failed to retrieve user');
     }
   }
+
+  async findAll(): Promise<User[]> {
+    try {
+      const db = this.firebaseService.getFirestore();
+      const snapshot = await db.collection(this.collectionName).orderBy('createdAt', 'desc').get();
+      return snapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          email: data?.email,
+          displayName: data?.displayName,
+          role: data?.role,
+          createdAt: data?.createdAt?.toDate(),
+          updatedAt: data?.updatedAt?.toDate(),
+        } as User;
+      });
+    } catch (error) {
+      throw new InternalServerErrorException('Failed to retrieve users');
+    }
+  }
+
+  async updateRole(id: string, role: string): Promise<void> {
+    try {
+      const db = this.firebaseService.getFirestore();
+      await db.collection(this.collectionName).doc(id).update({
+        role,
+        updatedAt: new Date(),
+      });
+    } catch (error) {
+      throw new InternalServerErrorException('Failed to update user role');
+    }
+  }
 }

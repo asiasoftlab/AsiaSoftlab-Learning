@@ -2,11 +2,15 @@ import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@
 import { Reflector } from '@nestjs/core';
 import { UsersService } from '../../users/users.service';
 import { ROLES_KEY } from '../decorators/roles.decorator';
-import { AuthenticatedRequest } from './firebase-auth.guard';
+import { Request } from 'express';
+
+export interface AuthenticatedRequest extends Request {
+  user?: any;
+}
 
 @Injectable()
 export class RolesGuard implements CanActivate {
-  constructor(private reflector: Reflector, private usersService: UsersService) {}
+  constructor(private reflector: Reflector, private usersService: UsersService) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const requiredRoles = this.reflector.getAllAndOverride<string[]>(ROLES_KEY, [
@@ -26,7 +30,7 @@ export class RolesGuard implements CanActivate {
     }
 
     const userProfile = await this.usersService.findById(user.uid);
-    
+
     if (!userProfile) {
       throw new ForbiddenException('User profile not found');
     }

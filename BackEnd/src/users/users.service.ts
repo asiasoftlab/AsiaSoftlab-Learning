@@ -19,4 +19,12 @@ export class UsersService {
   async findById(id: string): Promise<User | null> {
     return this.usersRepository.findById(id);
   }
+
+  async findAll(): Promise<User[]> {
+    return this.usersRepository.findAll();
+  }
+
+  async updateRole(id: string, role: string): Promise<void> {
+    return this.usersRepository.updateRole(id, role);
+  }
 }

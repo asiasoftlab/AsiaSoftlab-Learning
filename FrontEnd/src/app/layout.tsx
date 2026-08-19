@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
+import { PublicLayout } from "@/components/layout/PublicLayout";
 import { AuthProvider } from "@/components/providers/AuthProvider";
 import { Toaster } from "react-hot-toast";
 
@@ -26,9 +25,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-slate-50">
         <Toaster position="top-center" />
         <AuthProvider>
-          <Navbar />
-          <main className="flex-1 flex flex-col">{children}</main>
-          <Footer />
+          <PublicLayout>{children}</PublicLayout>
         </AuthProvider>
       </body>
     </html>
