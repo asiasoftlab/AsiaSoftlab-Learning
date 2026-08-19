@@ -48,12 +48,12 @@ export default function AdminUsersPage() {
         <h2 className="text-2xl font-bold text-slate-800">User Management</h2>
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+      <div className="bg-white rounded-lg border border-slate-300 overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left text-slate-600">
             <thead className="text-xs text-slate-700 uppercase bg-slate-50 border-b border-slate-200">
               <tr>
-                <th className="px-6 py-4 font-semibold">Name / Email</th>
+                <th className="px-6 py-4 font-semibold">Name & Email</th>
                 <th className="px-6 py-4 font-semibold">Role</th>
                 <th className="px-6 py-4 font-semibold">Actions</th>
               </tr>
@@ -65,7 +65,7 @@ export default function AdminUsersPage() {
                     <div className="font-medium text-slate-900">{u.displayName || "No Name"}</div>
                     <div className="text-slate-500 text-xs mt-1">{u.email}</div>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-4 text-md">
                     <Badge variant={u.role === "admin" ? "default" : "secondary"}>
                       {u.role}
                     </Badge>
@@ -74,7 +74,7 @@ export default function AdminUsersPage() {
                     <select
                       value={u.role}
                       onChange={(e) => updateRole(u.id, e.target.value)}
-                      className="bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-lg focus:ring-brand-500 focus:border-brand-500 block p-2"
+                      className="bg-slate-50 border border-slate-200 text-slate-900 text-md rounded-lg focus:ring-brand-500 focus:border-brand-500 block p-2"
                     >
                       <option value="student">Student</option>
                       <option value="instructor">Instructor</option>

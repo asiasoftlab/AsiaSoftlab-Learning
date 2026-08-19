@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, UseInterceptors, UploadedFile, BadRequestException } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { CoursesService } from './courses.service';
 import { CreateCourseDto, UpdateCourseDto } from './dto/course.dto';
 import { FirebaseAuthGuard } from '../auth/firebase-auth.guard';
@@ -12,12 +13,30 @@ export class CoursesController {
   @Post()
   @UseGuards(FirebaseAuthGuard, RolesGuard)
   @Roles('admin', 'instructor')
-  create(@Body() createCourseDto: CreateCourseDto, @Req() req: any) {
-    // If instructorId is not provided, use the logged-in user's ID
-    if (!createCourseDto.instructorId) {
-      createCourseDto.instructorId = req.user.id || req.user.uid;
+  @UseInterceptors(FileInterceptor('thumbnail'))
+  async create(
+    @Body() body: any,
+    @UploadedFile() file: Express.Multer.File,
+    @Req() req: any
+  ) {
+    // Parse the multipart form data
+    const createCourseDto: CreateCourseDto = {
+      title: body.title,
+      description: body.description,
+      category: body.category,
+      level: body.level,
+      price: Number(body.price),
+      originalPrice: body.originalPrice ? Number(body.originalPrice) : undefined,
+      status: body.status,
+      instructorId: body.instructorId || (req.user?.id || req.user?.uid),
+      lessons: body.lessons ? JSON.parse(body.lessons) : [],
+    };
+
+    if (!file) {
+      throw new BadRequestException('Thumbnail image is required');
     }
-    return this.coursesService.create(createCourseDto);
+
+    return this.coursesService.createWithThumbnail(createCourseDto, file);
   }
 
   @Get()
@@ -33,7 +52,20 @@ export class CoursesController {
   @Patch(':id')
   @UseGuards(FirebaseAuthGuard, RolesGuard)
   @Roles('admin', 'instructor')
-  update(@Param('id') id: string, @Body() updateCourseDto: UpdateCourseDto) {
+  @UseInterceptors(FileInterceptor('thumbnail'))
+  async update(
+    @Param('id') id: string,
+    @Body() body: any,
+    @UploadedFile() file?: Express.Multer.File
+  ) {
+    const updateCourseDto: UpdateCourseDto = { ...body };
+    if (body.price) updateCourseDto.price = Number(body.price);
+    if (body.originalPrice) updateCourseDto.originalPrice = Number(body.originalPrice);
+    if (body.lessons) updateCourseDto.lessons = JSON.parse(body.lessons);
+
+    if (file) {
+      return this.coursesService.updateWithThumbnail(id, updateCourseDto, file);
+    }
     return this.coursesService.update(id, updateCourseDto);
   }
 
@@ -44,3 +76,4 @@ export class CoursesController {
     return this.coursesService.remove(id);
   }
 }
+

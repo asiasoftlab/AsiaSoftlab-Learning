@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { FirebaseService } from '../firebase/firebase.service';
-import { Course } from './entities/course.entity';
+import { Course, CourseLesson } from './entities/course.entity';
 
 @Injectable()
 export class CoursesRepository {
@@ -11,18 +11,26 @@ export class CoursesRepository {
   async create(course: Course): Promise<Course> {
     try {
       const db = this.firebaseService.getFirestore();
-      // Generate a new ID if one isn't provided
       const docRef = db.collection(this.collectionName).doc();
       const courseWithId = { ...course, id: docRef.id };
       
-      await docRef.set({
+      const payload = {
         ...courseWithId,
         createdAt: course.createdAt,
         updatedAt: course.updatedAt,
+      };
+
+      Object.keys(payload).forEach(key => {
+        if (payload[key as keyof typeof payload] === undefined) {
+          delete payload[key as keyof typeof payload];
+        }
       });
+
+      await docRef.set(payload);
       return courseWithId;
-    } catch (error) {
-      throw new InternalServerErrorException('Failed to create course in database');
+    } catch (error: any) {
+      console.error('FIREBASE CREATE ERROR:', error);
+      throw new InternalServerErrorException('Failed to create course in database: ' + error.message);
     }
   }
 
@@ -36,10 +44,19 @@ export class CoursesRepository {
           id: doc.id,
           title: data.title,
           description: data.description,
-          instructorId: data.instructorId,
+          category: data.category,
+          level: data.level,
           price: data.price,
-          imageUrl: data.imageUrl,
-          published: data.published,
+          originalPrice: data.originalPrice,
+          thumbnailUrl: data.thumbnailUrl,
+          thumbnailPublicId: data.thumbnailPublicId,
+          status: data.status,
+          totalDuration: data.totalDuration,
+          averageRating: data.averageRating || 0,
+          ratingCount: data.ratingCount || 0,
+          enrollmentCount: data.enrollmentCount || 0,
+          instructorId: data.instructorId,
+          lessons: data.lessons || [],
           createdAt: data.createdAt?.toDate(),
           updatedAt: data.updatedAt?.toDate(),
         } as Course;
@@ -63,10 +80,19 @@ export class CoursesRepository {
         id: doc.id,
         title: data?.title,
         description: data?.description,
-        instructorId: data?.instructorId,
+        category: data?.category,
+        level: data?.level,
         price: data?.price,
-        imageUrl: data?.imageUrl,
-        published: data?.published,
+        originalPrice: data?.originalPrice,
+        thumbnailUrl: data?.thumbnailUrl,
+        thumbnailPublicId: data?.thumbnailPublicId,
+        status: data?.status,
+        totalDuration: data?.totalDuration,
+        averageRating: data?.averageRating || 0,
+        ratingCount: data?.ratingCount || 0,
+        enrollmentCount: data?.enrollmentCount || 0,
+        instructorId: data?.instructorId,
+        lessons: data?.lessons || [],
         createdAt: data?.createdAt?.toDate(),
         updatedAt: data?.updatedAt?.toDate(),
       } as Course;
@@ -89,6 +115,13 @@ export class CoursesRepository {
         ...updateData,
         updatedAt: new Date(),
       };
+
+      // Remove undefined fields so Firestore doesn't error
+      Object.keys(updatePayload).forEach(key => {
+        if (updatePayload[key as keyof typeof updatePayload] === undefined) {
+          delete updatePayload[key as keyof typeof updatePayload];
+        }
+      });
 
       await docRef.update(updatePayload);
       

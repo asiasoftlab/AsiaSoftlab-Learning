@@ -1,16 +1,23 @@
 export class CreateCourseDto {
   title: string;
   description: string;
-  instructorId: string;
+  category: string;
+  level: string;
   price: number;
-  imageUrl?: string;
-  published: boolean;
+  originalPrice?: number;
+  instructorId?: string;
+  status: 'Draft' | 'Published' | 'Unpublished';
+  lessons: any[]; // will validate properly later or trust frontend for now
 }
 
 export class UpdateCourseDto {
   title?: string;
   description?: string;
+  category?: string;
+  level?: string;
   price?: number;
-  imageUrl?: string;
-  published?: boolean;
+  originalPrice?: number;
+  status?: 'Draft' | 'Published' | 'Unpublished';
+  lessons?: any[];
 }
+
