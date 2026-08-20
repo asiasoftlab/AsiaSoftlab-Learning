@@ -5,6 +5,7 @@ import { Clock, ArrowUpRight, Star, Loader2 } from "lucide-react";
 import { api } from "@/lib/api";
 import Link from "next/link";
 import Image from "next/image";
+import toast from "react-hot-toast";
 
 export default function CoursesPage() {
   const [courses, setCourses] = useState<any[]>([]);
@@ -22,6 +23,7 @@ export default function CoursesPage() {
       setCourses(published);
     } catch (error) {
       console.error("Failed to fetch courses:", error);
+      toast.error("Failed to load course catalog.");
     } finally {
       setLoading(false);
     }

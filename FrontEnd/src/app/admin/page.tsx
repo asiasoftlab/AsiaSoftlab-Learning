@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, BookOpen, GraduationCap, ShieldCheck, CheckCircle2, FileText, Loader2 } from "lucide-react";
 import { api } from "@/lib/api";
+import toast from "react-hot-toast";
 
 interface User {
   id: string;
@@ -33,6 +34,7 @@ export default function AdminDashboardPage() {
         setCourses(coursesRes.data);
       } catch (error) {
         console.error("Failed to fetch dashboard data:", error);
+        toast.error("Failed to load dashboard statistics.");
       } finally {
         setLoading(false);
       }

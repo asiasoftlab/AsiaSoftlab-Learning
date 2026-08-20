@@ -6,11 +6,12 @@ import { api } from "@/lib/api";
 import { Loader2, Plus, ArrowLeft, Trash2, GripVertical, Image as ImageIcon } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import toast from "react-hot-toast";
 
 export default function CreateCoursePage() {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
-  
+
   // Form State
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -19,7 +20,7 @@ export default function CreateCoursePage() {
   const [price, setPrice] = useState("");
   const [originalPrice, setOriginalPrice] = useState("");
   const [status, setStatus] = useState("Draft");
-  
+
   // Media State
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
@@ -69,13 +70,13 @@ export default function CreateCoursePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!thumbnailFile) {
-      alert("Please select a thumbnail image.");
+      toast.error("Please select a thumbnail image.");
       return;
     }
 
     try {
       setSaving(true);
-      
+
       // Process lessons
       const processedLessons = lessons.map(l => ({
         ...l,
@@ -96,11 +97,12 @@ export default function CreateCoursePage() {
       await api.post("/courses", formData, {
         headers: { "Content-Type": "multipart/form-data" }
       });
+      toast.success("Course created successfully!");
 
       router.push("/admin/courses");
     } catch (error) {
       console.error("Failed to create course", error);
-      alert("Failed to create course.");
+      toast.error("Failed to create course.");
     } finally {
       setSaving(false);
     }
@@ -119,14 +121,14 @@ export default function CreateCoursePage() {
       </div>
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-        
+
         {/* Left Column: Basic Info & Lessons */}
         <div className="xl:col-span-2 space-y-6">
-          
+
           {/* Basic Info Card */}
           <div className="bg-white rounded-lg border border-slate-200 p-6 shadow-sm space-y-4">
             <h3 className="font-semibold text-lg text-slate-800 border-b border-slate-100 pb-3">Basic Information</h3>
-            
+
             <div className="space-y-2">
               <label className="text-sm font-medium text-slate-700">Course Title</label>
               <input required value={title} onChange={(e) => setTitle(e.target.value)} type="text" className="w-full bg-white border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-brand-500 focus:border-brand-500 outline-none transition-all text-slate-900 cursor-pointer" placeholder="e.g. Full Stack Web Development" />
@@ -187,12 +189,12 @@ export default function CreateCoursePage() {
                         <Trash2 className="h-4 w-4" />
                       </button>
                     </div>
-                    
+
                     <div className="pl-8 pr-6 space-y-4">
                       <div className="flex items-center gap-2 text-sm font-semibold text-slate-700">
                         Lesson {index + 1}
                       </div>
-                      
+
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-1">
                           <label className="text-xs font-medium text-slate-600">Lesson Title</label>
@@ -219,7 +221,7 @@ export default function CreateCoursePage() {
 
         {/* Right Column: Pricing, Media, Publishing */}
         <div className="space-y-6">
-          
+
           <div className="bg-white rounded-lg border border-slate-200 p-6 shadow-sm space-y-4">
             <h3 className="font-semibold text-lg text-slate-800 border-b border-slate-100 pb-3">Course Media</h3>
             <div className="space-y-2">
@@ -249,7 +251,7 @@ export default function CreateCoursePage() {
 
           <div className="bg-white rounded-lg border border-slate-200 p-6 shadow-sm space-y-4">
             <h3 className="font-semibold text-lg text-slate-800 border-b border-slate-100 pb-3">Pricing & Status</h3>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-slate-700">Offer Price (₹)</label>

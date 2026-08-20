@@ -4,12 +4,16 @@ import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import { Loader2, Plus, Edit, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { ConfirmModal } from "@/components/ui/ConfirmModal";
 import Link from "next/link";
 import Image from "next/image";
+import toast from "react-hot-toast";
 
 export default function AdminCoursesPage() {
   const [courses, setCourses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [courseToDelete, setCourseToDelete] = useState<string | null>(null);
 
   useEffect(() => {
     fetchCourses();
@@ -21,19 +25,30 @@ export default function AdminCoursesPage() {
       setCourses(response.data);
     } catch (error) {
       console.error("Failed to fetch courses:", error);
+      toast.error("Failed to load courses.");
     } finally {
       setLoading(false);
     }
   };
 
-  const deleteCourse = async (id: string) => {
-    if (window.confirm("Are you sure you want to delete this course?")) {
-      try {
-        await api.delete(`/courses/${id}`);
-        fetchCourses();
-      } catch (error) {
-        console.error("Failed to delete course:", error);
-      }
+  const confirmDelete = (id: string) => {
+    setCourseToDelete(id);
+    setIsDeleteModalOpen(true);
+  };
+
+  const executeDelete = async () => {
+    if (!courseToDelete) return;
+    
+    try {
+      await api.delete(`/courses/${courseToDelete}`);
+      toast.success("Course deleted successfully");
+      fetchCourses();
+    } catch (error) {
+      console.error("Failed to delete course:", error);
+      toast.error("Failed to delete course");
+    } finally {
+      setIsDeleteModalOpen(false);
+      setCourseToDelete(null);
     }
   };
 
@@ -118,7 +133,7 @@ export default function AdminCoursesPage() {
                         <Link href={`/admin/courses/edit/${c.id}`} className="p-2 text-slate-400 hover:text-brand-600 hover:bg-brand-50 rounded-lg transition-colors">
                           <Edit className="h-4 w-4" />
                         </Link>
-                        <button onClick={() => deleteCourse(c.id)} className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                        <button onClick={() => confirmDelete(c.id)} className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
                           <Trash2 className="h-4 w-4" />
                         </button>
                       </div>
@@ -130,6 +145,14 @@ export default function AdminCoursesPage() {
           </table>
         </div>
       </div>
+
+      <ConfirmModal
+        isOpen={isDeleteModalOpen}
+        title="Delete Course"
+        description="Are you sure you want to delete this course? This action cannot be undone and will remove all associated lessons."
+        onConfirm={executeDelete}
+        onCancel={() => setIsDeleteModalOpen(false)}
+      />
     </div>
   );
 }

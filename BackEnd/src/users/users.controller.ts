@@ -1,4 +1,4 @@
-import { Controller, Get, Param, UseGuards, Patch, Body } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards, Patch, Body, Delete } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { FirebaseAuthGuard } from '../auth/firebase-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -25,5 +25,12 @@ export class UsersController {
   async updateRole(@Param('id') id: string, @Body('role') role: string) {
     await this.usersService.updateRole(id, role);
     return { success: true, message: 'Role updated successfully' };
+  }
+
+  @Delete(':id')
+  @Roles('admin')
+  async delete(@Param('id') id: string) {
+    await this.usersService.delete(id);
+    return { success: true, message: 'User deleted successfully' };
   }
 }

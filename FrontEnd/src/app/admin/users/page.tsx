@@ -5,10 +5,15 @@ import { api } from "@/lib/api";
 import { Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { User } from "@/store/auth.store";
+import { ConfirmModal } from "@/components/ui/ConfirmModal";
+import { Trash2 } from "lucide-react";
+import toast from "react-hot-toast";
 
 export default function AdminUsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState<string | null>(null);
 
   useEffect(() => {
     fetchUsers();
@@ -20,6 +25,7 @@ export default function AdminUsersPage() {
       setUsers(response.data);
     } catch (error) {
       console.error("Failed to fetch users:", error);
+      toast.error("Failed to load users");
     } finally {
       setLoading(false);
     }
@@ -28,9 +34,32 @@ export default function AdminUsersPage() {
   const updateRole = async (userId: string, newRole: string) => {
     try {
       await api.patch(`/users/${userId}/role`, { role: newRole });
+      toast.success("User role updated successfully");
       fetchUsers(); // Refresh the list
     } catch (error) {
       console.error("Failed to update role:", error);
+      toast.error("Failed to update user role");
+    }
+  };
+
+  const confirmDelete = (id: string) => {
+    setUserToDelete(id);
+    setIsDeleteModalOpen(true);
+  };
+
+  const executeDelete = async () => {
+    if (!userToDelete) return;
+    
+    try {
+      await api.delete(`/users/${userToDelete}`);
+      toast.success("User deleted successfully");
+      fetchUsers();
+    } catch (error) {
+      console.error("Failed to delete user:", error);
+      toast.error("Failed to delete user");
+    } finally {
+      setIsDeleteModalOpen(false);
+      setUserToDelete(null);
     }
   };
 
@@ -74,15 +103,24 @@ export default function AdminUsersPage() {
                     </Badge>
                   </td>
                   <td className="px-6 py-4">
-                    <select
-                      value={u.role}
-                      onChange={(e) => updateRole(u.id, e.target.value)}
-                      className="bg-slate-50 border border-slate-200 text-slate-900 text-md rounded-lg focus:ring-brand-500 focus:border-brand-500 block p-2"
-                    >
-                      <option value="student">Student</option>
-                      <option value="instructor">Instructor</option>
-                      <option value="admin">Admin</option>
-                    </select>
+                    <div className="flex items-center gap-3">
+                      <select
+                        value={u.role}
+                        onChange={(e) => updateRole(u.id, e.target.value)}
+                        className="bg-slate-50 border border-slate-200 text-slate-900 text-md rounded-lg focus:ring-brand-500 focus:border-brand-500 block p-2"
+                      >
+                        <option value="student">Student</option>
+                        <option value="instructor">Instructor</option>
+                        <option value="admin">Admin</option>
+                      </select>
+                      <button 
+                        onClick={() => confirmDelete(u.id)} 
+                        className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        title="Delete User"
+                      >
+                        <Trash2 className="h-5 w-5" />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -97,6 +135,14 @@ export default function AdminUsersPage() {
           </table>
         </div>
       </div>
+
+      <ConfirmModal
+        isOpen={isDeleteModalOpen}
+        title="Delete User"
+        description="Are you sure you want to delete this user? This will permanently remove their account from the system."
+        onConfirm={executeDelete}
+        onCancel={() => setIsDeleteModalOpen(false)}
+      />
     </div>
   );
 }

@@ -27,4 +27,8 @@ export class UsersService {
   async updateRole(id: string, role: string): Promise<void> {
     return this.usersRepository.updateRole(id, role);
   }
+
+  async delete(id: string): Promise<void> {
+    return this.usersRepository.delete(id);
+  }
 }

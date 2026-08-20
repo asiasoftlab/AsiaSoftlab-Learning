@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { api } from "@/lib/api";
 import { Loader2, PlayCircle, Clock, Users, Star, ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 export default function CourseDetailsPage() {
   const params = useParams();
@@ -29,6 +30,7 @@ export default function CourseDetailsPage() {
       }
     } catch (error) {
       console.error("Failed to fetch course details:", error);
+      toast.error("Failed to load course details.");
     } finally {
       setLoading(false);
     }

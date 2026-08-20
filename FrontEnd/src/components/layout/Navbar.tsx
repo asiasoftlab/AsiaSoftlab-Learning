@@ -6,6 +6,7 @@ import { useAuthStore } from '@/store/auth.store';
 import { Button } from '@/components/ui/button';
 import { Menu, X, BookOpen, GraduationCap, Search, ChevronDown } from 'lucide-react';
 import { api } from '@/lib/api';
+import toast from 'react-hot-toast';
 
 export function Navbar() {
   const pathname = usePathname();
@@ -17,8 +18,10 @@ export function Navbar() {
   const handleLogout = async () => {
     try {
       await api.post('/auth/logout');
+      toast.success('Logged out successfully');
     } catch (e) {
       console.error('Logout failed', e);
+      toast.error('Failed to log out');
     } finally {
       logout();
       router.push('/login');

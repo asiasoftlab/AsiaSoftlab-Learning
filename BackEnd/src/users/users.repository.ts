@@ -76,4 +76,18 @@ export class UsersRepository {
       throw new InternalServerErrorException('Failed to update user role');
     }
   }
+
+  async delete(id: string): Promise<void> {
+    try {
+      // 1. Delete from Firebase Auth
+      await this.firebaseService.getAuth().deleteUser(id);
+      
+      // 2. Delete from Firestore
+      const db = this.firebaseService.getFirestore();
+      await db.collection(this.collectionName).doc(id).delete();
+    } catch (error) {
+      console.error('Failed to delete user:', error);
+      throw new InternalServerErrorException('Failed to delete user');
+    }
+  }
 }
