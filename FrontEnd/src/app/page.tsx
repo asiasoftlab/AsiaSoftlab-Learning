@@ -4,8 +4,99 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { BookOpen, Map, Target, Award, PlayCircle, ShieldCheck, Clock, CheckCircle2, ArrowUpRight, Star, Globe, Mail } from "lucide-react";
+import { api } from "@/lib/api";
 
-export default function Home() {
+export default async function Home() {
+  let displayCourses = [
+    {
+      id: "",
+      category: "Design",
+      title: "UI/UX Design Masterclass",
+      desc: "Use Figma to get a job in UI Design, User Interface, User Experience design.",
+      rating: "4.3",
+      reviews: "(16,325)",
+      author: "Hrishikesh",
+      enrolled: "2026 Enrolled",
+      price: "₹12000",
+      duration: "08 hr 12 mins",
+      color: "bg-slate-900",
+      thumbnailUrl: null
+    },
+    {
+      id: "",
+      category: "Development",
+      title: "Fullstack Web Development",
+      desc: "Design Web Sites and Mobile Apps that Your Users Love and Return to Again.",
+      rating: "3.9",
+      reviews: "(832)",
+      author: "Joseph John",
+      enrolled: "2026 Enrolled",
+      price: "₹4000",
+      duration: "06 hr 3 mins",
+      color: "bg-slate-900",
+      thumbnailUrl: null
+    },
+    {
+      id: "",
+      category: "Design",
+      title: "Advanced UX Principles",
+      desc: "Learn how to apply User Experience (UX) principles to your website designs.",
+      rating: "4.2",
+      reviews: "(125)",
+      author: "Vishnu Rohit",
+      enrolled: "2026 Enrolled",
+      price: "₹1000",
+      duration: "01 hr 2 mins",
+      color: "bg-slate-900",
+      thumbnailUrl: null
+    }
+  ];
+
+  try {
+    const res = await api.get('/courses');
+    const published = res.data.filter((c: any) => c.status === "Published");
+    if (published.length > 0) {
+      // Get the latest up to 3 courses
+      const latest = published.slice(-3).reverse();
+      
+      displayCourses = latest.map((course: any) => {
+        let totalMins = 0;
+        if (course.lessons && Array.isArray(course.lessons)) {
+          course.lessons.forEach((l: any) => {
+            const match = l.duration?.match(/(\d+)/g);
+            if (match && match.length > 0) {
+              if (match.length >= 2) {
+                totalMins += (parseInt(match[0]) * 60) + parseInt(match[1]);
+              } else {
+                totalMins += parseInt(match[0]);
+              }
+            }
+          });
+        }
+        const durationStr = totalMins > 0 
+          ? `${Math.floor(totalMins / 60).toString().padStart(2, '0')} hr ${(totalMins % 60).toString().padStart(2, '0')} mins` 
+          : "TBD";
+
+        return {
+          id: course.id,
+          category: course.category || "Uncategorized",
+          title: course.title,
+          desc: course.description,
+          rating: (course.averageRating || 0).toFixed(1),
+          reviews: `(${course.ratingCount || 0})`,
+          author: course.instructorId || "Instructor",
+          enrolled: `${course.enrollmentCount || 0} Enrolled`,
+          price: `₹${course.price || 0}`,
+          duration: durationStr,
+          color: "bg-slate-900",
+          thumbnailUrl: course.thumbnailUrl || null
+        };
+      });
+    }
+  } catch (error) {
+    console.error("Failed to fetch latest courses for homepage:", error);
+  }
+
   return (
     <div className="flex flex-col w-full">
       {/* Hero Section */}
@@ -77,62 +168,28 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                category: "",
-                title: "bfjwqbfjlql",
-                desc: "Use Figma to get a job in UI Design, User Interface, User Experience design.",
-                rating: "4.3",
-                reviews: "(16,325)",
-                author: "Hrishikesh",
-                enrolled: "2026 Enrolled",
-                price: "₹12000",
-                duration: "08 hr 12 mins",
-                color: "bg-slate-900"
-              },
-              {
-                category: "",
-                title: "bfvqklbvkl nef;kqnv",
-                desc: "Design Web Sites and Mobile Apps that Your Users Love and Return to Again.",
-                rating: "3.9",
-                reviews: "(832)",
-                author: "Joseph John",
-                enrolled: "2026 Enrolled",
-                price: "₹4000",
-                duration: "06 hr 3 mins",
-                color: "bg-slate-900"
-              },
-              {
-                category: "",
-                title: "lhfqhf hfhlf ohfnk hfipqb",
-                desc: "Learn how to apply User Experience (UX) principles to your website designs.",
-                rating: "4.2",
-                reviews: "(125)",
-                author: "Vishnu Rohit",
-                enrolled: "2026 Enrolled",
-                price: "₹1000",
-                duration: "01 hr 2 mins",
-                color: "bg-slate-900"
-              }
-            ].map((course, idx) => (
-              <div key={idx} className="group bg-white rounded-2xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.1)] overflow-hidden p-4 flex flex-col hover:shadow-xl transition-all cursor-pointer">
+            {displayCourses.map((course, idx) => (
+              <Link href={`/courses/${course.id || ''}`} key={idx} className="group bg-white rounded-2xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.1)] overflow-hidden p-4 flex flex-col hover:shadow-xl transition-all cursor-pointer">
                 {/* Thumbnail */}
                 <div className={`relative h-48 w-full rounded-md ${course.color} mb-4 overflow-hidden`}>
-                  <div className="absolute top-3 right-3 bg-white px-2.5 py-1.5 rounded-md flex items-center gap-1.5 text-xs font-medium text-slate-700 shadow-sm">
+                  {course.thumbnailUrl && (
+                    <Image src={course.thumbnailUrl} alt={course.title} fill className="object-cover" />
+                  )}
+                  <div className="absolute top-3 right-3 bg-white px-2.5 py-1.5 rounded-md flex items-center gap-1.5 text-xs font-medium text-slate-700 shadow-sm z-10">
                     <Clock className="h-3.5 w-3.5 text-slate-500" />
                     {course.duration}
                   </div>
                 </div>
 
                 {/* Content */}
-                <div className="flex flex-col flex-1">
+                <div className="flex flex-col flex-1 relative z-20">
                   <div className="text-emerald-500 font-semibold text-xs mb-2">{course.category}</div>
 
                   <div className="flex items-start justify-between mb-2">
-                    <h3 className="font-bold text-lg text-slate-900 group-hover:text-brand-600 transition-colors">
+                    <h3 className="font-bold text-lg text-slate-900 group-hover:text-brand-600 transition-colors line-clamp-2">
                       {course.title}
                     </h3>
-                    <ArrowUpRight className="h-5 w-5 text-slate-400 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
+                    <ArrowUpRight className="h-5 w-5 text-slate-400 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform shrink-0" />
                   </div>
 
                   <p className="text-slate-500 text-sm mb-4 line-clamp-2 leading-relaxed">
@@ -143,7 +200,7 @@ export default function Home() {
                     <span className="text-emerald-500">{course.rating}</span>
                     <div className="flex items-center">
                       {[1, 2, 3, 4, 5].map((star) => (
-                        <Star key={star} className="h-3.5 w-3.5 text-amber-400 fill-amber-400" />
+                        <Star key={star} className={`h-3.5 w-3.5 ${star <= Math.floor(parseFloat(course.rating)) ? 'text-amber-400 fill-amber-400' : 'text-slate-200 fill-slate-200'}`} />
                       ))}
                     </div>
                     <span className="ml-1">{course.reviews}</span>
@@ -152,7 +209,9 @@ export default function Home() {
                   {/* Footer */}
                   <div className="flex items-center justify-between pt-4 border-t border-slate-100">
                     <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 rounded-full bg-slate-200" />
+                      <div className="h-10 w-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-500 font-bold text-xs uppercase overflow-hidden">
+                        {course.author.substring(0, 2)}
+                      </div>
                       <div>
                         <div className="font-semibold text-xs text-slate-900">{course.author}</div>
                         <div className="text-[11px] text-slate-500">{course.enrolled}</div>
@@ -163,7 +222,7 @@ export default function Home() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
           <div className="mt-12 flex flex-col items-center gap-6">

@@ -124,11 +124,31 @@ export default function CourseDetailsPage() {
             
             {/* Action Card */}
             <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-              <div className="text-3xl font-bold text-emerald-600 mb-6">₹{course.price || 0}</div>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="text-3xl font-bold text-emerald-600">₹{course.price || 0}</div>
+                {course.originalPrice && course.originalPrice > course.price && (
+                  <>
+                    <div className="text-lg text-slate-400 line-through">₹{course.originalPrice}</div>
+                    <div className="bg-rose-50 text-rose-800 text-xs font-bold px-2.5 py-1 rounded-md">
+                      {Math.round(((course.originalPrice - course.price) / course.originalPrice) * 100)}% OFF
+                    </div>
+                  </>
+                )}
+              </div>
               <button className="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all">
                 Enroll Now
               </button>
-              <p className="text-xs text-center text-slate-500 mt-4">30-Day Money-Back Guarantee</p>
+              
+              <div className="mt-6 space-y-3">
+                <p className="text-sm font-bold text-slate-800">This course includes:</p>
+                <ul className="text-sm text-slate-600 space-y-3">
+                  <li className="flex items-center gap-3"><PlayCircle className="h-4 w-4 text-brand-500" /> {course.totalDuration || "TBD"} on-demand video</li>
+                  <li className="flex items-center gap-3"><Clock className="h-4 w-4 text-brand-500" /> Full lifetime access</li>
+                  <li className="flex items-center gap-3"><Users className="h-4 w-4 text-brand-500" /> Community discussions</li>
+                </ul>
+              </div>
+
+              <p className="text-xs text-center text-slate-500 mt-6 pt-4 border-t border-slate-100">30-Day Money-Back Guarantee</p>
             </div>
 
             {/* Course Content / Curriculum */}

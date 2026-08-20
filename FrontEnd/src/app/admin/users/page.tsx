@@ -45,7 +45,10 @@ export default function AdminUsersPage() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-slate-800">User Management</h2>
+        <div>
+          <h2 className="text-2xl font-bold text-slate-800">User Management</h2>
+          <p className="text-sm text-slate-500 mt-1">View and manage users</p>
+        </div>
       </div>
 
       <div className="bg-white rounded-lg border border-slate-300 overflow-hidden shadow-sm">
