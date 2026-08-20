@@ -8,6 +8,7 @@ export class CreateCourseDto {
   instructorId?: string;
   status: 'Draft' | 'Published' | 'Unpublished';
   lessons: any[]; // will validate properly later or trust frontend for now
+  learningObjectives?: string[];
 }
 
 export class UpdateCourseDto {
@@ -19,5 +20,6 @@ export class UpdateCourseDto {
   originalPrice?: number;
   status?: 'Draft' | 'Published' | 'Unpublished';
   lessons?: any[];
+  learningObjectives?: string[];
 }
 

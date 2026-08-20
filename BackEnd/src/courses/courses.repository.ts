@@ -57,6 +57,7 @@ export class CoursesRepository {
           enrollmentCount: data.enrollmentCount || 0,
           instructorId: data.instructorId,
           lessons: data.lessons || [],
+          learningObjectives: data.learningObjectives || [],
           createdAt: data.createdAt?.toDate(),
           updatedAt: data.updatedAt?.toDate(),
         } as Course;
@@ -93,6 +94,7 @@ export class CoursesRepository {
         enrollmentCount: data?.enrollmentCount || 0,
         instructorId: data?.instructorId,
         lessons: data?.lessons || [],
+        learningObjectives: data?.learningObjectives || [],
         createdAt: data?.createdAt?.toDate(),
         updatedAt: data?.updatedAt?.toDate(),
       } as Course;

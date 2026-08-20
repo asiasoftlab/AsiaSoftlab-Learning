@@ -11,6 +11,6 @@ import { CloudinaryModule } from '../cloudinary/cloudinary.module';
   imports: [FirebaseModule, AuthModule, UsersModule, CloudinaryModule],
   controllers: [CoursesController],
   providers: [CoursesService, CoursesRepository],
-  exports: [CoursesService],
+  exports: [CoursesService, CoursesRepository],
 })
 export class CoursesModule {}

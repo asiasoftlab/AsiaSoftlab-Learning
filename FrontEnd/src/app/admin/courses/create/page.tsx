@@ -20,6 +20,7 @@ export default function CreateCoursePage() {
   const [price, setPrice] = useState("");
   const [originalPrice, setOriginalPrice] = useState("");
   const [status, setStatus] = useState("Draft");
+  const [learningObjectives, setLearningObjectives] = useState<string[]>([""]);
 
   // Media State
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
@@ -61,6 +62,18 @@ export default function CreateCoursePage() {
     setLessons(newLessons.map((l, i) => ({ ...l, order: i + 1 })));
   };
 
+  const addObjective = () => setLearningObjectives([...learningObjectives, ""]);
+  
+  const updateObjective = (index: number, value: string) => {
+    const newObjs = [...learningObjectives];
+    newObjs[index] = value;
+    setLearningObjectives(newObjs);
+  };
+
+  const removeObjective = (index: number) => {
+    setLearningObjectives(learningObjectives.filter((_, i) => i !== index));
+  };
+
   const extractYoutubeId = (url: string) => {
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
     const match = url.match(regExp);
@@ -92,6 +105,7 @@ export default function CreateCoursePage() {
       if (originalPrice) formData.append("originalPrice", originalPrice);
       formData.append("status", status);
       formData.append("lessons", JSON.stringify(processedLessons));
+      formData.append("learningObjectives", JSON.stringify(learningObjectives.filter(obj => obj.trim() !== "")));
       formData.append("thumbnail", thumbnailFile);
 
       await api.post("/courses", formData, {
@@ -137,6 +151,31 @@ export default function CreateCoursePage() {
             <div className="space-y-2">
               <label className="text-sm font-medium text-slate-700">Course Description</label>
               <textarea required value={description} onChange={(e) => setDescription(e.target.value)} rows={4} className="w-full bg-white border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-brand-500 focus:border-brand-500 outline-none transition-all text-slate-900 cursor-pointer" placeholder="Write a detailed description..." />
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-medium text-slate-700">What You'll Learn (Learning Objectives)</label>
+                <button type="button" onClick={addObjective} className="text-xs font-medium text-brand-600 hover:text-brand-700 flex items-center gap-1 cursor-pointer">
+                  <Plus className="h-3 w-3" /> Add Objective
+                </button>
+              </div>
+              <div className="space-y-3">
+                {learningObjectives.map((obj, index) => (
+                  <div key={index} className="flex items-center gap-2">
+                    <input 
+                      value={obj} 
+                      onChange={(e) => updateObjective(index, e.target.value)} 
+                      type="text" 
+                      className="flex-1 bg-white border border-slate-300 rounded p-2 text-sm focus:ring-brand-500 focus:border-brand-500 outline-none transition-all text-slate-900" 
+                      placeholder={`Objective ${index + 1}`} 
+                    />
+                    <button type="button" onClick={() => removeObjective(index)} className="p-2 text-slate-400 hover:text-red-500 transition-colors">
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -131,6 +131,12 @@ export default function LoginPage() {
             >
               {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Login"}
             </button>
+
+            <div className="text-center mt-4">
+              <Link href="/" className="text-sm font-medium text-slate-500 hover:text-brand-500 transition-colors">
+                Continue as Guest
+              </Link>
+            </div>
           </form>
         </div>
 

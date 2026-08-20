@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { CoursesModule } from './courses/courses.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { AiModule } from './ai/ai.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
     UsersModule,
     CoursesModule,
     CloudinaryModule,
+    AiModule,
   ],
   controllers: [AppController],
   providers: [AppService],

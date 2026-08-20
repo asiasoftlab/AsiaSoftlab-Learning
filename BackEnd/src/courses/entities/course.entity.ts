@@ -25,6 +25,7 @@ export class Course {
   enrollmentCount: number;
   instructorId: string;
   lessons: CourseLesson[];
+  learningObjectives?: string[];
   createdAt: Date;
   updatedAt: Date;
 }
