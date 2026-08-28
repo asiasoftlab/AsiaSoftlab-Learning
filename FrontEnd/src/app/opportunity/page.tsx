@@ -94,7 +94,7 @@ export default function OpportunitiesPage() {
                     </Link>
                     <button 
                       onClick={() => handleApply(opp.applyLink)}
-                      className="block w-full text-center bg-white border-2 border-brand-500 text-brand-600 hover:bg-brand-50 font-semibold py-2.5 rounded-lg transition-colors"
+                      className="block w-full text-center bg-white border-2 border-brand-500 text-brand-600 hover:bg-brand-50 font-semibold py-2.5 rounded-lg transition-colors cursor-pointer"
                     >
                       {isAuthenticated ? "Apply Now" : "Login to Apply"}
                     </button>
