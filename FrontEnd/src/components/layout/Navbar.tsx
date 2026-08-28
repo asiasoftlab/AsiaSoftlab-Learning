@@ -1,6 +1,7 @@
 "use client";
 import * as React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/auth.store';
 import { Button } from '@/components/ui/button';
@@ -35,11 +36,15 @@ export function Navbar() {
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-white backdrop-blur supports-[backdrop-filter]:bg-white/100">
       <div className="container mx-auto flex h-24 items-center px-4 md:px-6">
-        <Link href="/" className="mr-8 flex items-center space-x-2 shrink-0">
-         
-          <span className="hidden font-bold text-xl sm:inline-block text-slate-900">
-            AsiaSoftlab
-          </span>
+        <Link href="/" className="mr-8 flex items-center space-x-2 shrink-0 py-2">
+          <Image 
+            src="/Home/ASVA_logo.png" 
+            alt="Asia Softlab Virtual Academy" 
+            width={280} 
+            height={100} 
+            style={{ width: "auto", height: "100px" }}
+            className="object-contain"
+          />
         </Link>
         
         {/* Search Bar */}

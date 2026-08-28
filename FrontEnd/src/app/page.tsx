@@ -164,7 +164,7 @@ export default async function Home() {
           <div className="text-center mb-16">
             <h3 className="text-emerald-500 font-semibold mb-2">Featured Courses</h3>
             <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Our Most Popular Classes</h2>
-            <p className="mt-4 text-lg text-slate-600">lskdjf nwofknwo fneowjfb oeiwjfoi nqefoi wenoifnq;ef oiwnoif qnoiw</p>
+            <p className="mt-4 text-lg text-slate-600">Explore our top-rated courses and begin your professional training journey today.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -173,7 +173,7 @@ export default async function Home() {
                 {/* Thumbnail */}
                 <div className={`relative h-48 w-full rounded-md ${course.color} mb-4 overflow-hidden`}>
                   {course.thumbnailUrl && (
-                    <Image src={course.thumbnailUrl} alt={course.title} fill className="object-cover" />
+                    <Image src={course.thumbnailUrl} alt={course.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover" />
                   )}
                   <div className="absolute top-3 right-3 bg-white px-2.5 py-1.5 rounded-md flex items-center gap-1.5 text-xs font-medium text-slate-700 shadow-sm z-10">
                     <Clock className="h-3.5 w-3.5 text-slate-500" />
@@ -244,7 +244,7 @@ export default async function Home() {
       <section className="py-20 bg-slate-50">
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Why AsiaSoftlab Learning</h2>
+            <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Why Asia Softlab Virtual Academy</h2>
             <p className="mt-4 text-lg text-slate-600">lskdjf nwofknwo fneowjfb oeiwjfoi nqefoi wenoifnq;ef oiwnoif qnoiw</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">

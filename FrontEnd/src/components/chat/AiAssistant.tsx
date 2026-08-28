@@ -77,19 +77,19 @@ export default function AiAssistant({ courseId, activeLessonId }: AiAssistantPro
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 h-14 w-14 bg-brand-600 hover:bg-brand-700 text-white rounded-full shadow-2xl flex items-center justify-center transition-transform hover:scale-110 z-50 cursor-pointer"
+          className="fixed bottom-6 right-6 h-18 w-18 bg-brand-600 hover:bg-brand-700 text-white rounded-full shadow-xl flex items-center justify-center transition-transform hover:scale-110 z-50 cursor-pointer overflow-hidden p-0"
         >
-          <MessageSquare className="h-6 w-6" />
+          <img src="/Courses/AI.webp" alt="AI Assistant" className="h-full w-full object-cover" />
         </button>
       )}
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-6 right-6 w-80 md:w-96 bg-white rounded-2xl shadow-2xl border border-slate-200 flex flex-col z-50 overflow-hidden animate-in slide-in-from-bottom-5">
+        <div className="fixed bottom-6 right-6 w-80 md:w-96 bg-white rounded-xl shadow-2xl border border-slate-200 flex flex-col z-50 overflow-hidden animate-in slide-in-from-bottom-5">
           {/* Header */}
           <div className="bg-brand-600 p-4 flex items-center justify-between text-white shrink-0">
             <div className="flex items-center gap-2">
-              <Bot className="h-5 w-5" />
+              <img src="/Courses/AI.webp" alt="AI" className="h-9 w-9 rounded-full object-cover" />
               <h3 className="font-bold">AI Course Assistant</h3>
             </div>
             <button onClick={() => setIsOpen(false)} className="text-white/80 hover:text-white hover:bg-white/20 p-1 rounded transition-colors cursor-pointer">
@@ -102,12 +102,10 @@ export default function AiAssistant({ courseId, activeLessonId }: AiAssistantPro
             {messages.map((msg, idx) => (
               <div key={idx} className={`flex gap-2 ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                 {msg.role === "model" && (
-                  <div className="h-8 w-8 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center shrink-0">
-                    <Bot className="h-4 w-4" />
-                  </div>
+                  <img src="/Courses/AI.webp" alt="AI" className="h-8 w-8 rounded-full object-cover shrink-0" />
                 )}
                 <div 
-                  className={`p-3 rounded-2xl max-w-[80%] text-sm prose prose-sm ${
+                  className={`p-3 rounded-xl max-w-[80%] text-sm prose prose-sm ${
                     msg.role === "user" 
                     ? "bg-brand-600 text-white rounded-br-sm prose-invert" 
                     : "bg-white border border-slate-200 text-slate-700 rounded-bl-sm"
@@ -128,10 +126,8 @@ export default function AiAssistant({ courseId, activeLessonId }: AiAssistantPro
             ))}
             {isLoading && (
               <div className="flex gap-2 justify-start">
-                <div className="h-8 w-8 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center shrink-0">
-                  <Bot className="h-4 w-4" />
-                </div>
-                <div className="bg-white border border-slate-200 p-3 rounded-2xl rounded-bl-sm flex items-center gap-2">
+                <img src="/Courses/AI.webp" alt="AI" className="h-8 w-8 rounded-full object-cover shrink-0" />
+                <div className="bg-white border border-slate-200 p-3 rounded-xl rounded-bl-sm flex items-center gap-2">
                   <Loader2 className="h-4 w-4 animate-spin text-brand-600" />
                   <span className="text-xs text-slate-500 font-medium">Thinking...</span>
                 </div>
@@ -142,7 +138,7 @@ export default function AiAssistant({ courseId, activeLessonId }: AiAssistantPro
 
           {/* Input Area */}
           <div className="p-3 bg-white border-t border-slate-100 shrink-0">
-            <div className="flex items-end gap-2 bg-slate-50 border border-slate-200 rounded-xl p-1 pr-2">
+            <div className="flex items-end gap-2 bg-slate-50 border border-slate-200 rounded-lg p-1 pr-2">
               <textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}

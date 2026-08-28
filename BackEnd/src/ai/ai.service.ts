@@ -35,7 +35,7 @@ export class AiService {
 
       // Construct system prompt
       const systemInstruction = `
-      You are an expert, helpful, and encouraging AI Doubt Solving Assistant for a learning platform called AsiaSoftlab Learning.
+      You are an expert, helpful, and encouraging AI Doubt Solving Assistant for a learning platform called Asia Softlab Virtual Academy.
       The user is taking a course named "${course.title}".
       Course Description: ${course.description}
       Level: ${course.level}

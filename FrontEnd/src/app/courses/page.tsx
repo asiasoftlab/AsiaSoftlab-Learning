@@ -78,7 +78,7 @@ export default function CoursesPage() {
                   {/* Thumbnail with slight scale animation on hover */}
                   <div className={`relative h-48 w-full rounded-xl bg-slate-100 mb-5 overflow-hidden`}>
                     {course.thumbnailUrl ? (
-                      <Image src={course.thumbnailUrl} alt={course.title} fill className="object-cover group-hover:scale-105 transition-transform duration-700" />
+                      <Image src={course.thumbnailUrl} alt={course.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover group-hover:scale-105 transition-transform duration-700" />
                     ) : (
                       <div className="w-full h-full bg-slate-800 flex items-center justify-center text-slate-500">No Image</div>
                     )}

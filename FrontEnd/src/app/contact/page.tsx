@@ -102,7 +102,7 @@ export default function ContactPage() {
           <div className="flex flex-col h-full space-y-6">
             <div className="space-y-4">
               <div className="text-slate-700 text-sm leading-relaxed font-medium">
-                <p className="font-bold text-slate-900 mb-1">AsiaSoftlab Learning</p>
+                <p className="font-bold text-slate-900 mb-1">Asia Softlab Virtual Academy</p>
                 <p>B 37/3 Ground Floor Double</p>
                 <p>StoryRamesh Nagar, Near Raja Garden</p>
                 <p>Chowk, Delhi: 110015</p>

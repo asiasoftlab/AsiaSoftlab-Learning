@@ -54,7 +54,17 @@ export default function RegisterPage() {
 
         {/* Right Side - Form */}
         <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col items-center justify-center">
-          <h2 className="text-xl font-bold text-slate-800 mb-6 text-center">Welcome to AsiaSoftlab!</h2>
+          <div className="flex flex-col items-center mb-6">
+            <Image 
+              src="/Home/ASVA_logo.png" 
+              alt="Asia Softlab Virtual Academy" 
+              width={280} 
+              height={90} 
+              style={{ width: "auto", height: "auto" }}
+              className="mb-4 h-20 w-auto object-contain"
+            />
+            <h2 className="text-xl font-bold text-slate-800 text-center">Welcome!</h2>
+          </div>
 
           {/* Toggle Button */}
           <div className="bg-brand-100 p-1 rounded-full flex w-[280px] mb-8">

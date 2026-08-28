@@ -268,7 +268,7 @@ export default function CreateCoursePage() {
               <div className="border-2 border-dashed border-slate-300 rounded-xl overflow-hidden relative bg-slate-50 transition-all hover:bg-slate-100 flex flex-col items-center justify-center min-h-[200px]">
                 {thumbnailPreview ? (
                   <>
-                    <Image src={thumbnailPreview} alt="Preview" fill className="object-cover" />
+                    <Image src={thumbnailPreview} alt="Preview" fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" />
                     <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
                       <label className="cursor-pointer bg-white text-slate-900 px-4 py-2 rounded-lg text-sm font-medium shadow-lg">
                         Replace Image

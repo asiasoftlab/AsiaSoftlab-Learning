@@ -200,7 +200,7 @@ export default function CourseDetailsPage() {
                   </>
                 )}
               </div>
-              <button onClick={handleEnrollClick} className="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all">
+              <button onClick={handleEnrollClick} className="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all cursor-pointer">
                 Enroll Now
               </button>
               
@@ -233,8 +233,8 @@ export default function CourseDetailsPage() {
                       onClick={() => handleLessonClick(lesson)}
                       className={`w-full text-left p-3 rounded-md transition-colors flex items-start gap-3 mb-1
                         ${activeLesson?.id === lesson.id 
-                          ? 'bg-brand-50 border border-brand-100' 
-                          : 'hover:bg-slate-50 border border-transparent'
+                          ? 'bg-brand-50 border border-brand-100 cursor-pointer' 
+                          : 'hover:bg-slate-50 border border-transparent cursor-pointer'
                         }`}
                     >
                       <div className={`mt-0.5 shrink-0 h-6 w-6 rounded-full flex items-center justify-center text-xs font-bold
@@ -270,7 +270,7 @@ export default function CourseDetailsPage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative cursor-pointer">
             {[1, 2, 3, 4].map((item) => (
               <div key={item} className="bg-white rounded-xl p-4 shadow-sm border border-slate-100 flex flex-col hover:shadow-md transition-shadow">
                 <div className="relative h-40 w-full rounded-xl overflow-hidden mb-4">

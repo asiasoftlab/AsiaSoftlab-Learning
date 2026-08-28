@@ -7,6 +7,7 @@ import { UsersModule } from './users/users.module';
 import { CoursesModule } from './courses/courses.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { AiModule } from './ai/ai.module';
+import { OpportunitiesModule } from './opportunities/opportunities.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AiModule } from './ai/ai.module';
     CoursesModule,
     CloudinaryModule,
     AiModule,
+    OpportunitiesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

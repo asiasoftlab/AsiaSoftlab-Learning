@@ -100,7 +100,7 @@ export default function AdminCoursesPage() {
                       <div className="flex items-center gap-4">
                         <div className="h-12 w-16 bg-slate-100 rounded overflow-hidden shrink-0 relative">
                           {c.thumbnailUrl ? (
-                            <Image src={c.thumbnailUrl} alt={c.title} fill className="object-cover" />
+                            <Image src={c.thumbnailUrl} alt={c.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover" />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center text-xs text-slate-400">No Img</div>
                           )}

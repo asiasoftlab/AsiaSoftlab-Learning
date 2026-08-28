@@ -2,7 +2,8 @@
 
 import { AdminRoute } from "@/components/auth/AdminRoute";
 import Link from "next/link";
-import { LayoutDashboard, Users, BookOpen, LogOut } from "lucide-react";
+import Image from "next/image";
+import { LayoutDashboard, Users, BookOpen, LogOut, Briefcase } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth.store";
 import { api } from "@/lib/api";
@@ -49,8 +50,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <div className="flex h-screen bg-slate-50">
         {/* Sidebar */}
         <aside className="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col">
-          <div className="p-6 border-b border-slate-200">
-            <h2 className="text-xl font-bold text-brand-600">Asia Softlab</h2>
+          <div className="h-32 border-b border-slate-200 flex items-center justify-center px-6">
+            <Image 
+              src="/Home/ASVA_logo.png" 
+              alt="Asia Softlab Virtual Academy" 
+              width={300} 
+              height={100} 
+              style={{ width: "auto", height: "80px" }}
+              className="object-contain"
+            />
           </div>
           <nav className="flex-1 p-4 space-y-2">
             <Link href="/admin" className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 transition-colors">
@@ -64,6 +72,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <Link href="/admin/courses" className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 transition-colors">
               <BookOpen className="w-5 h-5" />
               <span className="font-medium">Courses</span>
+            </Link>
+            <Link href="/admin/opportunities" className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 transition-colors">
+              <Briefcase className="w-5 h-5" />
+              <span className="font-medium">Opportunities</span>
             </Link>
           </nav>
           <div className="p-4 border-t border-slate-200">
@@ -80,12 +92,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
         {/* Main Content */}
         <main className="flex-1 flex flex-col overflow-hidden">
-          <header className="h-24 bg-white border-b border-slate-200 flex items-center px-6 lg:px-10 justify-between">
-            <div>
-              <h1 className="text-xl font-bold text-slate-800">
-                {mounted ? getGreeting() : "Welcome"}, Admin
-              </h1>
-              <p className="text-sm text-slate-500 mt-1">Here's what's happening on your platform today.</p>
+          <header className="h-32 bg-white border-b border-slate-200 flex items-center px-6 lg:px-10 justify-between">
+            <div className="flex items-center gap-4">
+              <div className="md:hidden flex items-center">
+                <Image src="/Home/ASVA_logo.png" alt="Asia Softlab Virtual Academy" width={150} height={50} style={{ width: "auto", height: "50px" }}className="object-contain"/>
+              </div>
+              <div>
+                <h1 className="mb-2 text-xl font-bold text-slate-800">
+                  {mounted ? getGreeting() : "Welcome"}, Admin
+                </h1>
+                <p className="text-sm text-slate-500 mt-1">Here's what's happening on your platform today.</p>
+              </div>
             </div>
             
             <div className="hidden md:flex items-center space-x-4 bg-white px-4 py-2">

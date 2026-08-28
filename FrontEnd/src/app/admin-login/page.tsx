@@ -89,7 +89,15 @@ export default function AdminLoginPage() {
           {/* Subtle gradient glow in header */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-32 bg-brand-500/10 rounded-full blur-2xl"></div>
           
-          <h2 className="relative z-10 text-3xl font-bold text-slate-800 tracking-tight">Admin Portal</h2>
+          <div className="flex flex-col items-center mb-2">
+            <img 
+              src="/Home/ASVA_logo.png" 
+              alt="Asia Softlab Virtual Academy" 
+              style={{ width: "auto", height: "auto" }}
+              className="h-20 w-auto object-contain mb-4 relative z-10"
+            />
+            <h2 className="relative z-10 text-3xl font-bold text-slate-800 tracking-tight">Admin Portal</h2>
+          </div>
           <p className="relative z-10 text-slate-500 mt-2 text-sm">Sign in to access the management dashboard</p>
         </div>
         

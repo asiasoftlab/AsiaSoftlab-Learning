@@ -11,7 +11,7 @@ const fontSans = FontSans({
 });
 
 export const metadata: Metadata = {
-  title: "AsiaSoftlab Learning",
+  title: "Asia Softlab Virtual Academy",
   description: "Professional Drone & Technology Training",
 };
 
