@@ -30,6 +30,7 @@ export class CoursesController {
       status: body.status,
       instructorId: body.instructorId || (req.user?.id || req.user?.uid),
       lessons: body.lessons ? JSON.parse(body.lessons) : [],
+      learningObjectives: body.learningObjectives ? JSON.parse(body.learningObjectives) : undefined,
     };
 
     if (!file) {
@@ -62,6 +63,7 @@ export class CoursesController {
     if (body.price) updateCourseDto.price = Number(body.price);
     if (body.originalPrice) updateCourseDto.originalPrice = Number(body.originalPrice);
     if (body.lessons) updateCourseDto.lessons = JSON.parse(body.lessons);
+    if (body.learningObjectives) updateCourseDto.learningObjectives = JSON.parse(body.learningObjectives);
 
     if (file) {
       return this.coursesService.updateWithThumbnail(id, updateCourseDto, file);
@@ -74,6 +76,42 @@ export class CoursesController {
   @Roles('admin', 'instructor')
   remove(@Param('id') id: string) {
     return this.coursesService.remove(id);
+  }
+
+  // Document Endpoints
+  @Post(':courseId/lessons/:lessonId/documents')
+  @UseGuards(FirebaseAuthGuard, RolesGuard)
+  @Roles('admin', 'instructor')
+  @UseInterceptors(FileInterceptor('file'))
+  uploadLessonDocument(
+    @Param('courseId') courseId: string,
+    @Param('lessonId') lessonId: string,
+    @UploadedFile() file: Express.Multer.File
+  ) {
+    if (!file) throw new BadRequestException('File is required');
+    return this.coursesService.uploadLessonDocument(courseId, lessonId, file);
+  }
+
+  @Delete(':courseId/lessons/:lessonId/documents/:documentId')
+  @UseGuards(FirebaseAuthGuard, RolesGuard)
+  @Roles('admin', 'instructor')
+  deleteLessonDocument(
+    @Param('courseId') courseId: string,
+    @Param('lessonId') lessonId: string,
+    @Param('documentId') documentId: string
+  ) {
+    return this.coursesService.deleteLessonDocument(courseId, lessonId, documentId);
+  }
+
+  @Get(':courseId/lessons/:lessonId/documents/:documentId/access')
+  @UseGuards(FirebaseAuthGuard)
+  getLessonDocumentAccessUrl(
+    @Param('courseId') courseId: string,
+    @Param('lessonId') lessonId: string,
+    @Param('documentId') documentId: string,
+    @Req() req: any
+  ) {
+    return this.coursesService.getLessonDocumentAccessUrl(courseId, lessonId, documentId, req.user);
   }
 }
 

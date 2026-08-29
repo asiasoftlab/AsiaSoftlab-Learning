@@ -4,10 +4,11 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import AiAssistant from "@/components/chat/AiAssistant";
-import { Loader2, PlayCircle, Clock, Users, Star, ArrowLeft, Lock, LayoutGrid, ChevronLeft, ChevronRight, CheckCircle2, BookOpen, Layers } from "lucide-react";
+import { Loader2, PlayCircle, Clock, Users, Star, ArrowLeft, Lock, LayoutGrid, ChevronLeft, ChevronRight, CheckCircle2, BookOpen, Layers, FileText, Download } from "lucide-react";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { useAuthStore } from "@/store/auth.store";
+import { SecureDocumentViewer } from "@/components/SecureDocumentViewer";
 
 export default function CourseDetailsPage() {
   const params = useParams();
@@ -18,6 +19,10 @@ export default function CourseDetailsPage() {
   const [course, setCourse] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [activeLesson, setActiveLesson] = useState<any>(null);
+  
+  // Document Viewer State
+  const [viewerUrl, setViewerUrl] = useState<string | null>(null);
+  const [viewerTitle, setViewerTitle] = useState("");
 
   useEffect(() => {
     fetchCourse();
@@ -75,6 +80,27 @@ export default function CourseDetailsPage() {
       return;
     }
     setActiveLesson(lesson);
+  };
+
+  const handleDocumentClick = async (doc: any) => {
+    if (!isAuthenticated) return;
+    try {
+      const toastId = toast.loading("Securely fetching document...");
+      const response = await api.get(`/courses/${id}/lessons/${activeLesson.id}/documents/${doc.id}/access`);
+      toast.dismiss(toastId);
+
+      const { url, fileType, filename } = response.data;
+      if (fileType === "application/pdf") {
+        setViewerUrl(url);
+        setViewerTitle(filename || doc.title);
+      } else {
+        // For non-PDFs, open the signed URL in a new tab which triggers download
+        window.open(url, "_blank");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to access document. You may not be authorized.");
+    }
   };
 
   return (
@@ -162,6 +188,35 @@ export default function CourseDetailsPage() {
                 <h3 className="text-lg font-bold text-slate-800 mb-3">About this course</h3>
                 <p className="text-slate-600 leading-relaxed whitespace-pre-wrap">{course.description}</p>
               </div>
+
+              {/* Supporting Documents (Visible if active lesson has docs) */}
+              {isAuthenticated && activeLesson?.documents && activeLesson.documents.length > 0 && (
+                <div className="pt-8 mt-8 border-t border-slate-100">
+                  <h3 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+                    <FileText className="w-5 h-5 text-brand-600" />
+                    Supporting Documents for {activeLesson.title}
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {activeLesson.documents.map((doc: any) => (
+                      <button
+                        key={doc.id}
+                        onClick={() => handleDocumentClick(doc)}
+                        className="flex items-center gap-3 p-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 hover:border-brand-300 transition-all text-left cursor-pointer group"
+                      >
+                        <div className="bg-brand-100 p-2.5 rounded-lg text-brand-600 group-hover:scale-110 transition-transform">
+                          {doc.fileType === "application/pdf" ? <FileText className="w-5 h-5" /> : <Download className="w-5 h-5" />}
+                        </div>
+                        <div className="flex-1 truncate">
+                          <h4 className="font-semibold text-slate-800 text-sm truncate">{doc.title}</h4>
+                          <p className="text-xs text-slate-500 mt-0.5">
+                            {doc.fileType === "application/pdf" ? "Secure View" : "Download"}
+                          </p>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Course Overview / What You'll Learn */}
               <div className="pt-8 mt-8 border-t border-slate-100">
@@ -326,6 +381,14 @@ export default function CourseDetailsPage() {
         </div>
       </div>
       <AiAssistant courseId={id} activeLessonId={activeLesson?.id} />
+
+      {viewerUrl && (
+        <SecureDocumentViewer
+          url={viewerUrl}
+          title={viewerTitle}
+          onClose={() => setViewerUrl(null)}
+        />
+      )}
     </div>
   );
 }

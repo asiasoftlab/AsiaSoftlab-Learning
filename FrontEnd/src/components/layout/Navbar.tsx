@@ -38,7 +38,7 @@ export function Navbar() {
       <div className="container mx-auto flex h-24 items-center px-4 md:px-6">
         <Link href="/" className="mr-8 flex items-center space-x-2 shrink-0 py-2">
           <Image 
-            src="/Home/ASVA_logo.png" 
+            src="/Home/logo ASVA.png" 
             alt="Asia Softlab Virtual Academy" 
             width={280} 
             height={100} 

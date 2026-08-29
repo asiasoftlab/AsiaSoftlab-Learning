@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { api } from "@/lib/api";
-import { Loader2, Plus, ArrowLeft, Trash2, GripVertical, Image as ImageIcon } from "lucide-react";
+import { Loader2, Plus, ArrowLeft, Trash2, GripVertical, Image as ImageIcon, FileText, Upload } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import toast from "react-hot-toast";
@@ -58,7 +58,8 @@ export default function EditCoursePage() {
         const mappedLessons = sorted.map(l => ({
           ...l,
           youtubeUrl: l.youtubeVideoId ? `https://youtube.com/watch?v=${l.youtubeVideoId}` : "",
-          id: l.id || Math.random().toString(36).substring(7)
+          id: l.id || Math.random().toString(36).substring(2, 9),
+          isNew: false
         }));
         setLessons(mappedLessons);
       }
@@ -83,12 +84,13 @@ export default function EditCoursePage() {
     setLessons([
       ...lessons,
       {
-        id: Math.random().toString(36).substring(7),
+        id: Math.random().toString(36).substring(2, 9),
         title: "",
         description: "",
         youtubeUrl: "",
         duration: "",
         order: lessons.length + 1,
+        isNew: true
       }
     ]);
   };
@@ -114,6 +116,53 @@ export default function EditCoursePage() {
 
   const removeObjective = (index: number) => {
     setLearningObjectives(learningObjectives.filter((_, i) => i !== index));
+  };
+
+  const handleDocumentUpload = async (lessonIndex: number, file: File) => {
+    const lesson = lessons[lessonIndex];
+    if (lesson.isNew) {
+      toast.error("Please save the course first to upload documents to this new lesson.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+    
+    try {
+      const toastId = toast.loading("Uploading document...");
+      const response = await api.post(`/courses/${id}/lessons/${lesson.id}/documents`, formData, {
+        headers: { "Content-Type": "multipart/form-data" }
+      });
+      toast.success("Document uploaded!", { id: toastId });
+      
+      const newLessons = [...lessons];
+      if (!newLessons[lessonIndex].documents) {
+        newLessons[lessonIndex].documents = [];
+      }
+      newLessons[lessonIndex].documents.push(response.data);
+      setLessons(newLessons);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to upload document");
+    }
+  };
+
+  const handleDocumentDelete = async (lessonIndex: number, documentId: string) => {
+    const lesson = lessons[lessonIndex];
+    if (!confirm("Are you sure you want to delete this document?")) return;
+
+    try {
+      const toastId = toast.loading("Deleting document...");
+      await api.delete(`/courses/${id}/lessons/${lesson.id}/documents/${documentId}`);
+      toast.success("Document deleted!", { id: toastId });
+
+      const newLessons = [...lessons];
+      newLessons[lessonIndex].documents = newLessons[lessonIndex].documents.filter((d: any) => d.id !== documentId);
+      setLessons(newLessons);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to delete document");
+    }
   };
 
   const extractYoutubeId = (url: string) => {
@@ -298,6 +347,45 @@ export default function EditCoursePage() {
                         <label className="text-xs font-medium text-slate-600">YouTube URL</label>
                         <input required value={lesson.youtubeUrl} onChange={(e) => updateLesson(index, "youtubeUrl", e.target.value)} type="url" className="w-full bg-white border border-slate-300 rounded p-2 text-sm outline-none text-brand-600 focus:ring-brand-500 focus:border-brand-500 cursor-pointer" placeholder="https://youtube.com/watch?v=..." />
                       </div>
+
+                      {/* Supporting Documents */}
+                      <div className="pt-2 border-t border-slate-100">
+                        <div className="flex items-center justify-between mb-2">
+                          <label className="text-xs font-medium text-slate-700 flex items-center gap-1">
+                            <FileText className="w-3.5 h-3.5" /> Supporting Documents
+                          </label>
+                          <label className="cursor-pointer text-xs font-medium text-brand-600 hover:text-brand-700 flex items-center gap-1">
+                            <Upload className="w-3.5 h-3.5" /> Upload File
+                            <input 
+                              type="file" 
+                              className="hidden" 
+                              onChange={(e) => {
+                                if (e.target.files && e.target.files[0]) {
+                                  handleDocumentUpload(index, e.target.files[0]);
+                                }
+                              }} 
+                            />
+                          </label>
+                        </div>
+                        {lesson.documents && lesson.documents.length > 0 ? (
+                          <div className="space-y-2">
+                            {lesson.documents.map((doc: any) => (
+                              <div key={doc.id} className="flex items-center justify-between bg-white border border-slate-200 rounded p-2">
+                                <div className="flex items-center gap-2 truncate">
+                                  <FileText className="w-4 h-4 text-brand-500 shrink-0" />
+                                  <span className="text-xs font-medium text-slate-700 truncate">{doc.title}</span>
+                                </div>
+                                <button type="button" onClick={() => handleDocumentDelete(index, doc.id)} className="p-1 text-slate-400 hover:text-red-500 cursor-pointer">
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="text-xs text-slate-500 italic">No documents uploaded for this lesson.</div>
+                        )}
+                      </div>
+
                     </div>
                   </div>
                 ))

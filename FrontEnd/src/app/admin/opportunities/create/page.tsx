@@ -63,7 +63,7 @@ export default function CreateOpportunityPage() {
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
-                placeholder="e.g. Drone Pilot, GIS Analyst"
+                placeholder="e.g. Drone Pilot, GIS Analyst, Python Developer"
                 className="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 text-sm text-slate-900 bg-white placeholder:text-slate-400"
                 required
               />
@@ -76,7 +76,7 @@ export default function CreateOpportunityPage() {
                 name="company"
                 value={formData.company}
                 onChange={handleChange}
-                placeholder="e.g. Asia Softlab"
+                placeholder="e.g. Asia Softlab Pvt.Ltd."
                 className="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 text-sm text-slate-900 bg-white placeholder:text-slate-400"
                 required
               />
@@ -89,7 +89,7 @@ export default function CreateOpportunityPage() {
                 name="location"
                 value={formData.location}
                 onChange={handleChange}
-                placeholder="e.g. Remote, New York, NY"
+                placeholder="e.g. Remote, India"
                 className="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 text-sm text-slate-900 bg-white placeholder:text-slate-400"
                 required
               />
@@ -161,7 +161,7 @@ export default function CreateOpportunityPage() {
           <button
             type="submit"
             disabled={saving}
-            className="bg-brand-600 hover:bg-brand-700 text-white px-6 py-2.5 rounded-lg font-medium flex items-center gap-2 transition-colors disabled:opacity-70"
+            className="bg-brand-600 hover:bg-brand-700 text-white px-6 py-2.5 rounded-lg font-medium flex items-center gap-2 transition-colors disabled:opacity-70 cursor-pointer"
           >
             {saving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
             {saving ? "Saving..." : "Create Opportunity"}

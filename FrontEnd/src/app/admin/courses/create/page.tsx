@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
-import { Loader2, Plus, ArrowLeft, Trash2, GripVertical, Image as ImageIcon } from "lucide-react";
+import { Loader2, Plus, ArrowLeft, Trash2, GripVertical, Image as ImageIcon, FileText } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import toast from "react-hot-toast";
@@ -174,7 +174,7 @@ export default function CreateCoursePage() {
                       <Trash2 className="h-4 w-4" />
                     </button>
                   </div>
-                ))}
+                ))}  
               </div>
             </div>
 
@@ -249,6 +249,16 @@ export default function CreateCoursePage() {
                         <label className="text-xs font-medium text-slate-600">YouTube URL</label>
                         <input required value={lesson.youtubeUrl} onChange={(e) => updateLesson(index, "youtubeUrl", e.target.value)} type="url" className="w-full bg-white border border-slate-300 rounded p-2 text-sm outline-none text-brand-600 focus:ring-brand-500 focus:border-brand-500 cursor-pointer" placeholder="https://youtube.com/watch?v=..." />
                       </div>
+
+                      <div className="pt-2 border-t border-slate-100">
+                        <label className="text-xs font-medium text-slate-700 flex items-center gap-1 mb-2">
+                          <FileText className="w-3.5 h-3.5" /> Supporting Documents
+                        </label>
+                        <div className="text-xs text-slate-500 italic bg-slate-100 p-2 rounded">
+                          You can upload supporting documents (PDFs, etc.) after saving the course for the first time.
+                        </div>
+                      </div>
+
                     </div>
                   </div>
                 ))

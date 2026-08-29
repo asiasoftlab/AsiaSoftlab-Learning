@@ -8,6 +8,7 @@ import { CoursesModule } from './courses/courses.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { AiModule } from './ai/ai.module';
 import { OpportunitiesModule } from './opportunities/opportunities.module';
+import { StorageModule } from './storage/storage.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { OpportunitiesModule } from './opportunities/opportunities.module';
     CloudinaryModule,
     AiModule,
     OpportunitiesModule,
+    StorageModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -3,8 +3,8 @@
 import { AdminRoute } from "@/components/auth/AdminRoute";
 import Link from "next/link";
 import Image from "next/image";
-import { LayoutDashboard, Users, BookOpen, LogOut, Briefcase } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { LayoutDashboard, Users, BookOpen, LogOut, Briefcase, ClipboardList, Award, CreditCard, Bell } from "lucide-react";
+import { useRouter, usePathname } from "next/navigation";
 import { useAuthStore } from "@/store/auth.store";
 import { api } from "@/lib/api";
 import toast from "react-hot-toast";
@@ -12,6 +12,7 @@ import { useState, useEffect } from "react";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
+  const pathname = usePathname();
   const setAuth = useAuthStore((state) => state.setAuth);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -52,30 +53,46 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <aside className="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col">
           <div className="h-32 border-b border-slate-200 flex items-center justify-center px-6">
             <Image 
-              src="/Home/ASVA_logo.png" 
+              src="/Home/logo ASVA.png" 
               alt="Asia Softlab Virtual Academy" 
-              width={300} 
-              height={100} 
-              style={{ width: "auto", height: "80px" }}
+              width={200} 
+              height={200} 
+              style={{ width: "auto", height: "200px" }}
               className="object-contain"
             />
           </div>
           <nav className="flex-1 p-4 space-y-2">
-            <Link href="/admin" className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 transition-colors">
+            <Link href="/admin" className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${pathname === '/admin' ? 'bg-brand-50 text-brand-600' : 'hover:bg-slate-50 text-slate-700 hover:text-brand-600'}`}>
               <LayoutDashboard className="w-5 h-5" />
               <span className="font-medium">Dashboard</span>
             </Link>
-            <Link href="/admin/users" className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 transition-colors">
+            <Link href="/admin/users" className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${pathname.startsWith('/admin/users') ? 'bg-brand-50 text-brand-600' : 'hover:bg-slate-50 text-slate-700 hover:text-brand-600'}`}>
               <Users className="w-5 h-5" />
               <span className="font-medium">Users</span>
             </Link>
-            <Link href="/admin/courses" className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 transition-colors">
+            <Link href="/admin/courses" className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${pathname.startsWith('/admin/courses') ? 'bg-brand-50 text-brand-600' : 'hover:bg-slate-50 text-slate-700 hover:text-brand-600'}`}>
               <BookOpen className="w-5 h-5" />
               <span className="font-medium">Courses</span>
             </Link>
-            <Link href="/admin/opportunities" className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-slate-50 text-slate-700 hover:text-brand-600 transition-colors">
+            <Link href="/admin/opportunities" className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${pathname.startsWith('/admin/opportunities') ? 'bg-brand-50 text-brand-600' : 'hover:bg-slate-50 text-slate-700 hover:text-brand-600'}`}>
               <Briefcase className="w-5 h-5" />
               <span className="font-medium">Opportunities</span>
+            </Link>
+            <Link href="/admin/assessments" className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${pathname.startsWith('/admin/assessments') ? 'bg-brand-50 text-brand-600' : 'hover:bg-slate-50 text-slate-700 hover:text-brand-600'}`}>
+              <ClipboardList className="w-5 h-5" />
+              <span className="font-medium">Assessments</span>
+            </Link>
+            <Link href="/admin/certificates" className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${pathname.startsWith('/admin/certificates') ? 'bg-brand-50 text-brand-600' : 'hover:bg-slate-50 text-slate-700 hover:text-brand-600'}`}>
+              <Award className="w-5 h-5" />
+              <span className="font-medium">Certificates</span>
+            </Link>
+            <Link href="/admin/payments" className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${pathname.startsWith('/admin/payments') ? 'bg-brand-50 text-brand-600' : 'hover:bg-slate-50 text-slate-700 hover:text-brand-600'}`}>
+              <CreditCard className="w-5 h-5" />
+              <span className="font-medium">Payments-Revenue</span>
+            </Link>
+            <Link href="/admin/notifications" className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${pathname.startsWith('/admin/notifications') ? 'bg-brand-50 text-brand-600' : 'hover:bg-slate-50 text-slate-700 hover:text-brand-600'}`}>
+              <Bell className="w-5 h-5" />
+              <span className="font-medium">User Notifications</span>
             </Link>
           </nav>
           <div className="p-4 border-t border-slate-200">

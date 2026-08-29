@@ -37,15 +37,12 @@ export default function OpportunitiesPage() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50">
-      <main className="flex-grow py-12">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-slate-900 tracking-tight">Career Opportunities</h1>
-            <p className="mt-4 text-lg text-slate-600 max-w-2xl mx-auto">
-              Explore open positions and kickstart your career with our industry partners.
-            </p>
-          </div>
+    <div className="bg-slate-50 min-h-screen py-16">
+      <div className="container mx-auto px-4 md:px-6">
+        <div className="text-center mb-16">
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-900 mb-4">Careers</h1>
+          <p className="text-lg text-slate-600 max-w-2xl mx-auto">Explore open positions and kickstart your career with our industry partners.</p>
+        </div>
 
           {loading ? (
             <div className="flex justify-center items-center h-64">
@@ -104,7 +101,6 @@ export default function OpportunitiesPage() {
             </div>
           )}
         </div>
-      </main>
     </div>
   );
 }
