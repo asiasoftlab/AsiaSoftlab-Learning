@@ -70,7 +70,7 @@ export default function OpportunityDetailsPage() {
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
       <main className="flex-grow py-12">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-8xl">
           <Link href="/opportunity" className="inline-flex items-center text-sm font-medium text-slate-500 hover:text-brand-600 mb-8 transition-colors">
             <ArrowLeft className="w-4 h-4 mr-1" /> Back to opportunities
           </Link>
@@ -80,7 +80,7 @@ export default function OpportunityDetailsPage() {
             <div className="p-8 md:p-10 border-b border-slate-100 bg-slate-50/50">
               <div className="flex flex-wrap items-start justify-between gap-6">
                 <div>
-                  <div className="inline-flex bg-brand-100 text-brand-700 text-sm font-bold px-3 py-1 rounded-full mb-4">
+                  <div className="inline-flex bg-brand-100 text-brand-700 text-sm font-bold px-3 py-1 rounded-lg mb-4">
                     {opportunity.type}
                   </div>
                   <h1 className="text-3xl font-bold text-slate-900 tracking-tight mb-4">{opportunity.title}</h1>

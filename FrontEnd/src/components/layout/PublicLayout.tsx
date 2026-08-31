@@ -8,7 +8,7 @@ export function PublicLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   
   // Routes where Navbar and Footer should be hidden
-  const isAdminRoute = pathname?.startsWith('/admin') || pathname?.startsWith('/admin-login');
+  const isAdminRoute = pathname?.startsWith('/admin') || pathname?.startsWith('/admin-login') || pathname?.startsWith('/dashboard');
 
   if (isAdminRoute) {
     return <main className="flex-1 flex flex-col">{children}</main>;

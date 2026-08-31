@@ -41,7 +41,7 @@ export default function RegisterPage() {
       {/* Background Grid */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#e5e7eb_1px,transparent_1px),linear-gradient(to_bottom,#e5e7eb_1px,transparent_1px)] bg-[size:40px_40px]"></div>
 
-      <div className="relative z-10 max-w-5xl w-full bg-white rounded-3xl shadow-xl overflow-hidden flex flex-col md:flex-row min-h-[650px]">
+      <div className="relative z-10 max-w-6xl w-full bg-white rounded-3xl shadow-xl overflow-hidden flex flex-col md:flex-row min-h-[650px]">
 
         {/* Left Side - Image */}
         <div className="relative w-full md:w-1/2 h-64 md:h-auto hidden md:block">
