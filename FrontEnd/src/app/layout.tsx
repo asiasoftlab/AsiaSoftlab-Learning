@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${fontSans.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-slate-50">
-        <Toaster position="top-center" />
+        <Toaster position="top-right" />
         <AuthProvider>
           <PublicLayout>{children}</PublicLayout>
         </AuthProvider>

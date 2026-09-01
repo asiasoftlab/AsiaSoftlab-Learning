@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard,BookOpen,Layers,MessageSquare,CalendarDays,Award,Settings,LifeBuoy,LogOut} from "lucide-react";
+import { User, LayoutDashboard, BookOpen, Layers, MessageSquare, CalendarDays, Award, Settings, LifeBuoy, LogOut } from "lucide-react";
 import { useAuthStore } from "@/store/auth.store";
 
 const navItems = [
@@ -13,6 +13,7 @@ const navItems = [
   { name: "Messages", href: "/dashboard/messages", icon: MessageSquare },
   { name: "Calendar", href: "/dashboard/calendar", icon: CalendarDays },
   { name: "Certificates", href: "/dashboard/certificates", icon: Award },
+  { name: "My Profile", href: "/dashboard/profile", icon: User },
 ];
 
 const secondaryNavItems = [
@@ -37,16 +38,15 @@ export function DashboardSidebar() {
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             const Icon = item.icon;
-            
+
             return (
               <Link
                 key={item.name}
                 href={item.href}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors ${
-                  isActive 
-                    ? "bg-slate-100 text-slate-900 font-medium" 
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors ${isActive
+                    ? "bg-slate-100 text-slate-900 font-medium"
                     : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
-                }`}
+                  }`}
               >
                 <Icon className={`h-5 w-5 ${isActive ? "text-slate-900" : "text-slate-400"}`} />
                 {item.name}
@@ -59,16 +59,15 @@ export function DashboardSidebar() {
           {secondaryNavItems.map((item) => {
             const isActive = pathname === item.href;
             const Icon = item.icon;
-            
+
             return (
               <Link
                 key={item.name}
                 href={item.href}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors ${
-                  isActive 
-                    ? "bg-slate-100 text-slate-900 font-medium" 
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors ${isActive
+                    ? "bg-slate-100 text-slate-900 font-medium"
                     : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
-                }`}
+                  }`}
               >
                 <Icon className={`h-5 w-5 ${isActive ? "text-slate-900" : "text-slate-400"}`} />
                 {item.name}
@@ -91,7 +90,7 @@ export function DashboardSidebar() {
               {user?.email || "student@example.com"}
             </p>
           </div>
-          <button 
+          <button
             onClick={logout}
             className="text-slate-400 hover:text-red-500 transition-colors"
             title="Logout"

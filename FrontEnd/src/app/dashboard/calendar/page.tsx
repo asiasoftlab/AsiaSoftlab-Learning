@@ -231,7 +231,7 @@ export default function CalendarPage() {
 
   return (
     <div className="flex flex-col lg:flex-row gap-8 pb-12 relative">
-      <Toaster position="top-right" />
+
       {/* Main Calendar Area */}
       <div className="flex-1 flex flex-col gap-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
