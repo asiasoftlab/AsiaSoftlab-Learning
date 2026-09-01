@@ -147,22 +147,41 @@ export default function EditCoursePage() {
     }
   };
 
-  const handleDocumentDelete = async (lessonIndex: number, documentId: string) => {
+  const handleDocumentDelete = (lessonIndex: number, documentId: string) => {
     const lesson = lessons[lessonIndex];
-    if (!confirm("Are you sure you want to delete this document?")) return;
+    toast((t) => (
+      <div className="flex flex-col gap-3">
+        <p className="text-sm font-medium text-slate-900">Are you sure you want to delete this document?</p>
+        <div className="flex gap-2 justify-end">
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            className="px-3 py-1.5 text-xs font-medium text-slate-700 bg-slate-100 rounded-md hover:bg-slate-200 transition-colors cursor-pointer"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={async () => {
+              toast.dismiss(t.id);
+              try {
+                const toastId = toast.loading("Deleting document...");
+                await api.delete(`/courses/${id}/lessons/${lesson.id}/documents/${documentId}`);
+                toast.success("Document deleted!", { id: toastId });
 
-    try {
-      const toastId = toast.loading("Deleting document...");
-      await api.delete(`/courses/${id}/lessons/${lesson.id}/documents/${documentId}`);
-      toast.success("Document deleted!", { id: toastId });
-
-      const newLessons = [...lessons];
-      newLessons[lessonIndex].documents = newLessons[lessonIndex].documents.filter((d: any) => d.id !== documentId);
-      setLessons(newLessons);
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to delete document");
-    }
+                const newLessons = [...lessons];
+                newLessons[lessonIndex].documents = newLessons[lessonIndex].documents.filter((d: any) => d.id !== documentId);
+                setLessons(newLessons);
+              } catch (error) {
+                console.error(error);
+                toast.error("Failed to delete document");
+              }
+            }}
+            className="px-3 py-1.5 text-xs font-medium text-white bg-red-600 rounded-md hover:bg-red-700 transition-colors cursor-pointer"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    ), { duration: 9999999 });
   };
 
   const extractYoutubeId = (url: string) => {

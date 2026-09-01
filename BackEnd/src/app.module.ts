@@ -9,6 +9,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { AiModule } from './ai/ai.module';
 import { OpportunitiesModule } from './opportunities/opportunities.module';
 import { StorageModule } from './storage/storage.module';
+import { EventsModule } from './events/events.module';
 
 @Module({
   imports: [
@@ -22,8 +23,9 @@ import { StorageModule } from './storage/storage.module';
     AiModule,
     OpportunitiesModule,
     StorageModule,
+    EventsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
