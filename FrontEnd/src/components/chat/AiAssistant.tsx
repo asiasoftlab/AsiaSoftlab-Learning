@@ -6,7 +6,7 @@ import { api } from "@/lib/api";
 import ReactMarkdown from "react-markdown";
 
 interface AiAssistantProps {
-  courseId: string;
+  courseId?: string;
   activeLessonId?: string;
 }
 
@@ -18,7 +18,7 @@ interface Message {
 export default function AiAssistant({ courseId, activeLessonId }: AiAssistantProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
-    { role: "model", text: "Hi! I'm your AI Course Assistant. Ask me anything about this course or the current lesson!" }
+    { role: "model", text: "Hi! I'm your AI Assistant. Ask me anything about this platform or course!" }
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -28,6 +28,12 @@ export default function AiAssistant({ courseId, activeLessonId }: AiAssistantPro
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  useEffect(() => {
+    const handleOpen = () => setIsOpen(true);
+    window.addEventListener('open-ai-chat', handleOpen);
+    return () => window.removeEventListener('open-ai-chat', handleOpen);
+  }, []);
 
   const handleSend = async () => {
     if (!input.trim()) return;

@@ -18,15 +18,18 @@ export class AiService {
     try {
       const ai = new GoogleGenAI({ apiKey });
 
-      // Fetch course context
-      const course = await this.coursesRepository.findById(courseId);
-      if (!course) {
-        throw new InternalServerErrorException('Course not found');
+      // Fetch course context if provided
+      let course: any = null;
+      if (courseId) {
+        course = await this.coursesRepository.findById(courseId);
+        if (!course) {
+          throw new InternalServerErrorException('Course not found');
+        }
       }
 
       // Add lesson context if present
       let activeLessonContext = '';
-      if (lessonId) {
+      if (lessonId && course) {
         const lesson = course.lessons.find((l) => l.id === lessonId);
         if (lesson) {
           activeLessonContext = `The user is currently watching the lesson titled: "${lesson.title}". Lesson description: ${lesson.description}`;
@@ -34,20 +37,23 @@ export class AiService {
       }
 
       // Construct system prompt
-      const systemInstruction = `
-      You are an expert, helpful, and encouraging AI Doubt Solving Assistant for a learning platform called Asia Softlab Virtual Academy.
-      The user is taking a course named "${course.title}".
-      Course Description: ${course.description}
-      Level: ${course.level}
-      Category: ${course.category}
-      Learning Objectives: ${course.learningObjectives?.join(', ') || 'Not specified'}
-      
-      ${activeLessonContext}
-      
-      Your goal is to answer the student's questions accurately, keeping your answers concise, structured (use markdown), 
-      and directly related to the course content if applicable.
-      If the user asks something completely unrelated to the course or technology, kindly steer them back to the topic.
+      let systemInstruction = `
+      You are an expert, helpful, and encouraging Support and Learning Assistant for a platform called Asia Softlab Virtual Academy.
+      Your goal is to answer the user's questions accurately, keeping your answers concise and structured (use markdown).
+      If the user asks something completely unrelated to learning, technology, or this platform, kindly steer them back to the topic.
       `;
+
+      if (course) {
+        systemInstruction += `
+        The user is currently taking a course named "${course.title}".
+        Course Description: ${course.description}
+        Level: ${course.level}
+        Category: ${course.category}
+        Learning Objectives: ${course.learningObjectives?.join(', ') || 'Not specified'}
+        
+        ${activeLessonContext}
+        `;
+      }
 
       // Map history to the format expected by GenAI SDK
       // Note: The new @google/genai SDK (v0.1.2) expects history in { role: string, parts: [{ text: string }] } format for chats, or similar.

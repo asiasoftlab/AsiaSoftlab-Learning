@@ -17,7 +17,7 @@ const navItems = [
 
 const secondaryNavItems = [
   // { name: "Settings", href: "/dashboard/settings", icon: Settings },
-  { name: "Help & Support", href: "/support", icon: LifeBuoy },
+  { name: "Help & Support", href: "/dashboard/support", icon: LifeBuoy },
 ];
 
 export function DashboardSidebar() {

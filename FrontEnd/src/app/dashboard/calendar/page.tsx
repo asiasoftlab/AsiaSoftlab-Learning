@@ -250,20 +250,22 @@ export default function CalendarPage() {
               <Plus className="w-4 h-4" />
               Add Event
             </button>
-            <button
-              onClick={goToToday}
-              className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors cursor-pointer"
-            >
-              Today
-            </button>
-            <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-lg p-1 cursor-pointer">
-              <button onClick={prevMonth} className="p-1 hover:bg-slate-100 rounded-md text-slate-600">
+            <div className="flex items-center bg-white border border-slate-200 rounded-lg p-1 shadow-sm">
+              <button onClick={prevMonth} className="p-1.5 hover:bg-slate-100 rounded-md text-slate-600 transition-colors">
                 <ChevronLeft className="h-5 w-5" />
               </button>
-              <span className="w-32 text-center font-semibold text-slate-800">
-                {monthNames[currentMonth]} {currentYear}
-              </span>
-              <button onClick={nextMonth} className="p-1 hover:bg-slate-100 rounded-md text-slate-600">
+              
+              <button 
+                onClick={goToToday}
+                title="Return to Today"
+                className="px-4 py-1.5 text-sm font-semibold text-slate-800 hover:bg-slate-100 rounded-md transition-colors min-w-[160px] text-center"
+              >
+                {currentMonth === new Date().getMonth() && currentYear === new Date().getFullYear() 
+                  ? `Today: ${new Date().getDate()} ${monthNames[new Date().getMonth()]}, ${new Date().getFullYear()}` 
+                  : `${monthNames[currentMonth]} ${currentYear}`}
+              </button>
+
+              <button onClick={nextMonth} className="p-1.5 hover:bg-slate-100 rounded-md text-slate-600 transition-colors">
                 <ChevronRight className="h-5 w-5" />
               </button>
             </div>
