@@ -15,11 +15,11 @@ export default function CourseDetailsPage() {
   const router = useRouter();
   const id = params.id as string;
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  
+
   const [course, setCourse] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [activeLesson, setActiveLesson] = useState<any>(null);
-  
+
   // Document Viewer State
   const [viewerUrl, setViewerUrl] = useState<string | null>(null);
   const [viewerTitle, setViewerTitle] = useState("");
@@ -106,16 +106,16 @@ export default function CourseDetailsPage() {
   return (
     <div className="bg-slate-50 min-h-screen py-10">
       <div className="container mx-auto px-4 md:px-6">
-        
+
         <Link href="/courses" className="inline-flex items-center gap-2 text-slate-500 hover:text-brand-600 transition-colors mb-6 font-medium text-sm">
           <ArrowLeft className="h-4 w-4" /> Back to Courses
         </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          
+
           {/* Main Content Area: Video Player & Description */}
           <div className="lg:col-span-2 space-y-6">
-            
+
             {/* Video Player */}
             <div className="bg-black rounded-2xl overflow-hidden shadow-xl aspect-video relative">
               {!isAuthenticated ? (
@@ -128,23 +128,23 @@ export default function CourseDetailsPage() {
                 </div>
               ) : activeLesson && activeLesson.youtubeVideoId ? (
                 <div className="relative w-full h-full bg-black group">
-                  <iframe 
+                  <iframe
                     className="w-full h-full"
                     src={`https://www.youtube.com/embed/${activeLesson.youtubeVideoId}?autoplay=0&rel=0&modestbranding=1&iv_load_policy=3&showinfo=0&controls=1&disablekb=1&fs=0`}
                     title={activeLesson.title}
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     sandbox="allow-scripts allow-same-origin allow-presentation"
                   />
-                  
+
                   {/* Block entire top area (Title, Share, Watch Later) */}
                   <div className="absolute top-0 left-0 w-full h-24 z-10 bg-transparent"></div>
-                  
+
                   {/* Block right edge (More videos, extra buttons) */}
                   <div className="absolute top-0 right-0 w-24 h-full z-10 bg-transparent"></div>
-                  
+
                   {/* Block bottom right (Watch on YouTube logo) - leaves room for volume/settings */}
                   <div className="absolute bottom-10 right-0 w-32 h-20 z-10 bg-transparent"></div>
-                  
+
                   {/* Block bottom left just above controls (Sometimes Share appears here) */}
                   <div className="absolute bottom-10 left-0 w-48 h-20 z-10 bg-transparent"></div>
                 </div>
@@ -167,7 +167,7 @@ export default function CourseDetailsPage() {
                 </span>
               </div>
               <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4">{course.title}</h1>
-              
+
               <div className="flex flex-wrap items-center gap-6 text-sm text-slate-600 pb-6 border-b border-slate-100">
                 <div className="flex items-center gap-2">
                   <Star className="h-5 w-5 text-amber-400 fill-amber-400" />
@@ -196,16 +196,22 @@ export default function CourseDetailsPage() {
                     <FileText className="w-5 h-5 text-brand-600" />
                     Supporting Documents for {activeLesson.title}
                   </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
                     {activeLesson.documents.map((doc: any) => (
                       <button
                         key={doc.id}
                         onClick={() => handleDocumentClick(doc)}
-                        className="flex items-center gap-3 p-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 hover:border-brand-300 transition-all text-left cursor-pointer group"
+                        className="flex items-center gap-3 p-4 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 hover:border-brand-300 transition-all text-left cursor-pointer group"
                       >
-                        <div className="bg-brand-100 p-2.5 rounded-lg text-brand-600 group-hover:scale-110 transition-transform">
-                          {doc.fileType === "application/pdf" ? <FileText className="w-5 h-5" /> : <Download className="w-5 h-5" />}
-                        </div>
+                        {/* <div className="bg-brand-100 p-2.5 rounded-lg text-brand-800 group-hover:scale-110 transition-transform"> */}
+                        {doc.fileType === "application/pdf" ? (
+                          <svg className="w-12 h-12 text-red-500" viewBox="0 0 384 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M181.9 256.1c-5-16-4.9-46.9-2-46.9 8.4 0 7.6 36.9 2 46.9zm-1.7 47.2c-7.7 20.2-17.3 43.3-28.4 62.7 18.3-7 39-17.2 62.9-21.9-12.7-9.6-24.9-23.4-34.5-40.8zM86.1 428.1c0 .8 13.2-5.4 34.9-40.2-6.7 6.3-29.1 24.5-34.9 40.2zM248 160h136v328c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V24C0 10.7 10.7 0 24 0h200v136c0 13.2 10.8 24 24 24zm-8 171.8c-20-12.2-33.3-29-42.7-53.8 4.5-18.5 11.6-46.6 6.2-64.2-4.7-29.4-42.4-26.5-47.8-6.8-5 18.3-.4 44.1 8.1 77-11.6 27.6-28.7 64.6-40.8 85.8-.1 0-.1.1-.2.1-27.1 13.9-73.6 44.5-54.5 68 5.6 6.9 16 10 21.5 10 17.9 0 35.7-18 61.1-61.8 25.8-8.5 54.1-19.1 79-23.2 21.7 11.8 47.1 19.5 64 19.5 29.2 0 31.2-32 19.7-43.4-13.9-13.6-54.3-9.7-73.6-7.2zM377 105L279 7c-4.5-4.5-10.6-7-17-7h-6v128h128v-6.1c0-6.3-2.5-12.4-7-16.9zm-74.1 255.3c4.1-2.7-2.5-11.9-42.8-9 37.1 15.8 42.8 9 42.8 9z" />
+                          </svg>
+                        ) : (
+                          <Download className="w-12 h-12" />
+                        )}
+                        {/* </div> */}
                         <div className="flex-1 truncate">
                           <h4 className="font-semibold text-slate-800 text-sm truncate">{doc.title}</h4>
                           <p className="text-xs text-slate-500 mt-0.5">
@@ -241,7 +247,7 @@ export default function CourseDetailsPage() {
 
           {/* Sidebar: Lessons List & Purchase Info */}
           <div className="space-y-6">
-            
+
             {/* Action Card */}
             <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
               <div className="flex items-center gap-3 mb-6">
@@ -258,7 +264,7 @@ export default function CourseDetailsPage() {
               <button onClick={handleEnrollClick} className="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all cursor-pointer">
                 Enroll Now
               </button>
-              
+
               <div className="mt-6 space-y-3">
                 <p className="text-sm font-bold text-slate-800">This course includes:</p>
                 <ul className="text-sm text-slate-600 space-y-3">
@@ -277,18 +283,18 @@ export default function CourseDetailsPage() {
                 <h3 className="font-bold text-slate-800">Course Content</h3>
                 <p className="text-xs text-slate-500 mt-1">{sortedLessons.length} lessons</p>
               </div>
-              
+
               <div className="overflow-y-auto flex-1 p-2">
                 {sortedLessons.length === 0 ? (
                   <div className="p-4 text-center text-slate-500 text-sm">No lessons available yet.</div>
                 ) : (
                   sortedLessons.map((lesson: any, index: number) => (
-                    <button 
-                      key={lesson.id} 
+                    <button
+                      key={lesson.id}
                       onClick={() => handleLessonClick(lesson)}
                       className={`w-full text-left p-3 rounded-md transition-colors flex items-start gap-3 mb-1
-                        ${activeLesson?.id === lesson.id 
-                          ? 'bg-brand-50 border border-brand-100 cursor-pointer' 
+                        ${activeLesson?.id === lesson.id
+                          ? 'bg-brand-50 border border-brand-100 cursor-pointer'
                           : 'hover:bg-slate-50 border border-transparent cursor-pointer'
                         }`}
                     >
@@ -332,7 +338,7 @@ export default function CourseDetailsPage() {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src="/Home/College.webp" alt="Course" className="object-cover w-full h-full" />
                 </div>
-                
+
                 <div className="flex items-center justify-between text-xs text-slate-400 font-medium mb-3 px-1">
                   <div className="flex items-center gap-1.5">
                     <LayoutGrid className="w-4 h-4 text-slate-300" />
@@ -347,7 +353,7 @@ export default function CourseDetailsPage() {
                 <h3 className="font-bold text-slate-900 mb-2 px-1 text-[15px] leading-tight">
                   AWS Certified solutions Architect
                 </h3>
-                
+
                 <p className="text-slate-500 text-xs leading-relaxed mb-6 px-1 line-clamp-3 flex-1">
                   fgjadfjgbk ghjdhghsdh lkdhglksdhgkh hsgshdkghs hsdgklhds sdlhglsdhglkhlsdhgkl klsdhgdksh hgklshdklghlksdglhks
                 </p>

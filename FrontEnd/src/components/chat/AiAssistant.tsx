@@ -22,7 +22,6 @@ export default function AiAssistant({ courseId, activeLessonId }: AiAssistantPro
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -47,17 +46,8 @@ export default function AiAssistant({ courseId, activeLessonId }: AiAssistantPro
     setIsLoading(true);
 
     try {
-      // API expects history without the very first greeting if we don't want to confuse it, or we can just send everything.
-      // We'll send the whole history except the current prompt.
-      const historyToSend = newMessages.slice(1, -1); // exclude greeting and the current message
-
-      const response = await api.post("/ai/chat", {
-        courseId,
-        lessonId: activeLessonId,
-        message: userMessage,
-        history: historyToSend,
-      });
-
+      const historyToSend = newMessages.slice(1, -1);
+      const response = await api.post("/ai/chat", {courseId, lessonId: activeLessonId, message: userMessage, history: historyToSend});
       setMessages(prev => [...prev, { role: "model", text: response.data.reply }]);
     } catch (error) {
       console.error("AI Chat error:", error);

@@ -222,7 +222,7 @@ export default function EditCoursePage() {
       });
       toast.success("Course updated successfully!");
 
-      router.push("/admin/courses");
+      await fetchCourse();
     } catch (error) {
       console.error("Failed to update course", error);
       toast.error("Failed to update course.");
@@ -369,15 +369,19 @@ export default function EditCoursePage() {
 
                       {/* Supporting Documents */}
                       <div className="pt-2 border-t border-slate-100">
-                        <div className="flex items-center justify-between mb-2">
-                          <label className="text-xs font-medium text-slate-700 flex items-center gap-1">
-                            <FileText className="w-3.5 h-3.5" /> Supporting Documents
-                          </label>
-                          <label className="cursor-pointer text-xs font-medium text-brand-600 hover:text-brand-700 flex items-center gap-1">
-                            <Upload className="w-3.5 h-3.5" /> Upload File
+                        <div className="flex items-center justify-between pb-2 border-b border-slate-100 mb-4">
+                          <h4 className="text-xs font-semibold text-slate-700 flex items-center gap-2">
+                            <FileText className="w-4 h-4 text-slate-400" />
+                            Supporting Documents
+                          </h4>
+                          <label className={`text-xs font-medium flex items-center gap-1 ${lesson.isNew ? 'text-slate-400 cursor-not-allowed' : 'text-brand-600 hover:text-brand-700 cursor-pointer'}`}>
+                            <Upload className="w-3.5 h-3.5" />
+                            {lesson.isNew ? "Save course to upload" : "Upload File"}
                             <input 
                               type="file" 
+                              accept=".pdf,.doc,.docx,.ppt,.pptx,.txt" 
                               className="hidden" 
+                              disabled={lesson.isNew}
                               onChange={(e) => {
                                 if (e.target.files && e.target.files[0]) {
                                   handleDocumentUpload(index, e.target.files[0]);
