@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useAuthStore } from "@/store/auth.store";
 import { api } from "@/lib/api";
-import { Bell, Search, Menu } from "lucide-react";
+import { Bell, Search, Menu, X, CheckCheck } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -27,15 +27,19 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
     try {
       const response = await api.get("/notifications");
       const fetchedNotifs = response.data || [];
-      setNotifications(fetchedNotifs);
+      
+      const clearedIds = JSON.parse(localStorage.getItem('clearedNotifications') || '[]');
+      const visibleNotifs = fetchedNotifs.filter((n: any) => !clearedIds.includes(n.id));
+      
+      setNotifications(visibleNotifs);
       
       // Calculate unread count using local storage
       const lastRead = localStorage.getItem('lastReadNotificationsTimestamp');
       if (!lastRead) {
-        setUnreadCount(fetchedNotifs.length);
+        setUnreadCount(visibleNotifs.length);
       } else {
         const lastReadTime = new Date(lastRead).getTime();
-        const unread = fetchedNotifs.filter((n: any) => new Date(n.createdAt).getTime() > lastReadTime).length;
+        const unread = visibleNotifs.filter((n: any) => new Date(n.createdAt).getTime() > lastReadTime).length;
         setUnreadCount(unread);
       }
     } catch (error) {
@@ -46,6 +50,32 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
   const handleMarkAsRead = () => {
     setUnreadCount(0);
     localStorage.setItem('lastReadNotificationsTimestamp', new Date().toISOString());
+  };
+
+  const handleClearAll = () => {
+    const currentIds = notifications.map(n => n.id);
+    const clearedIds = JSON.parse(localStorage.getItem('clearedNotifications') || '[]');
+    localStorage.setItem('clearedNotifications', JSON.stringify([...clearedIds, ...currentIds]));
+    setNotifications([]);
+    setUnreadCount(0);
+  };
+
+  const handleClearSingle = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const clearedIds = JSON.parse(localStorage.getItem('clearedNotifications') || '[]');
+    clearedIds.push(id);
+    localStorage.setItem('clearedNotifications', JSON.stringify(clearedIds));
+    
+    setNotifications(prev => {
+      const target = prev.find(n => n.id === id);
+      if (target) {
+        const lastRead = localStorage.getItem('lastReadNotificationsTimestamp');
+        if (!lastRead || new Date(target.createdAt).getTime() > new Date(lastRead).getTime()) {
+          setUnreadCount(count => Math.max(0, count - 1));
+        }
+      }
+      return prev.filter(n => n.id !== id);
+    });
   };
 
   // Close dropdown when clicking outside
@@ -104,14 +134,26 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
             <div className="absolute right-0 mt-3 w-[320px] sm:w-[380px] bg-white rounded-2xl shadow-xl border border-slate-200 z-50 overflow-hidden transform origin-top-right transition-all animate-in fade-in zoom-in duration-200">
               <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
                 <h3 className="font-bold text-slate-900">Notifications</h3>
-                {unreadCount > 0 && (
-                  <button 
-                    onClick={handleMarkAsRead}
-                    className="text-xs font-semibold text-brand-600 hover:text-brand-700 cursor-pointer"
-                  >
-                    Mark all as read
-                  </button>
-                )}
+                <div className="flex gap-3">
+                  {unreadCount > 0 && (
+                    <button 
+                      onClick={handleMarkAsRead}
+                      title="Mark all as read"
+                      className="text-slate-400 hover:text-brand-600 transition-colors cursor-pointer"
+                    >
+                      <CheckCheck className="w-4 h-4" />
+                    </button>
+                  )}
+                  {notifications.length > 0 && (
+                    <button 
+                      onClick={handleClearAll}
+                      title="Clear all"
+                      className="text-slate-400 hover:text-red-500 transition-colors cursor-pointer"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
               </div>
               <div className="max-h-[360px] overflow-y-auto">
                 {notifications.length > 0 ? (
@@ -124,20 +166,27 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
                       const isUnread = notifTime > lastReadTime;
 
                       return (
-                        <div key={notif.id} className={`p-4 hover:bg-slate-50 cursor-pointer transition-colors flex gap-4 items-start ${isUnread ? 'bg-brand-50/30' : ''}`}>
+                        <div key={notif.id} className={`p-4 hover:bg-slate-50 cursor-pointer transition-colors flex gap-4 items-start relative group ${isUnread ? 'bg-brand-50/30' : ''}`}>
                           <div className={`w-2 h-2 rounded-full mt-2 shrink-0 ${
                             notif.type === 'alert' ? 'bg-red-500' :
                             notif.type === 'warning' ? 'bg-orange-500' :
                             notif.type === 'success' ? 'bg-emerald-500' :
                             'bg-blue-500'
                           }`}></div>
-                          <div>
+                          <div className="flex-1 pr-6">
                             <p className="text-sm text-slate-800 font-medium leading-snug">{notif.title}</p>
                             <p className="text-xs text-slate-600 mt-1">{notif.message}</p>
                             <p className="text-[10px] text-slate-400 mt-2 font-medium">
                               {new Date(notif.createdAt).toLocaleString()}
                             </p>
                           </div>
+                          <button
+                            onClick={(e) => handleClearSingle(notif.id, e)}
+                            className="absolute right-4 top-4 p-1.5 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-lg opacity-0 group-hover:opacity-100 transition-all"
+                            title="Clear notification"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
                         </div>
                       )
                     })}
@@ -151,9 +200,12 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
                   </div>
                 )}
               </div>
-              <div className="p-3 border-t border-slate-100 bg-slate-50 text-center">
-                <Link href="/dashboard/profile" onClick={() => setShowNotifications(false)} className="text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors">
-                  View Notification Settings
+              <div className="p-3 border-t border-slate-100 bg-slate-50 flex justify-between px-4">
+                <Link href="/dashboard/notifications" onClick={() => setShowNotifications(false)} className="text-xs font-semibold text-brand-600 hover:text-brand-800 transition-colors">
+                  View All Notifications
+                </Link>
+                <Link href="/dashboard/profile" onClick={() => setShowNotifications(false)} className="text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors">
+                  Settings
                 </Link>
               </div>
             </div>
