@@ -135,7 +135,22 @@ export default function DashboardPage() {
               )}
             </Card>
           </section>
-
+          {/*  Recommended Courses*/}
+          <section>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                <ChartIcon className="h-5 w-5 text-slate-500" /> Recommended Courses
+              </h2>
+              <Link href="/dashboard/performance" className="text-sm font-medium text-blue-600 hover:text-blue-700 mr-10">
+                View All
+              </Link>
+            </div>
+            <Card className="border-slate-200 shadow-sm flex flex-col items-center">
+              <div className="p-8 text-center text-slate-500">
+                  No recommended courses data available.
+                </div>
+            </Card>
+          </section>
         </div>
 
         {/* Right Sidebar Column (1/3 width on large screens) */}
@@ -219,7 +234,7 @@ export default function DashboardPage() {
               </p>
             </Card>
           </section>
-
+          
         </div>
       </div>
     </div>

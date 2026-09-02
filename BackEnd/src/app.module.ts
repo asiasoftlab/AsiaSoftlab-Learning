@@ -10,6 +10,7 @@ import { AiModule } from './ai/ai.module';
 import { OpportunitiesModule } from './opportunities/opportunities.module';
 import { StorageModule } from './storage/storage.module';
 import { EventsModule } from './events/events.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { EventsModule } from './events/events.module';
     OpportunitiesModule,
     StorageModule,
     EventsModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

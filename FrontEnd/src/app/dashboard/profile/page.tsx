@@ -115,7 +115,7 @@ export default function ProfilePage() {
             
             <div className="relative mt-8 mb-4 group cursor-pointer">
               <div className="w-28 h-28 bg-white p-1 rounded-full shadow-lg">
-                <div className="w-full h-full bg-slate-100 rounded-full flex items-center justify-center text-3xl font-bold text-brand-600 border-2 border-dashed border-slate-300 group-hover:border-brand-400 transition-colors">
+                <div className="w-full h-full bg-slate-100 rounded-full flex items-center justify-center text-5xl font-bold text-brand-600 border-2 border-dashed border-slate-300 group-hover:border-brand-400 transition-colors">
                   {getInitials(formData.displayName)}
                 </div>
               </div>
@@ -124,8 +124,8 @@ export default function ProfilePage() {
               </div>
             </div>
             
-            <h2 className="text-xl font-bold text-slate-900">{formData.displayName}</h2>
-            <div className="inline-flex items-center px-3 py-1 mt-2 rounded-full bg-brand-50 text-brand-700 text-xs font-semibold uppercase tracking-wider">
+            <h2 className="text-2xl font-bold text-slate-900">{formData.displayName}</h2>
+            <div className="inline-flex items-center px-3 py-1 mt-2 rounded-md bg-brand-100 text-brand-700 text-xs font-semibold uppercase tracking-wider">
               {formData.role}
             </div>
             
@@ -137,13 +137,13 @@ export default function ProfilePage() {
 
           {/* Navigation */}
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-2">
-            <button onClick={() => setActiveTab("personal")} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${activeTab === "personal" ? "bg-brand-50 text-brand-700" : "text-slate-600 hover:bg-slate-50 cursor-pointer"}`}>
+            <button onClick={() => setActiveTab("personal")} className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${activeTab === "personal" ? "bg-brand-50 text-brand-700" : "text-slate-600 hover:bg-slate-50 cursor-pointer"}`}>
               <User className="w-4 h-4" /> Personal Details
             </button>
-            <button onClick={() => setActiveTab("security")} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${activeTab === "security" ? "bg-brand-50 text-brand-700" : "text-slate-600 hover:bg-slate-50 cursor-pointer"}`}>
+            <button onClick={() => setActiveTab("security")} className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${activeTab === "security" ? "bg-brand-50 text-brand-700" : "text-slate-600 hover:bg-slate-50 cursor-pointer"}`}>
               <Shield className="w-4 h-4" /> Security & Password
             </button>
-            <button onClick={() => setActiveTab("notifications")} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${activeTab === "notifications" ? "bg-brand-50 text-brand-700" : "text-slate-600 hover:bg-slate-50 cursor-pointer"}`}>
+            <button onClick={() => setActiveTab("notifications")} className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${activeTab === "notifications" ? "bg-brand-50 text-brand-700" : "text-slate-600 hover:bg-slate-50 cursor-pointer"}`}>
               <Bell className="w-4 h-4" /> Notifications
             </button>
           </div>
@@ -170,7 +170,7 @@ export default function ProfilePage() {
                       type="text" 
                       value={formData.displayName}
                       onChange={(e) => setFormData({...formData, displayName: e.target.value})}
-                      className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none text-slate-700"
+                      className="w-full px-4 py-3 rounded-lg border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none text-slate-700"
                     />
                   </div>
 
@@ -183,7 +183,7 @@ export default function ProfilePage() {
                       type="email" 
                       disabled
                       value={formData.email}
-                      className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-100 text-slate-500 cursor-not-allowed outline-none"
+                      className="w-full px-4 py-3 rounded-lg border border-slate-200 bg-slate-100 text-slate-500 cursor-not-allowed outline-none"
                     />
                   </div>
 
@@ -196,7 +196,7 @@ export default function ProfilePage() {
                       type="date" 
                       value={formData.dob}
                       onChange={(e) => setFormData({...formData, dob: e.target.value})}
-                      className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none text-slate-700"
+                      className="w-full px-4 py-3 rounded-lg border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none text-slate-700"
                     />
                   </div>
 
@@ -208,7 +208,7 @@ export default function ProfilePage() {
                     <select
                       value={formData.gender}
                       onChange={(e) => setFormData({...formData, gender: e.target.value})}
-                      className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none text-slate-700 appearance-none"
+                      className="w-full px-4 py-3 rounded-lg border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none text-slate-700 appearance-none"
                     >
                       <option value="Male">Male</option>
                       <option value="Female">Female</option>
@@ -227,7 +227,7 @@ export default function ProfilePage() {
                       value={formData.phone}
                       onChange={(e) => setFormData({...formData, phone: e.target.value})}
                       placeholder="e.g. +911234567890"
-                      className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none text-slate-700"
+                      className="w-full px-4 py-3 rounded-lg border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none text-slate-700"
                     />
                   </div>
 
@@ -241,7 +241,7 @@ export default function ProfilePage() {
                       value={formData.country}
                       onChange={(e) => setFormData({...formData, country: e.target.value})}
                       placeholder="e.g. India"
-                      className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none text-slate-700"
+                      className="w-full px-4 py-3 rounded-lg border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none text-slate-700"
                     />
                   </div>
 
@@ -255,7 +255,7 @@ export default function ProfilePage() {
                       value={formData.state}
                       onChange={(e) => setFormData({...formData, state: e.target.value})}
                       placeholder="e.g. Tamil Nadu or Kerala"
-                      className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none text-slate-700"
+                      className="w-full px-4 py-3 rounded-lg border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none text-slate-700"
                     />
                   </div>
 
@@ -269,7 +269,7 @@ export default function ProfilePage() {
                       value={formData.city}
                       onChange={(e) => setFormData({...formData, city: e.target.value})}
                       placeholder="e.g. Chennai or Coimbatore"
-                      className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none text-slate-700"
+                      className="w-full px-4 py-3 rounded-lg border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none text-slate-700"
                     />
                   </div>
                   {/* Education Qualification */}
@@ -284,7 +284,7 @@ export default function ProfilePage() {
                         education: e.target.value,
                         course: "" // Reset course when education changes
                       })}
-                      className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none text-slate-700 appearance-none"
+                      className="w-full px-4 py-3 rounded-lg border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none text-slate-700 appearance-none"
                     >
                       <option value="" disabled>Select Qualification</option>
                       <option value="8th">8th</option>
@@ -308,7 +308,7 @@ export default function ProfilePage() {
                       onChange={(e) => setFormData({...formData, course: e.target.value})}
                       
                       disabled={!formData.education}
-                      className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none text-slate-700 appearance-none disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-full px-4 py-3 rounded-lg border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none text-slate-700 appearance-none disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <option value="" disabled>Select Course/Degree</option>
                       {formData.education && courseOptions[formData.education]?.map((courseName, idx) => (
@@ -327,7 +327,7 @@ export default function ProfilePage() {
                       value={formData.yearOfPassout}
                       onChange={(e) => setFormData({...formData, yearOfPassout: e.target.value})}
                       placeholder="e.g. 2024"
-                      className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none text-slate-700"
+                      className="w-full px-4 py-3 rounded-lg border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none text-slate-700"
                     />
                   </div>
 
@@ -340,7 +340,7 @@ export default function ProfilePage() {
                       value={formData.address}
                       onChange={(e) => setFormData({...formData, address: e.target.value})}
                       rows={2}
-                      className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none text-slate-700 resize-none"
+                      className="w-full px-4 py-3 rounded-lg border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none text-slate-700 resize-none"
                     />
                   </div>
                 </div>
@@ -371,21 +371,21 @@ export default function ProfilePage() {
                   <label className="text-sm font-semibold text-slate-700">Current Password</label>
                   <input 
                     type="password" 
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none"
+                    className="w-full px-4 py-3 rounded-lg border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none"
                   />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-slate-700">New Password</label>
                   <input 
                     type="password" 
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none"
+                    className="w-full px-4 py-3 rounded-lg border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none"
                   />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-slate-700">Confirm New Password</label>
                   <input 
                     type="password" 
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none"
+                    className="w-full px-4 py-3 rounded-lg border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none"
                   />
                 </div>
                 
@@ -407,14 +407,13 @@ export default function ProfilePage() {
                 </h2>
                 <p className="text-sm text-slate-500 mt-1">Choose what updates you want to receive.</p>
               </div>
-              
               <div className="space-y-6">
                 {[
                   { title: "Course Updates", desc: "Get notified when new lessons are added to your enrolled courses." },
                   { title: "Messages", desc: "Receive email alerts when you get a new direct message." },
                   { title: "Marketing & Promos", desc: "Hear about new features, sales, and platform news." }
                 ].map((item, i) => (
-                  <div key={i} className="flex items-start justify-between gap-4 p-4 rounded-2xl border border-slate-100 hover:border-brand-200 bg-slate-50/50 transition-colors">
+                  <div key={i} className="flex items-start justify-between gap-4 p-4 rounded-xl border border-slate-100 hover:border-brand-200 bg-slate-50/50 transition-colors">
                     <div>
                       <h3 className="font-semibold text-slate-800">{item.title}</h3>
                       <p className="text-sm text-slate-500">{item.desc}</p>

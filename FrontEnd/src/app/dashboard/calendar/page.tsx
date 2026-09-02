@@ -151,7 +151,7 @@ export default function CalendarPage() {
   const handleDeleteEvent = (id: string) => {
     // Close the 3-dots dropdown menu immediately
     setOpenMenuId(null);
-    
+
     // Show confirmation toast
     toast((t) => (
       <div className="flex flex-col gap-3">
@@ -254,14 +254,14 @@ export default function CalendarPage() {
               <button onClick={prevMonth} className="p-1.5 hover:bg-slate-100 rounded-md text-slate-600 transition-colors">
                 <ChevronLeft className="h-5 w-5" />
               </button>
-              
-              <button 
+
+              <button
                 onClick={goToToday}
                 title="Return to Today"
                 className="px-4 py-1.5 text-sm font-semibold text-slate-800 hover:bg-slate-100 rounded-md transition-colors min-w-[160px] text-center"
               >
-                {currentMonth === new Date().getMonth() && currentYear === new Date().getFullYear() 
-                  ? `Today: ${new Date().getDate()} ${monthNames[new Date().getMonth()]}, ${new Date().getFullYear()}` 
+                {currentMonth === new Date().getMonth() && currentYear === new Date().getFullYear()
+                  ? `Today: ${new Date().getDate()} ${monthNames[new Date().getMonth()]}, ${new Date().getFullYear()}`
                   : `${monthNames[currentMonth]} ${currentYear}`}
               </button>
 

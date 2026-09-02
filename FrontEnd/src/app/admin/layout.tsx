@@ -92,7 +92,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </Link>
             <Link href="/admin/notifications" className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${pathname.startsWith('/admin/notifications') ? 'bg-brand-50 text-brand-600' : 'hover:bg-slate-50 text-slate-700 hover:text-brand-600'}`}>
               <Bell className="w-5 h-5" />
-              <span className="font-medium">User Notifications</span>
+              <span className="font-medium">Notifications</span>
             </Link>
           </nav>
           <div className="p-4 border-t border-slate-200">
