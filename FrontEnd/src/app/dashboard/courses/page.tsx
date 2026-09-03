@@ -14,16 +14,22 @@ export default function MyCoursesPage() {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await api.get("/courses");
-        // Inject mock progress to simulate enrolled courses until the enrollment API is ready
-        const mapped = response.data.map((c: any) => ({
-          ...c,
-          // progress: Math.floor(Math.random() * 80) + 10,
-          // lastLesson: `Module ${Math.floor(Math.random() * 4) + 1}: Introduction`
+        const response = await api.get("/payments/my-enrollments");
+        const enrolledItems = response.data || [];
+        const mapped = enrolledItems.map((item: any) => ({
+          id: item.courseId,
+          title: item.course?.title || item.courseTitle,
+          thumbnailUrl: item.course?.thumbnailUrl || item.courseThumbnailUrl,
+          lastLesson: item.course?.lessons?.[0]?.title 
+            ? `Lesson 1: ${item.course.lessons[0].title}` 
+            : "Course Materials Ready",
+          progress: 0,
         }));
         setCourses(mapped);
       } catch (error) {
-        console.error("Failed to fetch courses:", error);
+        console.error("Failed to fetch enrolled courses:", error);
+        // Fallback: empty courses list
+        setCourses([]);
       } finally {
         setLoading(false);
       }
@@ -82,7 +88,8 @@ export default function MyCoursesPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {filteredCourses.map((course, idx) => (
             <ActiveCourseCard 
-              key={course._id || idx}
+              key={course.id || idx}
+              courseId={course.id}
               title={course.title}
               lastLesson={course.lastLesson}
               progress={course.progress}
@@ -91,10 +98,18 @@ export default function MyCoursesPage() {
             />
           ))}
           {filteredCourses.length === 0 && (
-            <div className="col-span-full flex flex-col items-center justify-center py-16 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+            <div className="col-span-full flex flex-col items-center justify-center py-16 text-center bg-white rounded-2xl border border-dashed border-slate-200 p-8 shadow-sm">
               <BookOpen className="h-12 w-12 text-slate-300 mb-4" />
-              <h3 className="text-lg font-semibold text-slate-900">No courses found</h3>
-              <p className="text-slate-500 mt-1">You don't have any courses matching this filter.</p>
+              <h3 className="text-lg font-semibold text-slate-900">No Enrolled Courses Found</h3>
+              <p className="text-slate-500 mt-1 max-w-sm mb-6 text-sm">
+                You haven't enrolled in any courses yet. Discover skills and advance your career with our top-rated programs.
+              </p>
+              <a 
+                href="/courses" 
+                className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white text-sm font-bold px-6 py-2.5 rounded-xl shadow-sm transition-all"
+              >
+                Browse Academy Courses
+              </a>
             </div>
           )}
         </div>

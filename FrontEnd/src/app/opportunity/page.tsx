@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
-import { Loader2, MapPin, Building, Briefcase } from "lucide-react";
+import { Loader2, MapPin, Building, Briefcase, ArrowRight, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth.store";
@@ -91,9 +91,17 @@ export default function OpportunitiesPage() {
                     </Link>
                     <button 
                       onClick={() => handleApply(opp.applyLink)}
-                      className="block w-full text-center bg-white border-2 border-brand-500 text-brand-600 hover:bg-brand-50 font-semibold py-2.5 rounded-lg transition-colors cursor-pointer"
+                      className="flex items-center justify-center gap-2 w-full text-center bg-white border-2 border-brand-500 text-brand-600 hover:bg-brand-50 font-semibold py-2.5 rounded-lg transition-colors cursor-pointer"
                     >
-                      {isAuthenticated ? "Apply Now" : "Login to Apply"}
+                      {isAuthenticated ? (
+                        <>
+                          Apply Now <ArrowRight className="w-4 h-4" />
+                        </>
+                      ) : (
+                        <>
+                          <ArrowLeft className="w-4 h-4" /> Login to Apply
+                        </>
+                      )}
                     </button>
                   </div>
                 </div>

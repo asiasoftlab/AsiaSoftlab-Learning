@@ -3,8 +3,10 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MonitorPlay } from "lucide-react";
+import Link from "next/link";
 
 interface ActiveCourseCardProps {
+  courseId?: string;
   title: string;
   lastLesson: string;
   progress: number;
@@ -13,6 +15,7 @@ interface ActiveCourseCardProps {
 }
 
 export function ActiveCourseCard({ 
+  courseId,
   title, 
   lastLesson, 
   progress, 
@@ -82,9 +85,17 @@ export function ActiveCourseCard({
           <div className="h-12 w-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center flex-shrink-0">
             <MonitorPlay className="h-6 w-6 text-white" />
           </div>
-          <Button variant="ghost" className="bg-white/90 hover:bg-white text-slate-800 rounded-full text-xs font-medium px-4 h-8">
-            Continue Learning
-          </Button>
+          {courseId ? (
+            <Link href={`/courses/${courseId}`}>
+              <Button variant="ghost" className="bg-white/90 hover:bg-white text-slate-800 rounded-full text-xs font-medium px-4 h-8 cursor-pointer">
+                Continue Learning
+              </Button>
+            </Link>
+          ) : (
+            <Button variant="ghost" className="bg-white/90 hover:bg-white text-slate-800 rounded-full text-xs font-medium px-4 h-8">
+              Continue Learning
+            </Button>
+          )}
         </div>
 
         <div className="mb-8 mt-auto">

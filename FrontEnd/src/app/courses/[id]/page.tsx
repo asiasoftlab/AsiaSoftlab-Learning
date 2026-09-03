@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import AiAssistant from "@/components/chat/AiAssistant";
-import { Loader2, PlayCircle, Clock, Users, Star, ArrowLeft, Lock, LayoutGrid, ChevronLeft, ChevronRight, CheckCircle2, BookOpen, Layers, FileText, Download } from "lucide-react";
+import { Loader2, PlayCircle, Clock, Users, Star, ArrowLeft, Lock, LayoutGrid, ChevronLeft, ChevronRight, CheckCircle2, BookOpen, Layers, FileText, Download, ArrowRight} from "lucide-react";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { useAuthStore } from "@/store/auth.store";
@@ -24,9 +24,23 @@ export default function CourseDetailsPage() {
   const [viewerUrl, setViewerUrl] = useState<string | null>(null);
   const [viewerTitle, setViewerTitle] = useState("");
 
+  const [isEnrolled, setIsEnrolled] = useState(false);
+
   useEffect(() => {
     fetchCourse();
   }, [id]);
+
+  useEffect(() => {
+    if (isAuthenticated && id) {
+      api.get(`/payments/check/${id}`)
+        .then((res) => {
+          if (res.data?.isEnrolled) {
+            setIsEnrolled(true);
+          }
+        })
+        .catch(() => {});
+    }
+  }, [id, isAuthenticated]);
 
   const fetchCourse = async () => {
     try {
@@ -65,12 +79,21 @@ export default function CourseDetailsPage() {
   const sortedLessons = course.lessons ? [...course.lessons].sort((a, b) => a.order - b.order) : [];
 
   const handleEnrollClick = () => {
-    if (!isAuthenticated) {
-      toast.error("Please log in to enroll in this course");
-      router.push("/login");
+    if (isEnrolled) {
+      if (sortedLessons.length > 0) {
+        setActiveLesson(sortedLessons[0]);
+      }
+      toast.success("You are enrolled! Enjoy the course lessons.");
       return;
     }
-    toast.success("Enrollment process initiated!");
+
+    if (!isAuthenticated) {
+      toast.error("Please log in to enroll in this course");
+      router.push(`/login?redirect=/checkout?courseId=${id}`);
+      return;
+    }
+
+    router.push(`/checkout?courseId=${id}`);
   };
 
   const handleLessonClick = (lesson: any) => {
@@ -261,8 +284,23 @@ export default function CourseDetailsPage() {
                   </>
                 )}
               </div>
-              <button onClick={handleEnrollClick} className="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all cursor-pointer">
-                Enroll Now
+              <button
+                onClick={handleEnrollClick}
+                className={`flex items-center justify-center gap-2 w-full font-bold py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all cursor-pointer ${
+                  isEnrolled
+                    ? "bg-emerald-600 hover:bg-emerald-700 text-white"
+                    : "bg-brand-600 hover:bg-brand-700 text-white"
+                }`}
+              >
+                {isEnrolled ? (
+                  <>
+                    Enrolled • Start Learning <PlayCircle className="h-4 w-4" />
+                  </>
+                ) : (
+                  <>
+                    Enroll Now <ArrowRight className="h-4 w-4" />
+                  </>
+                )}
               </button>
 
               <div className="mt-6 space-y-3">

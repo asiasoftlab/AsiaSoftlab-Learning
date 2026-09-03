@@ -46,7 +46,7 @@ export default function CoursesPage() {
         </div>
 
         {courses.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-2xl border border-slate-100 shadow-sm">
+          <div className="text-center py-20 bg-white rounded-xl border border-slate-100 shadow-sm">
             <h3 className="text-xl font-semibold text-slate-800">No Courses Available</h3>
             <p className="text-slate-500 mt-2">Check back later for exciting new courses!</p>
           </div>
@@ -73,12 +73,12 @@ export default function CoursesPage() {
                 : "TBD";
 
               return (
-                <Link href={`/courses/${course.id}`} key={idx} className="group bg-white rounded-2xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] overflow-hidden p-4 flex flex-col hover:shadow-2xl hover:-translate-y-2 hover:border-emerald-100 transition-all duration-300 ease-out cursor-pointer relative">
+                <Link href={`/courses/${course.id}`} key={idx} className="group bg-white rounded-xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] overflow-hidden p-4 flex flex-col hover:shadow-2xl hover:-translate-y-2 hover:border-emerald-100 transition-all duration-300 ease-out cursor-pointer relative">
                   
                   {/* Thumbnail with slight scale animation on hover */}
-                  <div className={`relative h-48 w-full rounded-xl bg-slate-100 mb-5 overflow-hidden`}>
+                  <div className={`relative h-48 w-full rounded-md bg-slate-100 mb-5 overflow-hidden`}>
                     {course.thumbnailUrl ? (
-                      <Image src={course.thumbnailUrl} alt={course.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover group-hover:scale-105 transition-transform duration-700" />
+                      <Image src={course.thumbnailUrl} alt={course.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 100vw" className="object-cover group-hover:scale-105 transition-transform duration-700" />
                     ) : (
                       <div className="w-full h-full bg-slate-800 flex items-center justify-center text-slate-500">No Image</div>
                     )}
