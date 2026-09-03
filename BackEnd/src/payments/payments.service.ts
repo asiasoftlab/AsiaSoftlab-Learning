@@ -217,4 +217,8 @@ export class PaymentsService {
 
     return enriched;
   }
+
+  async getAllOrders() {
+    return this.paymentsRepository.findAllOrders();
+  }
 }

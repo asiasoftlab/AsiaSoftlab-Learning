@@ -146,4 +146,24 @@ export class PaymentsRepository {
       throw new InternalServerErrorException('Failed to fetch user enrollments');
     }
   }
+
+  async findAllOrders(): Promise<PaymentOrder[]> {
+    try {
+      const db = this.firebaseService.getFirestore();
+      const snapshot = await db.collection(this.ordersCollection).orderBy('createdAt', 'desc').get();
+
+      return snapshot.docs.map((doc) => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          ...data,
+          createdAt: data?.createdAt?.toDate ? data.createdAt.toDate() : data?.createdAt,
+          updatedAt: data?.updatedAt?.toDate ? data.updatedAt.toDate() : data?.updatedAt,
+        } as PaymentOrder;
+      });
+    } catch (error: any) {
+      console.error('Error retrieving all orders:', error);
+      throw new InternalServerErrorException('Failed to fetch all orders');
+    }
+  }
 }

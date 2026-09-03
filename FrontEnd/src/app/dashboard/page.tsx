@@ -10,23 +10,39 @@ import { ChevronRight, ClipboardList, PlayCircle, Star, Sparkles } from "lucide-
 import Link from "next/link";
 
 export default function DashboardPage() {
-  // In a real application, these would be fetched from an API
-  const activeCourses: any[] = [];
+  const [activeCourses, setActiveCourses] = useState<any[]>([]);
   const recentPerformance: any[] = [];
   const upcomingDeadlines: any[] = [];
   const [availableCourses, setAvailableCourses] = useState<number | string>("...");
 
   useEffect(() => {
-    const fetchCourses = async () => {
+    const fetchDashboardData = async () => {
       try {
         const response = await api.get('/courses');
         setAvailableCourses(response.data?.length || 0);
+
+        const enrollmentsResponse = await api.get('/payments/my-enrollments');
+        const enrollments = enrollmentsResponse.data || [];
+        
+        const mappedCourses = enrollments.map((e: any, index: number) => {
+          const colors: ("teal" | "blue" | "purple" | "orange")[] = ['teal', 'blue', 'purple', 'orange'];
+          return {
+            courseId: e.courseId,
+            title: e.courseTitle || 'Enrolled Course',
+            thumbnailUrl: e.courseThumbnailUrl,
+            lastLesson: 'Getting Started',
+            progress: 0,
+            colorScheme: colors[index % colors.length]
+          };
+        });
+        
+        setActiveCourses(mappedCourses);
       } catch (error) {
-        console.error("Failed to fetch courses:", error);
+        console.error("Failed to fetch dashboard data:", error);
         setAvailableCourses("-");
       }
     };
-    fetchCourses();
+    fetchDashboardData();
   }, []);
 
   return (
@@ -35,7 +51,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-5 gap-4 w-full">
         <SummaryCard
           title="Courses Enrolled"
-          value="0"
+          value={activeCourses.length.toString()}
         />
         <SummaryCard
           title="Hours Learned"
@@ -81,7 +97,14 @@ export default function DashboardPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {activeCourses.map((course, idx) => (
                   <ActiveCourseCard
-                    key={idx} title={course.title} lastLesson={course.lastLesson} progress={course.progress} thumbnailUrl={course.thumbnailUrl} colorScheme="teal" />
+                    key={idx} 
+                    courseId={course.courseId}
+                    title={course.title} 
+                    lastLesson={course.lastLesson} 
+                    progress={course.progress} 
+                    thumbnailUrl={course.thumbnailUrl} 
+                    colorScheme={course.colorScheme} 
+                  />
                 ))}
               </div>
             ) : (

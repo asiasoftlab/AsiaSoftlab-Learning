@@ -4,9 +4,10 @@ import { PaymentsService } from './payments.service';
 import { PaymentsRepository } from './payments.repository';
 import { FirebaseModule } from '../firebase/firebase.module';
 import { CoursesModule } from '../courses/courses.module';
+import { UsersModule } from '../users/users.module';
 
 @Module({
-  imports: [FirebaseModule, CoursesModule],
+  imports: [FirebaseModule, CoursesModule, UsersModule],
   controllers: [PaymentsController],
   providers: [PaymentsService, PaymentsRepository],
   exports: [PaymentsService, PaymentsRepository],

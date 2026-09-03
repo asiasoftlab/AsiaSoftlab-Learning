@@ -3,6 +3,8 @@ import { PaymentsService } from './payments.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { VerifyPaymentDto } from './dto/verify-payment.dto';
 import { FirebaseAuthGuard } from '../auth/firebase-auth.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { RolesGuard } from '../auth/guards/roles.guard';
 
 @Controller('payments')
 export class PaymentsController {
@@ -41,5 +43,12 @@ export class PaymentsController {
   getMyEnrollments(@Req() req: any) {
     const userId = req.user?.uid || req.user?.id;
     return this.paymentsService.getMyEnrollments(userId);
+  }
+
+  @Get('admin/orders')
+  @UseGuards(FirebaseAuthGuard, RolesGuard)
+  @Roles('admin')
+  getAllOrders() {
+    return this.paymentsService.getAllOrders();
   }
 }
