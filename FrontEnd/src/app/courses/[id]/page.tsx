@@ -4,11 +4,17 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import AiAssistant from "@/components/chat/AiAssistant";
-import { Loader2, PlayCircle, Clock, Users, Star, ArrowLeft, Lock, LayoutGrid, ChevronLeft, ChevronRight, CheckCircle2, BookOpen, Layers, FileText, Download, ArrowRight} from "lucide-react";
+import { Play,Loader2, PlayCircle, Clock, Users, Star, ArrowLeft, Lock, LayoutGrid, ChevronLeft, ChevronRight, CheckCircle2, BookOpen, Layers, FileText, Download, ArrowRight} from "lucide-react";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { useAuthStore } from "@/store/auth.store";
-import { SecureDocumentViewer } from "@/components/SecureDocumentViewer";
+import dynamic from "next/dynamic";
+
+// react-pdf uses browser-only Canvas APIs — must be loaded client-side only
+const SecureDocumentViewer = dynamic(
+  () => import("@/components/SecureDocumentViewer").then((m) => m.SecureDocumentViewer),
+  { ssr: false }
+);
 
 export default function CourseDetailsPage() {
   const params = useParams();
@@ -216,7 +222,9 @@ export default function CourseDetailsPage() {
               {isAuthenticated && activeLesson?.documents && activeLesson.documents.length > 0 && (
                 <div className="pt-8 mt-8 border-t border-slate-100">
                   <h3 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
-                    <FileText className="w-5 h-5 text-brand-600" />
+                    <svg className="w-6 h-6 text-red-500" viewBox="0 0 384 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M181.9 256.1c-5-16-4.9-46.9-2-46.9 8.4 0 7.6 36.9 2 46.9zm-1.7 47.2c-7.7 20.2-17.3 43.3-28.4 62.7 18.3-7 39-17.2 62.9-21.9-12.7-9.6-24.9-23.4-34.5-40.8zM86.1 428.1c0 .8 13.2-5.4 34.9-40.2-6.7 6.3-29.1 24.5-34.9 40.2zM248 160h136v328c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V24C0 10.7 10.7 0 24 0h200v136c0 13.2 10.8 24 24 24zm-8 171.8c-20-12.2-33.3-29-42.7-53.8 4.5-18.5 11.6-46.6 6.2-64.2-4.7-29.4-42.4-26.5-47.8-6.8-5 18.3-.4 44.1 8.1 77-11.6 27.6-28.7 64.6-40.8 85.8-.1 0-.1.1-.2.1-27.1 13.9-73.6 44.5-54.5 68 5.6 6.9 16 10 21.5 10 17.9 0 35.7-18 61.1-61.8 25.8-8.5 54.1-19.1 79-23.2 21.7 11.8 47.1 19.5 64 19.5 29.2 0 31.2-32 19.7-43.4-13.9-13.6-54.3-9.7-73.6-7.2zM377 105L279 7c-4.5-4.5-10.6-7-17-7h-6v128h128v-6.1c0-6.3-2.5-12.4-7-16.9zm-74.1 255.3c4.1-2.7-2.5-11.9-42.8-9 37.1 15.8 42.8 9 42.8 9z" />
+                    </svg>
                     Supporting Documents for {activeLesson.title}
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
@@ -317,9 +325,13 @@ export default function CourseDetailsPage() {
 
             {/* Course Content / Curriculum */}
             <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm flex flex-col h-[calc(100vh-20rem)] sticky top-24">
-              <div className="p-5 border-b border-slate-100 bg-slate-50 shrink-0">
-                <h3 className="font-bold text-slate-800">Course Content</h3>
-                <p className="text-xs text-slate-500 mt-1">{sortedLessons.length} lessons</p>
+              <div className="px-5 py-4 border-b border-slate-100 bg-slate-50 shrink-0 flex items-center gap-2.5">
+                <svg className="w-5 h-5 text-brand-500 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5,3 19,12 5,21" />
+                </svg>
+                <h3 className="font-bold text-slate-800 text-md">Course Content</h3>
+                <span className="text-slate-300 text-sm">·</span>
+                <p className="text-sm text-slate-500">{sortedLessons.length} lessons</p>
               </div>
 
               <div className="overflow-y-auto flex-1 p-2">

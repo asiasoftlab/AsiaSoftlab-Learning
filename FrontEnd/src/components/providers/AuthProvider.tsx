@@ -13,17 +13,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const setLoading = useAuthStore((state) => state.setLoading);
   const isLoading = useAuthStore((state) => state.isLoading);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  
   const pathname = usePathname();
   const router = useRouter();
 
   useEffect(() => {
     const checkAuth = async () => {
       let isAuth = false;
+      let userRole = null;
       try {
         const response = await api.get("/auth/me");
         if (response.data.success && response.data.user) {
           setAuth(response.data.user);
+          userRole = response.data.user.role;
           isAuth = true;
         } else {
           setAuth(null);
@@ -36,20 +37,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       // Handle Redirects after resolution
       const isProtectedPath = protectedPaths.some(p => pathname.startsWith(p));
+      const isAdminPath = pathname.startsWith('/admin');
       const authPaths = ['/login', '/register'];
       const isAuthPath = authPaths.some(p => pathname.startsWith(p));
 
-      if (!isAuth && isProtectedPath) {
+      if (!isAuth && (isProtectedPath || isAdminPath)) {
         router.replace("/login");
       } else if (isAuth && isAuthPath) {
         router.replace("/");
+      } else if (isAuth && isAdminPath && userRole !== 'admin') {
+        router.replace("/dashboard");
       }
     };
 
     checkAuth();
   }, [setAuth, setLoading, pathname, router]);
 
-  const isProtectedPath = protectedPaths.some(p => pathname.startsWith(p));
+  const isProtectedPath = protectedPaths.some(p => pathname.startsWith(p)) || pathname.startsWith('/admin');
   
   // Prevent UI flash by rendering a loading state while resolving a protected route
   if (isLoading && isProtectedPath) {

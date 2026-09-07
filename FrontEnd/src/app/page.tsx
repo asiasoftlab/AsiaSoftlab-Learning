@@ -58,7 +58,7 @@ export default async function Home() {
     if (published.length > 0) {
       // Get the latest up to 3 courses
       const latest = published.slice(-3).reverse();
-      
+
       displayCourses = latest.map((course: any) => {
         let totalMins = 0;
         if (course.lessons && Array.isArray(course.lessons)) {
@@ -73,8 +73,8 @@ export default async function Home() {
             }
           });
         }
-        const durationStr = totalMins > 0 
-          ? `${Math.floor(totalMins / 60).toString().padStart(2, '0')} hr ${(totalMins % 60).toString().padStart(2, '0')} mins` 
+        const durationStr = totalMins > 0
+          ? `${Math.floor(totalMins / 60).toString().padStart(2, '0')} hr ${(totalMins % 60).toString().padStart(2, '0')} mins`
           : "TBD";
 
         return {
@@ -137,7 +137,7 @@ export default async function Home() {
       <section className="py-20 bg-slate-50 border-t border-slate-100">
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-16">
-             <h3 className="text-emerald-500 font-semibold mb-2">Journey</h3>
+            <h3 className="text-emerald-500 font-semibold mb-2">Journey</h3>
             <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">How to begin our Jouney</h2>
             <p className="mt-4 text-lg text-slate-600">lskdjf nwofknwo fneowjfb oeiwjfoi nqefoi wenoifnq;ef oiwnoif qnoiw</p>
           </div>
@@ -245,16 +245,46 @@ export default async function Home() {
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Why Asia Softlab Virtual Academy</h2>
-            <p className="mt-4 text-lg text-slate-600">lskdjf nwofknwo fneowjfb oeiwjfoi nqefoi wenoifnq;ef oiwnoif qnoiw</p>
+            <p className="mt-4 text-lg text-slate-600">Everything you need to advance your aviation career - all in one place.</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+
+            {/* 1 */}
             <div className="flex flex-col items-center text-center">
-              <div className="h-16 w-16 rounded-2xl bg-brand-100 flex items-center justify-center text-brand-600 mb-6">
-                <Award className="h-8 w-8" />
+              <div className="flex items-center justify-center mb-6 overflow-hidden">
+                <Image src="/Home/1.png" alt="Expert-Led Learning" width={200} height={200} className="object-contain w-full h-full" />
               </div>
               <h3 className="text-xl font-semibold mb-3">Expert-Led Learning</h3>
               <p className="text-slate-600">Courses taught by industry veterans with thousands of hours of field experience.</p>
             </div>
+
+            {/* 2 */}
+            <div className="flex flex-col items-center text-center">
+              <div className="flex items-center justify-center mb-6 overflow-hidden">
+                <Image src="/Home/2.png" alt="Expert-Led Learning" width={200} height={200} className="object-contain w-full h-full" />
+              </div>
+              <h3 className="text-xl font-semibold mb-3">Practical, Real-World Skills</h3>
+              <p className="text-slate-600">Hands-on projects and simulations designed to mirror actual industry scenarios and workflows.</p>
+            </div>
+
+            {/* 3 */}
+            <div className="flex flex-col items-center text-center">
+              <div className="flex items-center justify-center mb-6 overflow-hidden">
+                <Image src="/Home/3.png" alt="Expert-Led Learning" width={200} height={200} className="object-contain w-full h-full" />
+              </div>
+              <h3 className="text-xl font-semibold mb-3">Learner Support</h3>
+              <p className="text-slate-600">Dedicated mentors and an active community ready to guide you at every step of your journey.</p>
+            </div>
+
+            {/* 4 */}
+            <div className="flex flex-col items-center text-center">
+              <div className="flex items-center justify-center mb-6 overflow-hidden">
+                <Image src="/Home/4.png" alt="Expert-Led Learning" width={200} height={200} className="object-contain w-full h-full" />
+              </div>
+              <h3 className="text-xl font-semibold mb-3">DGCA Certification</h3>
+              <p className="text-slate-600">Prepare for and achieve DGCA-recognised certifications that open doors across the aviation sector.</p>
+            </div>
+
           </div>
         </div>
       </section>
@@ -268,7 +298,7 @@ export default async function Home() {
               On Weekend UX, instructors from all over the world instruct millions of students. <br className="hidden md:block" /> We offer the knowledge and abilities.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               {
@@ -303,7 +333,7 @@ export default async function Home() {
                 <h4 className="font-semibold text-slate-900 text-md md:text-base mb-1">{tutor.name}</h4>
                 <p className="text-emerald-500 text-sm whitespace-pre-line leading-relaxed mb-4">{tutor.role}</p>
                 <p className="text-slate-500 text-sm leading-relaxed mb-6 flex-grow px-2">{tutor.desc}</p>
-                
+
                 <div className="flex items-center gap-4 text-slate-400 mt-auto">
                   <TwitterIcon className="w-4 h-4 hover:text-emerald-500 cursor-pointer transition-colors" />
                   <LinkedinIcon className="w-4 h-4 hover:text-emerald-500 cursor-pointer transition-colors" />
@@ -349,7 +379,7 @@ export default async function Home() {
               Stay updated with the latest news, industry insights, and educational resources from our expert instructors.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
             {/* Left Column - Small Posts */}
             <div className="flex flex-col gap-8">
