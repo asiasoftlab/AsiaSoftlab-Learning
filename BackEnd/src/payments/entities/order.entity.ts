@@ -1,14 +1,15 @@
 export class PaymentOrder {
-  id: string; // Razorpay order_id or local doc id
-  razorpayOrderId: string;
+  id: string; // The order ID (either razorpay_order_id or internal ID)
+  razorpayOrderId?: string;
   razorpayPaymentId?: string;
   razorpaySignature?: string;
+  paymentGateway: 'razorpay';
   userId: string;
   courseId: string;
   amount: number; // in INR
   amountInPaise: number;
   currency: string; // 'INR'
-  status: 'created' | 'paid' | 'failed' | 'cancelled';
+  status: 'created' | 'attempted' | 'paid' | 'failed' | 'cancelled';
   receipt: string;
   studentDetails: {
     name: string;

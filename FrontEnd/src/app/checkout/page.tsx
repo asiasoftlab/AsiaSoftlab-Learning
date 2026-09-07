@@ -155,7 +155,6 @@ function CheckoutContent() {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Handle Razorpay Checkout
   const handleProceedToPayment = async () => {
     setPaymentError(null);
 

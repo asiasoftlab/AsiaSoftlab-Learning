@@ -13,7 +13,7 @@ export class PaymentsRepository {
   async saveOrder(order: PaymentOrder): Promise<PaymentOrder> {
     try {
       const db = this.firebaseService.getFirestore();
-      const docRef = db.collection(this.ordersCollection).doc(order.razorpayOrderId);
+      const docRef = db.collection(this.ordersCollection).doc(order.id);
       
       const payload: any = {
         ...order,
@@ -38,10 +38,11 @@ export class PaymentsRepository {
   async findOrderByRazorpayId(razorpayOrderId: string): Promise<PaymentOrder | null> {
     try {
       const db = this.firebaseService.getFirestore();
-      const doc = await db.collection(this.ordersCollection).doc(razorpayOrderId).get();
-      if (!doc.exists) {
+      const snapshot = await db.collection(this.ordersCollection).where('razorpayOrderId', '==', razorpayOrderId).limit(1).get();
+      if (snapshot.empty) {
         return null;
       }
+      const doc = snapshot.docs[0];
       const data = doc.data();
       return {
         id: doc.id,
@@ -55,15 +56,37 @@ export class PaymentsRepository {
     }
   }
 
+  async findOrderById(orderId: string): Promise<PaymentOrder | null> {
+    try {
+      const db = this.firebaseService.getFirestore();
+      const doc = await db.collection(this.ordersCollection).doc(orderId).get();
+      if (!doc.exists) {
+        return null;
+      }
+      const data = doc.data();
+      return {
+        id: doc.id,
+        ...data,
+        createdAt: data?.createdAt?.toDate ? data.createdAt.toDate() : data?.createdAt,
+        updatedAt: data?.updatedAt?.toDate ? data.updatedAt.toDate() : data?.updatedAt,
+      } as PaymentOrder;
+    } catch (error: any) {
+      console.error('Error finding order by ID:', error);
+      throw new InternalServerErrorException('Failed to retrieve payment order');
+    }
+  }
+
+
+
   async updateOrderStatus(
-    razorpayOrderId: string,
+    orderId: string,
     status: 'paid' | 'failed' | 'cancelled',
     paymentId?: string,
     signature?: string,
   ): Promise<void> {
     try {
       const db = this.firebaseService.getFirestore();
-      const docRef = db.collection(this.ordersCollection).doc(razorpayOrderId);
+      const docRef = db.collection(this.ordersCollection).doc(orderId);
       const updateData: any = {
         status,
         updatedAt: new Date(),

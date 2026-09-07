@@ -61,8 +61,9 @@ export class PaymentsService {
 
       // Save order in Firestore
       const paymentOrder: PaymentOrder = {
-        id: razorpayOrder.id,
+        id: razorpayOrder.id, // Using Razorpay's generated ID as our local ID for Razorpay orders
         razorpayOrderId: razorpayOrder.id,
+        paymentGateway: 'razorpay',
         userId,
         courseId: course.id,
         amount: price,
@@ -130,35 +131,77 @@ export class PaymentsService {
 
     if (!isMatch) {
       // Record failure on order
-      await this.paymentsRepository.updateOrderStatus(
-        dto.razorpay_order_id,
-        'failed',
-        dto.razorpay_payment_id,
-        dto.razorpay_signature,
-      ).catch(console.error);
+      const orderToFail = await this.paymentsRepository.findOrderByRazorpayId(dto.razorpay_order_id);
+      if (orderToFail) {
+        await this.paymentsRepository.updateOrderStatus(
+          orderToFail.id,
+          'failed',
+          dto.razorpay_payment_id,
+          dto.razorpay_signature,
+        ).catch(console.error);
+      }
 
       throw new BadRequestException('Payment verification failed: invalid signature');
     }
 
-    // 3. Mark order as paid
-    await this.paymentsRepository.updateOrderStatus(dto.razorpay_order_id,'paid',dto.razorpay_payment_id,dto.razorpay_signature);
-
-    // Retrieve order details if available
     const order = await this.paymentsRepository.findOrderByRazorpayId(dto.razorpay_order_id);
+    if (!order) {
+       throw new NotFoundException('Order not found');
+    }
 
-    // 4. Create student enrollment
-    const studentName = dto.studentName || order?.studentDetails?.name || 'Student';
-    const studentEmail = dto.studentEmail || order?.studentDetails?.email || '';
-    const studentPhone = dto.studentPhone || order?.studentDetails?.phone || '';
+    // Record verification success (note: actual fulfillment happens via webhook)
+    await this.paymentsRepository.updateOrderStatus(order.id, 'paid', dto.razorpay_payment_id, dto.razorpay_signature);
+
+    // Call processSuccessfulPayment directly for instant frontend enrollment (idempotency protects against webhook duplication)
+    await this.processSuccessfulPayment(dto.razorpay_order_id, dto.razorpay_payment_id, dto.razorpay_signature);
+
+    const enrollment = await this.paymentsRepository.findEnrollment(userId, dto.courseId);
+
+    return {
+      success: true,
+      message: 'Payment verified and enrollment activated.',
+      enrollment,
+    };
+  }
+
+  async processSuccessfulPayment(orderId: string, paymentId?: string, signature?: string) {
+    const order = await this.paymentsRepository.findOrderById(orderId);
+    if (!order) {
+      throw new NotFoundException('Order not found');
+    }
+
+    if (order.status === 'paid') {
+      // Idempotency: order already paid
+      return;
+    }
+
+    // 1. Mark order as paid
+    await this.paymentsRepository.updateOrderStatus(orderId, 'paid', paymentId, signature);
+
+    const course = await this.coursesRepository.findById(order.courseId);
+    if (!course) {
+      throw new NotFoundException('Course not found');
+    }
+
+    // 2. Check if user is already enrolled (idempotency at enrollment level)
+    const existingEnrollment = await this.paymentsRepository.findEnrollment(order.userId, course.id);
+    if (existingEnrollment && existingEnrollment.status === 'active') {
+      return;
+    }
+
+    // 3. Create student enrollment
+    const studentName = order.studentDetails?.name || 'Student';
+    const studentEmail = order.studentDetails?.email || '';
+    const studentPhone = order.studentDetails?.phone || '';
 
     const enrollment: Enrollment = {
-      id: `${userId}_${course.id}`,
-      userId,
+      id: `${order.userId}_${course.id}`,
+      userId: order.userId,
       courseId: course.id,
-      orderId: dto.razorpay_order_id,
-      paymentId: dto.razorpay_payment_id,
-      amount: order?.amount || course.price,
-      currency: 'INR',
+      orderId: order.id,
+      paymentId: paymentId || order.razorpayPaymentId || '',
+      amount: order.amount,
+      currency: order.currency,
       status: 'active',
       studentName,
       studentEmail,
@@ -169,20 +212,26 @@ export class PaymentsService {
       updatedAt: new Date(),
     };
 
-    const savedEnrollment = await this.paymentsRepository.createEnrollment(enrollment);
+    await this.paymentsRepository.createEnrollment(enrollment);
 
-    // 5. Increment course enrollment count
+    // 4. Increment course enrollment count
     try {
       const newCount = (course.enrollmentCount || 0) + 1;
       await this.coursesRepository.update(course.id, { enrollmentCount: newCount });
     } catch (countError) {
       console.error('Failed to increment enrollment count on course:', countError);
     }
+  }
 
+  async getOrderStatus(orderId: string) {
+    const order = await this.paymentsRepository.findOrderById(orderId);
+    if (!order) {
+      throw new NotFoundException('Order not found');
+    }
     return {
-      success: true,
-      message: 'Payment verified and enrollment successfully activated',
-      enrollment: savedEnrollment,
+      orderId: order.id,
+      status: order.status,
+      paymentGateway: order.paymentGateway,
     };
   }
 
