@@ -37,13 +37,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       // Handle Redirects after resolution
       const isProtectedPath = protectedPaths.some(p => pathname.startsWith(p));
-      const isAdminPath = pathname.startsWith('/admin');
-      const authPaths = ['/login', '/register'];
-      const isAuthPath = authPaths.some(p => pathname.startsWith(p));
+      const isAdminPath = pathname.startsWith('/admin') && !pathname.startsWith('/admin-login');
+      const isUserAuthPath = pathname.startsWith('/login') || pathname.startsWith('/register');
 
-      if (!isAuth && (isProtectedPath || isAdminPath)) {
+      if (!isAuth && isAdminPath) {
+        router.replace("/admin-login");
+      } else if (!isAuth && isProtectedPath) {
         router.replace("/login");
-      } else if (isAuth && isAuthPath) {
+      } else if (isAuth && isUserAuthPath) {
         router.replace("/");
       } else if (isAuth && isAdminPath && userRole !== 'admin') {
         router.replace("/dashboard");
@@ -53,7 +54,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     checkAuth();
   }, [setAuth, setLoading, pathname, router]);
 
-  const isProtectedPath = protectedPaths.some(p => pathname.startsWith(p)) || pathname.startsWith('/admin');
+  const isProtectedPath = protectedPaths.some(p => pathname.startsWith(p)) || (pathname.startsWith('/admin') && !pathname.startsWith('/admin-login'));
   
   // Prevent UI flash by rendering a loading state while resolving a protected route
   if (isLoading && isProtectedPath) {

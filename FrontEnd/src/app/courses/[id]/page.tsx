@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import AiAssistant from "@/components/chat/AiAssistant";
-import { Play,Loader2, PlayCircle, Clock, Users, Star, ArrowLeft, Lock, LayoutGrid, ChevronLeft, ChevronRight, CheckCircle2, BookOpen, Layers, FileText, Download, ArrowRight} from "lucide-react";
+import { Play, Loader2, PlayCircle, Clock, Users, Star, ArrowLeft, Lock, LayoutGrid, ChevronLeft, ChevronRight, CheckCircle2, BookOpen, Layers, FileText, Download, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import toast from "react-hot-toast";
 import { useAuthStore } from "@/store/auth.store";
 import dynamic from "next/dynamic";
@@ -20,7 +21,7 @@ export default function CourseDetailsPage() {
   const params = useParams();
   const router = useRouter();
   const id = params.id as string;
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const { isAuthenticated, user } = useAuthStore();
 
   const [course, setCourse] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -31,6 +32,10 @@ export default function CourseDetailsPage() {
   const [viewerTitle, setViewerTitle] = useState("");
 
   const [isEnrolled, setIsEnrolled] = useState(false);
+  const [checkingEnrollment, setCheckingEnrollment] = useState(false);
+
+  // Admin or instructor can watch regardless of enrollment
+  const canAccessCourse = isEnrolled || user?.role === "admin" || user?.role === "instructor";
 
   useEffect(() => {
     fetchCourse();
@@ -38,13 +43,20 @@ export default function CourseDetailsPage() {
 
   useEffect(() => {
     if (isAuthenticated && id) {
+      setCheckingEnrollment(true);
       api.get(`/payments/check/${id}`)
         .then((res) => {
           if (res.data?.isEnrolled) {
             setIsEnrolled(true);
           }
         })
-        .catch(() => {});
+        .catch(() => { })
+        .finally(() => {
+          setCheckingEnrollment(false);
+        });
+    } else {
+      setIsEnrolled(false);
+      setCheckingEnrollment(false);
     }
   }, [id, isAuthenticated]);
 
@@ -105,14 +117,25 @@ export default function CourseDetailsPage() {
   const handleLessonClick = (lesson: any) => {
     if (!isAuthenticated) {
       toast.error("Please log in to view lessons");
-      router.push("/login");
+      router.push(`/login?redirect=/courses/${id}`);
+      return;
+    }
+    if (!canAccessCourse) {
+      toast.error("Please enroll in this course to watch lessons");
       return;
     }
     setActiveLesson(lesson);
   };
 
   const handleDocumentClick = async (doc: any) => {
-    if (!isAuthenticated) return;
+    if (!isAuthenticated) {
+      toast.error("Please log in to view documents");
+      return;
+    }
+    if (!canAccessCourse) {
+      toast.error("Please enroll in this course to access supporting documents");
+      return;
+    }
     try {
       const toastId = toast.loading("Securely fetching document...");
       const response = await api.get(`/courses/${id}/lessons/${activeLesson.id}/documents/${doc.id}/access`);
@@ -147,13 +170,79 @@ export default function CourseDetailsPage() {
 
             {/* Video Player */}
             <div className="bg-black rounded-2xl overflow-hidden shadow-xl aspect-video relative">
-              {!isAuthenticated ? (
+              {checkingEnrollment ? (
                 <div className="w-full h-full flex flex-col items-center justify-center text-slate-400 bg-slate-900 p-6 text-center">
-                  <Lock className="h-12 w-12 mb-4 opacity-50" />
-                  <p className="mb-6">Please log in to access this course content.</p>
-                  <button onClick={() => router.push("/login")} className="bg-brand-600 hover:bg-brand-700 text-white px-8 py-3 rounded-lg font-bold transition-colors shadow-lg cursor-pointer">
-                    Log in to Watch
-                  </button>
+                  <Loader2 className="h-10 w-10 animate-spin text-brand-500 mb-3" />
+                  <p className="text-sm">Checking enrollment status...</p>
+                </div>
+              ) : !isAuthenticated ? (
+                <div className="relative w-full h-full flex items-center justify-center md:justify-end text-center p-6 md:pr-12 overflow-hidden">
+                  <Image
+                    src="/Courses/course-locked-bg.png"
+                    alt="Course Preview"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 66vw"
+                    className="object-cover object-center select-none"
+                    priority
+                  />
+
+                  <div className="relative z-10 flex flex-col items-center max-w-sm w-full px-7 py-8 rounded-3xl bg-slate-950/40 backdrop-blur-xl border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+                    <div className="w-14 h-14 rounded-xl bg-white/15 backdrop-blur-md flex items-center justify-center mb-3.5 shadow-inner border border-white/25">
+                      <Lock className="h-7 w-7 text-red-400" />
+                    </div>
+                    <h3 className="text-xl md:text-2xl font-bold text-white mb-2 tracking-tight">Member Access Only</h3>
+                    <p className="text-xs md:text-sm text-slate-200/90 mb-6 leading-relaxed">
+                      Please log in to your account to access the video lectures, documents, and course syllabus.
+                    </p>
+                    <button
+                      onClick={() => router.push(`/login?redirect=/courses/${id}`)}
+                      className="inline-flex items-center gap-2 bg-brand-600/90 hover:bg-brand-500 text-white px-7 py-3 rounded-xl font-bold transition-all shadow-lg hover:shadow-brand-500/30 hover:scale-[1.02] active:scale-[0.98] cursor-pointer w-full justify-center"
+                    >
+                      Log in to Watch <ArrowRight className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+              ) : !canAccessCourse ? (
+                <div className="relative w-full h-full overflow-hidden rounded-2xl">
+                  {/* Background Image */}
+                  <Image
+                    src="/Courses/course-locked-bg.png"
+                    alt="Course Preview"
+                    fill
+                    priority
+                    sizes="100vw"
+                    className="absolute inset-0 w-full h-full object-cover object-center"
+                  />
+
+                  {/* Optional dark overlay */}
+                  <div className="absolute inset-0 bg-black/10" />
+
+                  {/* Locked Content */}
+                  <div className="absolute inset-0 z-10 flex items-center justify-center md:justify-end px-6 md:pr-12">
+                    <div className="flex flex-col items-center max-w-sm w-full px-6 py-7 rounded-xl bg-slate-950/40 backdrop-blur-xs border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.5)] -translate-y-10 sm:-translate-y-16">
+                      <div className="w-14 h-14 rounded-lg bg-green-500/20 backdrop-blur-md flex items-center justify-center mb-3.5 border border-green-400/30">
+                        <Lock className="h-7 w-7 text-green-500" />
+                      </div>
+
+                      <h3 className="text-xl md:text-2xl font-bold text-white mb-2 tracking-tight">
+                        Course Locked
+                      </h3>
+
+                      <p className="text-xs md:text-sm text-slate-200/90 mb-6 leading-relaxed text-center">
+                        You must enroll in this course to unlock and watch the video
+                        lessons and access study materials.
+                      </p>
+
+                      <button
+                        onClick={handleEnrollClick}
+                        className="inline-flex items-center gap-2 bg-brand-600/90 hover:bg-brand-600 text-white px-7 py-3 rounded-xl font-bold transition-all shadow-lg hover:shadow-brand-500/30 hover:scale-[1.02] active:scale-[0.98] cursor-pointer w-full justify-center"
+                      >
+                        Enroll Now to Unlock
+                        <ArrowRight className="h-4 w-4" />
+                      </button>
+
+                    </div>
+                  </div>
                 </div>
               ) : activeLesson && activeLesson.youtubeVideoId ? (
                 <div className="relative w-full h-full bg-black group">
@@ -218,8 +307,8 @@ export default function CourseDetailsPage() {
                 <p className="text-slate-600 leading-relaxed whitespace-pre-wrap">{course.description}</p>
               </div>
 
-              {/* Supporting Documents (Visible if active lesson has docs) */}
-              {isAuthenticated && activeLesson?.documents && activeLesson.documents.length > 0 && (
+              {/* Supporting Documents (Visible only to enrolled students / admins) */}
+              {canAccessCourse && activeLesson?.documents && activeLesson.documents.length > 0 && (
                 <div className="pt-8 mt-8 border-t border-slate-100">
                   <h3 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
                     <svg className="w-6 h-6 text-red-500" viewBox="0 0 384 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -294,11 +383,10 @@ export default function CourseDetailsPage() {
               </div>
               <button
                 onClick={handleEnrollClick}
-                className={`flex items-center justify-center gap-2 w-full font-bold py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all cursor-pointer ${
-                  isEnrolled
-                    ? "bg-emerald-600 hover:bg-emerald-700 text-white"
-                    : "bg-brand-600 hover:bg-brand-700 text-white"
-                }`}
+                className={`flex items-center justify-center gap-2 w-full font-bold py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all cursor-pointer ${isEnrolled
+                  ? "bg-emerald-600 hover:bg-emerald-700 text-white"
+                  : "bg-brand-600 hover:bg-brand-700 text-white"
+                  }`}
               >
                 {isEnrolled ? (
                   <>
@@ -338,32 +426,50 @@ export default function CourseDetailsPage() {
                 {sortedLessons.length === 0 ? (
                   <div className="p-4 text-center text-slate-500 text-sm">No lessons available yet.</div>
                 ) : (
-                  sortedLessons.map((lesson: any, index: number) => (
-                    <button
-                      key={lesson.id}
-                      onClick={() => handleLessonClick(lesson)}
-                      className={`w-full text-left p-3 rounded-md transition-colors flex items-start gap-3 mb-1
-                        ${activeLesson?.id === lesson.id
-                          ? 'bg-brand-50 border border-brand-100 cursor-pointer'
-                          : 'hover:bg-slate-50 border border-transparent cursor-pointer'
-                        }`}
-                    >
-                      <div className={`mt-0.5 shrink-0 h-6 w-6 rounded-full flex items-center justify-center text-xs font-bold
-                        ${activeLesson?.id === lesson.id ? 'bg-brand-600 text-white' : 'bg-slate-200 text-slate-500'}
-                      `}>
-                        {index + 1}
-                      </div>
-                      <div className="flex-1">
-                        <div className={`text-sm font-semibold line-clamp-2 ${activeLesson?.id === lesson.id ? 'text-brand-700' : 'text-slate-700'}`}>
-                          {lesson.title}
+                  sortedLessons.map((lesson: any, index: number) => {
+                    const isActive = canAccessCourse && activeLesson?.id === lesson.id;
+                    return (
+                      <button
+                        key={lesson.id}
+                        onClick={() => handleLessonClick(lesson)}
+                        className={`w-full text-left p-3 rounded-md transition-colors flex items-start gap-3 mb-1
+                          ${isActive
+                            ? 'bg-brand-50 border border-brand-100 cursor-pointer'
+                            : canAccessCourse
+                              ? 'hover:bg-slate-50 border border-transparent cursor-pointer'
+                              : 'hover:bg-slate-50 border border-transparent cursor-pointer opacity-75'
+                          }`}
+                      >
+                        <div className={`mt-0.5 shrink-0 h-6 w-6 rounded-full flex items-center justify-center text-xs font-bold
+                          ${isActive
+                            ? 'bg-brand-600 text-white'
+                            : !canAccessCourse
+                              ? 'bg-slate-100 text-slate-400'
+                              : 'bg-slate-200 text-slate-500'}
+                        `}>
+                          {!canAccessCourse ? (
+                            <Lock className="h-3 w-3 text-slate-400" />
+                          ) : (
+                            index + 1
+                          )}
                         </div>
-                        <div className="text-xs text-slate-500 mt-1 flex items-center gap-1">
-                          <PlayCircle className="h-3 w-3" />
-                          {lesson.duration || "Video"}
+                        <div className="flex-1 min-w-0">
+                          <div className={`text-sm font-semibold truncate ${isActive ? 'text-brand-700' : 'text-slate-700'}`}>
+                            {lesson.title}
+                          </div>
+                          <div className="text-xs text-slate-500 mt-1 flex items-center gap-1.5">
+                            <PlayCircle className="h-3 w-3 shrink-0" />
+                            <span>{lesson.duration || "Video"}</span>
+                            {!canAccessCourse && (
+                              <span className="ml-auto text-[10px] uppercase font-bold tracking-wider text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded">
+                                Locked
+                              </span>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    </button>
-                  ))
+                      </button>
+                    );
+                  })
                 )}
               </div>
             </div>
