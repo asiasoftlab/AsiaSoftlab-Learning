@@ -1,14 +1,18 @@
-import { Controller, Get, Post, Body, ValidationPipe, UsePipes, Delete, Param, Patch } from '@nestjs/common';
+import { Controller, Get, Post, Body, Delete, Param, Patch, UseGuards } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
+import { FirebaseAuthGuard } from '../auth/firebase-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
 
 @Controller('events')
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
   @Post()
-  @UsePipes(new ValidationPipe({ transform: true }))
+  @UseGuards(FirebaseAuthGuard, RolesGuard)
+  @Roles('admin')
   create(@Body() createEventDto: CreateEventDto) {
     return this.eventsService.create(createEventDto);
   }
@@ -19,13 +23,18 @@ export class EventsController {
   }
 
   @Patch(':id')
-  @UsePipes(new ValidationPipe({ transform: true }))
+  @UseGuards(FirebaseAuthGuard, RolesGuard)
+  @Roles('admin')
   update(@Param('id') id: string, @Body() updateEventDto: UpdateEventDto) {
     return this.eventsService.update(id, updateEventDto);
   }
 
   @Delete(':id')
+  @UseGuards(FirebaseAuthGuard, RolesGuard)
+  @Roles('admin')
   remove(@Param('id') id: string) {
     return this.eventsService.remove(id);
   }
 }
+
+

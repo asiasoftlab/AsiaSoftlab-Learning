@@ -186,8 +186,8 @@ export default function CourseDetailsPage() {
                     priority
                   />
 
-                  <div className="relative z-10 flex flex-col items-center max-w-sm w-full px-7 py-8 rounded-3xl bg-slate-950/40 backdrop-blur-xl border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
-                    <div className="w-14 h-14 rounded-xl bg-white/15 backdrop-blur-md flex items-center justify-center mb-3.5 shadow-inner border border-white/25">
+                  <div className="relative z-10 flex flex-col items-center max-w-sm w-full px-7 py-8 rounded-2xl bg-slate-950/40 backdrop-blur-xl border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+                    <div className="w-14 h-14 rounded-lg bg-white/15 backdrop-blur-md flex items-center justify-center mb-3.5 shadow-inner border border-white/25">
                       <Lock className="h-7 w-7 text-red-400" />
                     </div>
                     <h3 className="text-xl md:text-2xl font-bold text-white mb-2 tracking-tight">Member Access Only</h3>
@@ -196,7 +196,7 @@ export default function CourseDetailsPage() {
                     </p>
                     <button
                       onClick={() => router.push(`/login?redirect=/courses/${id}`)}
-                      className="inline-flex items-center gap-2 bg-brand-600/90 hover:bg-brand-500 text-white px-7 py-3 rounded-xl font-bold transition-all shadow-lg hover:shadow-brand-500/30 hover:scale-[1.02] active:scale-[0.98] cursor-pointer w-full justify-center"
+                      className="inline-flex items-center gap-2 bg-brand-600/90 hover:bg-brand-500 text-white px-7 py-3 rounded-lg font-bold transition-all shadow-lg hover:shadow-brand-500/30 hover:scale-[1.02] active:scale-[0.98] cursor-pointer w-full justify-center"
                     >
                       Log in to Watch <ArrowRight className="h-4 w-4" />
                     </button>
@@ -458,7 +458,9 @@ export default function CourseDetailsPage() {
                             {lesson.title}
                           </div>
                           <div className="text-xs text-slate-500 mt-1 flex items-center gap-1.5">
-                            <PlayCircle className="h-3 w-3 shrink-0" />
+                            <svg className="w-3 h-3 text-brand-500 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                              <polygon points="5,3 19,12 5,21" />
+                            </svg>
                             <span>{lesson.duration || "Video"}</span>
                             {!canAccessCourse && (
                               <span className="ml-auto text-[10px] uppercase font-bold tracking-wider text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded">
