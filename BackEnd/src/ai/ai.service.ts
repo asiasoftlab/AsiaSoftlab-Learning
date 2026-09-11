@@ -55,29 +55,8 @@ export class AiService {
         `;
       }
 
-      // Map history to the format expected by GenAI SDK
-      // Note: The new @google/genai SDK (v0.1.2) expects history in { role: string, parts: [{ text: string }] } format for chats, or similar.
-      // Alternatively, we can use generateContent with the system instruction and just format the whole history as text.
-      // Since @google/genai allows chat sessions, let's use ai.chats.create
-
-      const formattedHistory = history.map(h => ({
-        role: h.role,
-        parts: [{ text: h.text }]
-      }));
-
-      const chatSession = ai.chats.create({
-        model: 'gemini-3.6-flash',
-        config: {
-          systemInstruction: systemInstruction,
-          temperature: 0.7,
-        }
-      });
-
-      // It seems with the new SDK we might have to pass history when creating chat or appending.
-      // A simpler way for a stateless API is to just pass the conversation history as parts of generateContent.
-
-      // Let's use generateContent for simplicity since we have the history array
-      let contents: any[] = [];
+      // Build conversation contents for generateContent
+      const contents: any[] = [];
       for (const h of history) {
         contents.push({ role: h.role, parts: [{ text: h.text }] });
       }

@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useRef, useEffect } from "react";
 import { MessageSquare, X, Send, Loader2, Bot, User } from "lucide-react";
 import { api } from "@/lib/api";
@@ -18,7 +17,7 @@ interface Message {
 export default function AiAssistant({ courseId, activeLessonId }: AiAssistantProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
-    { role: "model", text: "Hi! I'm your AI Assistant. Ask me anything about this platform or course!" }
+    { role: "model", text: "Hi! I'm Neeli, your AI Assistant. Ask me anything about this platform or course!" }
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
