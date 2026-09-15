@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, BookOpen, GraduationCap, ShieldCheck, CheckCircle2, FileText, Loader2, Briefcase } from "lucide-react";
+import { Users, BookOpen, GraduationCap, ShieldCheck, CheckCircle2, FileText, Loader2, Briefcase, Mail } from "lucide-react";
 import { api } from "@/lib/api";
 import toast from "react-hot-toast";
+import Link from "next/link";
 
 interface User {
   id: string;
@@ -23,23 +24,31 @@ interface Opportunity {
   title?: string;
 }
 
+interface Subscriber {
+  id: string;
+  status: string;
+}
+
 export default function AdminDashboardPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
+  const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
 
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const [usersRes, coursesRes, opportunitiesRes] = await Promise.all([
+        const [usersRes, coursesRes, opportunitiesRes, subscribersRes] = await Promise.all([
           api.get("/users"),
           api.get("/courses"),
-          api.get("/opportunities")
+          api.get("/opportunities"),
+          api.get("/newsletter/subscribers").catch(() => ({ data: [] })),
         ]);
-        setUsers(usersRes.data);
-        setCourses(coursesRes.data);
-        setOpportunities(opportunitiesRes.data);
+        setUsers(usersRes.data || []);
+        setCourses(coursesRes.data || []);
+        setOpportunities(opportunitiesRes.data || []);
+        setSubscribers(subscribersRes.data || []);
       } catch (error) {
         console.error("Failed to fetch dashboard data:", error);
         toast.error("Failed to load dashboard statistics.");
@@ -59,10 +68,9 @@ export default function AdminDashboardPage() {
     );
   }
 
-  const students = users.filter(u => u.role === "student").length;
-  const admins = users.filter(u => u.role === "admin").length;
   const publishedCourses = courses.filter(c => c.published).length;
   const draftCourses = courses.length - publishedCourses;
+  const activeSubscribers = subscribers.filter(s => s.status === 'active').length;
 
   return (
     <div className="space-y-6">
@@ -92,7 +100,7 @@ export default function AdminDashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-slate-800">{courses.length}</div>
-            <p className="text-sm text-slate-500 mt-1">Available on platform</p>
+            <p className="text-sm text-slate-500 mt-1">{publishedCourses} published, {draftCourses} drafts</p>
           </CardContent>
         </Card>
 
@@ -105,22 +113,24 @@ export default function AdminDashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-slate-800">{opportunities.length}</div>
-            <p className="text-sm text-slate-500 mt-1">Opportunities available</p>
+            <p className="text-sm text-slate-500 mt-1">Active listings</p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-lg font-medium text-slate-600">Published Content</CardTitle>
-            <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center shadow-inner">
-              <CheckCircle2 className="w-6 h-6 text-emerald-600" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-slate-800">{publishedCourses}</div>
-            <p className="text-sm text-slate-500 mt-1">{draftCourses} drafts pending</p>
-          </CardContent>
-        </Card>
+        <Link href="/admin/newsletter" className="block">
+          <Card className="hover:border-brand-300 transition-all cursor-pointer h-full">
+            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+              <CardTitle className="text-lg font-medium text-slate-600">Newsletter</CardTitle>
+              <div className="w-10 h-10 rounded-full bg-rose-50 flex items-center justify-center shadow-inner">
+                <Mail className="w-6 h-6 text-rose-600" />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-slate-800">{subscribers.length}</div>
+              <p className="text-sm text-slate-500 mt-1">{activeSubscribers} active subscribers</p>
+            </CardContent>
+          </Card>
+        </Link>
       </div>
     </div>
   );

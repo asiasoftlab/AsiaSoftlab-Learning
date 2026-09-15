@@ -12,6 +12,7 @@ import { StorageModule } from './storage/storage.module';
 import { EventsModule } from './events/events.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { PaymentsModule } from './payments/payments.module';
+import { NewsletterModule } from './newsletter/newsletter.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { PaymentsModule } from './payments/payments.module';
     EventsModule,
     NotificationsModule,
     PaymentsModule,
+    NewsletterModule,
   ],
   controllers: [AppController],
   providers: [AppService],

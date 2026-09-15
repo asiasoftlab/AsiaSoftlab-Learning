@@ -3,7 +3,7 @@
 import { AdminRoute } from "@/components/auth/AdminRoute";
 import Link from "next/link";
 import Image from "next/image";
-import { LayoutDashboard, Users, BookOpen, LogOut, Briefcase, ClipboardList, Award, CreditCard, Bell } from "lucide-react";
+import { LayoutDashboard, Users, BookOpen, LogOut, Briefcase, ClipboardList, Award, CreditCard, Bell, Mail } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuthStore } from "@/store/auth.store";
 import { api } from "@/lib/api";
@@ -61,7 +61,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               className="object-contain"
             />
           </div>
-          <nav className="flex-1 p-4 space-y-2">
+          <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
             <Link href="/admin" className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${pathname === '/admin' ? 'bg-brand-50 text-brand-600' : 'hover:bg-slate-50 text-slate-700 hover:text-brand-600'}`}>
               <LayoutDashboard className="w-5 h-5" />
               <span className="font-medium">Dashboard</span>
@@ -93,6 +93,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <Link href="/admin/notifications" className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${pathname.startsWith('/admin/notifications') ? 'bg-brand-50 text-brand-600' : 'hover:bg-slate-50 text-slate-700 hover:text-brand-600'}`}>
               <Bell className="w-5 h-5" />
               <span className="font-medium">Notifications</span>
+            </Link>
+            <Link href="/admin/newsletter" className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${pathname.startsWith('/admin/newsletter') ? 'bg-brand-50 text-brand-600' : 'hover:bg-slate-50 text-slate-700 hover:text-brand-600'}`}>
+              <Mail className="w-5 h-5" />
+              <span className="font-medium">Newsletter</span>
             </Link>
           </nav>
           <div className="p-4 border-t border-slate-200">
