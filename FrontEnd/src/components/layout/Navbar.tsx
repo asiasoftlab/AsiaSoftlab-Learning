@@ -35,15 +35,14 @@ export function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-white backdrop-blur supports-[backdrop-filter]:bg-white/100">
-      <div className="container mx-auto flex h-24 items-center px-4 md:px-6">
-        <Link href="/" className="mr-8 flex items-center space-x-2 shrink-0 py-2">
+      <div className="container mx-auto flex h-16 sm:h-20 md:h-24 items-center px-4 md:px-6">
+        <Link href="/" className="mr-4 sm:mr-8 flex items-center space-x-2 shrink-0 py-1 sm:py-2">
           <Image 
             src="/Home/logo ASVA.png" 
             alt="Asia Softlab Virtual Academy" 
             width={280} 
             height={100} 
-            style={{ width: "auto", height: "100px" }}
-            className="object-contain"
+            className="object-contain h-10 sm:h-14 md:h-[80px] lg:h-[100px] w-auto"
             priority
           />
         </Link>

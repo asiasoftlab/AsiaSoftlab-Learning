@@ -3,12 +3,13 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { User, LayoutDashboard, BookOpen, Layers, MessageSquare, CalendarDays, Award, Settings, LifeBuoy, LogOut } from "lucide-react";
+import { User, LayoutDashboard, BookOpen, Layers, MessageSquare, CalendarDays, Award, Settings, LifeBuoy, LogOut, ClipboardList } from "lucide-react";
 import { useAuthStore } from "@/store/auth.store";
 
 const navItems = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "My Courses", href: "/dashboard/courses", icon: BookOpen },
+  { name: "Assessments", href: "/dashboard/assessments", icon: ClipboardList },
   { name: "All Courses", href: "/courses", icon: Layers },
   { name: "Messages", href: "/dashboard/messages", icon: MessageSquare },
   { name: "Calendar", href: "/dashboard/calendar", icon: CalendarDays },

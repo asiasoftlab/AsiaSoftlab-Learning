@@ -100,7 +100,7 @@ export default function AdminNotificationsPage() {
       <div className="flex justify-between items-end">
         <div>
           <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-            <Bell className="w-6 h-6 text-brand-600" /> Notification Center
+             Notification Center
           </h1>
           <p className="text-slate-500 mt-1">Push announcements and alerts to all users.</p>
         </div>

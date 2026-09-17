@@ -143,7 +143,7 @@ export default function AdminNewsletterPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2.5">
-            <Mail className="w-6 h-6 text-brand-600" /> Newsletter Subscribers
+             Newsletter Subscribers
           </h1>
           <p className="text-slate-500 text-sm mt-1">
             View, search, and manage all users subscribed via the website footer newsletter.
@@ -280,7 +280,7 @@ export default function AdminNewsletterPage() {
             <table className="w-full text-left text-sm text-slate-600">
               <thead className="bg-slate-50 text-slate-700 text-xs uppercase font-semibold border-b border-slate-200">
                 <tr>
-                  <th className="px-6 py-4">#</th>
+                  <th className="px-6 py-4">No.</th>
                   <th className="px-6 py-4">Email Address</th>
                   <th className="px-6 py-4">Subscribed Date</th>
                   <th className="px-6 py-4">Status</th>
@@ -323,12 +323,11 @@ export default function AdminNewsletterPage() {
                     </td>
                     <td className="px-6 py-4">
                       {subscriber.status === "active" ? (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60">
                           Active
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200">
                           Unsubscribed
                         </span>
                       )}

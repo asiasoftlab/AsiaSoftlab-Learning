@@ -5,6 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { BookOpen, Map, Target, Award, PlayCircle, ShieldCheck, Clock, CheckCircle2, ArrowUpRight, Star, Globe, Mail } from "lucide-react";
 import { api } from "@/lib/api";
+import FeaturedCoursesSlider from "@/components/home/FeaturedCoursesSlider";
+import FacultiesSlider from "@/components/home/FacultiesSlider";
 
 export default async function Home() {
   let displayCourses = [
@@ -100,32 +102,30 @@ export default async function Home() {
   return (
     <div className="flex flex-col w-full">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-slate-900 py-24 sm:py-32 flex items-center min-h-[95vh]">
+      <section className="relative overflow-hidden bg-slate-900 py-20 sm:py-24 md:py-32 flex items-center min-h-[calc(100vh-4rem)] sm:min-h-[90vh] md:min-h-[95vh]">
         <div className="absolute inset-0 z-0 overflow-hidden">
           {/* Vibrant Mesh Gradient Background */}
-          <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[70%] rounded-full bg-brand-600/50 blur-[100px]" />
-          {/* <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-brand-600/50 blur-[100px]" /> */}
-          {/* <div className="absolute top-[20%] left-[30%] w-[40%] h-[50%] rounded-full bg-purple-500/40 blur-[120px]" /> */}
+          <div className="absolute top-[-10%] left-[-10%] w-[60%] sm:w-[50%] h-[60%] sm:h-[70%] rounded-full bg-brand-600/50 blur-[80px] sm:blur-[100px]" />
           <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
 
           {/* Subtle Grid overlay */}
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:3rem_3rem] sm:bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
         </div>
-        <div className="container relative z-20 mx-auto px-4 md:px-6 flex flex-col items-center md:items-start text-center md:text-left">
+        <div className="container relative z-20 mx-auto px-4 sm:px-6 flex flex-col items-center md:items-start text-center md:text-left">
 
-          <h1 className="max-w-3xl text-4xl font-bold tracking-tight text-white sm:text-6xl lg:text-5xl mb-8 leading-tight">
-            Learn. Build. Fly. <br className="hidden md:block" />
-            <span className="text-brand-400">Professional Drone & Technology Training</span>
+          <h1 className="max-w-3xl text-3xl sm:text-5xl lg:text-5xl font-bold tracking-tight text-white mb-5 sm:mb-8 leading-tight">
+            Learn. Build. Fly. <br className="hidden sm:inline md:block" />
+            <span className="text-brand-400 block sm:inline mt-1 sm:mt-0 text-2xl sm:text-4xl lg:text-5xl font-extrabold">Professional Drone & Technology Training</span>
           </h1>
-          <p className="max-w-2xl text-lg leading-8 text-slate-300 mb-10">
+          <p className="max-w-2xl text-sm sm:text-base md:text-lg leading-relaxed text-slate-300 mb-8 sm:mb-10">
             Learn practical drone technology, surveying, mapping, ROV systems, and emerging technologies through expert-led online courses designed for industry professionals.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Link href="/courses">
-              <Button size="lg" className="w-full sm:w-auto text-base">Explore Courses</Button>
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto max-w-xs sm:max-w-none">
+            <Link href="/courses" className="w-full sm:w-auto">
+              <Button size="lg" className="w-full sm:w-auto text-sm sm:text-base h-11 sm:h-12 px-6 shadow-md shadow-brand-500/20">Explore Courses</Button>
             </Link>
-            <Link href="/register">
-              <Button size="lg" variant="outline" className="w-full sm:w-auto text-base bg-transparent text-white border-white hover:bg-white/10 hover:text-white">
+            <Link href="/register" className="w-full sm:w-auto">
+              <Button size="lg" variant="outline" className="w-full sm:w-auto text-sm sm:text-base h-11 sm:h-12 px-6 bg-transparent text-white border-white/80 hover:bg-white/10 hover:text-white">
                 Start Learning
               </Button>
             </Link>
@@ -134,24 +134,24 @@ export default async function Home() {
       </section>
 
       {/* How it Works */}
-      <section className="py-20 bg-slate-50 border-t border-slate-100">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="text-center mb-16">
-            <h3 className="text-emerald-500 font-semibold mb-2">Journey</h3>
-            <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">How to begin our Jouney</h2>
-            <p className="mt-4 text-lg text-slate-600">lskdjf nwofknwo fneowjfb oeiwjfoi nqefoi wenoifnq;ef oiwnoif qnoiw</p>
+      <section className="py-12 sm:py-20 bg-slate-50 border-t border-slate-100">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="text-center mb-10 sm:mb-16">
+            <h3 className="text-emerald-500 font-semibold text-xs sm:text-sm tracking-wider uppercase mb-1 sm:mb-2">Journey</h3>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-slate-900">How to begin our Journey</h2>
+            <p className="mt-2 sm:mt-4 text-xs sm:text-sm md:text-base text-slate-600 max-w-xl mx-auto">Start your learning pathway with these four structured steps to success.</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 md:gap-8">
             {[
               { num: "01", title: "Choose a Course", desc: "Browse our catalog of professional technical courses." },
               { num: "02", title: "Enroll & Start", desc: "Get instant access to structured video lessons and materials." },
               { num: "03", title: "Complete Lessons", desc: "Watch videos, download resources, and track your progress." },
               { num: "04", title: "Earn Certificate", desc: "Receive a verified certificate of completion upon finishing." },
             ].map((step, i) => (
-              <div key={i} className="relative flex flex-col items-center md:items-start text-center md:text-left bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                <div className="text-4xl font-black text-brand-300 mb-4">{step.num}</div>
-                <h3 className="text-lg font-bold text-slate-900 mb-2">{step.title}</h3>
-                <p className="text-slate-600 text-sm">{step.desc}</p>
+              <div key={i} className="relative flex flex-col items-center sm:items-start text-center sm:text-left bg-white p-3.5 sm:p-6 rounded-xl sm:rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                <div className="text-2xl sm:text-4xl font-black text-brand-400 mb-1.5 sm:mb-4">{step.num}</div>
+                <h3 className="text-xs sm:text-lg font-bold text-slate-900 mb-1 sm:mb-2">{step.title}</h3>
+                <p className="text-slate-600 text-[11px] sm:text-sm leading-relaxed line-clamp-3 sm:line-clamp-none">{step.desc}</p>
               </div>
             ))}
           </div>
@@ -159,148 +159,77 @@ export default async function Home() {
       </section>
 
       {/* Featured Courses Section */}
-      <section className="py-20 bg-slate-50">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="text-center mb-16">
-            <h3 className="text-emerald-500 font-semibold mb-2">Featured Courses</h3>
-            <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Our Most Popular Classes</h2>
-            <p className="mt-4 text-lg text-slate-600">Explore our top-rated courses and begin your professional training journey today.</p>
+      <section className="py-12 sm:py-20 bg-slate-50">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="text-center mb-10 sm:mb-16">
+            <h3 className="text-emerald-500 font-semibold text-xs sm:text-sm tracking-wider uppercase mb-1 sm:mb-2">Featured Courses</h3>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-slate-900">Our Most Popular Classes</h2>
+            <p className="mt-2 sm:mt-4 text-xs sm:text-sm md:text-base text-slate-600 max-w-xl mx-auto">Explore our top-rated courses and begin your professional training journey today.</p>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {displayCourses.map((course, idx) => (
-              <Link href={`/courses/${course.id || ''}`} key={idx} className="group bg-white rounded-2xl border border-slate-100 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.1)] overflow-hidden p-4 flex flex-col hover:shadow-xl transition-all cursor-pointer">
-                {/* Thumbnail */}
-                <div className={`relative h-48 w-full rounded-md ${course.color} mb-4 overflow-hidden`}>
-                  {course.thumbnailUrl && (
-                    <Image src={course.thumbnailUrl} alt={course.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover" />
-                  )}
-                  <div className="absolute top-3 right-3 bg-white px-2.5 py-1.5 rounded-md flex items-center gap-1.5 text-xs font-medium text-slate-700 shadow-sm z-10">
-                    <Clock className="h-3.5 w-3.5 text-slate-500" />
-                    {course.duration}
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="flex flex-col flex-1 relative z-20">
-                  <div className="text-emerald-500 font-semibold text-xs mb-2">{course.category}</div>
-
-                  <div className="flex items-start justify-between mb-2">
-                    <h3 className="font-bold text-lg text-slate-900 group-hover:text-brand-600 transition-colors line-clamp-2">
-                      {course.title}
-                    </h3>
-                    <ArrowUpRight className="h-5 w-5 text-slate-400 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform shrink-0" />
-                  </div>
-
-                  <p className="text-slate-500 text-sm mb-4 line-clamp-2 leading-relaxed">
-                    {course.desc}
-                  </p>
-
-                  <div className="flex items-center gap-1 text-xs text-slate-500 mb-6 font-medium mt-auto">
-                    <span className="text-emerald-500">{course.rating}</span>
-                    <div className="flex items-center">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <Star key={star} className={`h-3.5 w-3.5 ${star <= Math.floor(parseFloat(course.rating)) ? 'text-amber-400 fill-amber-400' : 'text-slate-200 fill-slate-200'}`} />
-                      ))}
-                    </div>
-                    <span className="ml-1">{course.reviews}</span>
-                  </div>
-
-                  {/* Footer */}
-                  <div className="flex items-center justify-between pt-4 border-t border-slate-100">
-                    <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-500 font-bold text-xs uppercase overflow-hidden">
-                        {course.author.substring(0, 2)}
-                      </div>
-                      <div>
-                        <div className="font-semibold text-xs text-slate-900">{course.author}</div>
-                        <div className="text-[11px] text-slate-500">{course.enrolled}</div>
-                      </div>
-                    </div>
-                    <div className="font-bold text-xl text-emerald-500">
-                      {course.price}
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-          <div className="mt-12 flex flex-col items-center gap-6">
-            <div className="flex items-center gap-2">
-              <div className="h-2 w-8 rounded-full bg-emerald-400"></div>
-              <div className="h-2 w-2 rounded-full bg-slate-200"></div>
-              <div className="h-2 w-2 rounded-full bg-slate-200"></div>
-            </div>
-            <Link href="/courses">
-              <Button variant="outline" className="border-slate-200 text-slate-700 hover:bg-slate-50 font-medium rounded-lg px-6 py-2 h-auto">
-                Explore All Courses
-              </Button>
-            </Link>
-          </div>
+          <FeaturedCoursesSlider courses={displayCourses} />
         </div>
       </section>
 
       {/* Why Choose Us */}
-      <section className="py-20 bg-slate-50">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Why Asia Softlab Virtual Academy</h2>
-            <p className="mt-4 text-lg text-slate-600">Everything you need to advance your aviation career - all in one place.</p>
+      <section className="py-12 sm:py-20 bg-slate-50">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="text-center mb-10 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-slate-900">Why Asia Softlab Virtual Academy</h2>
+            <p className="mt-2 sm:mt-4 text-xs sm:text-sm md:text-base text-slate-600 max-w-xl mx-auto">Everything you need to advance your aviation career - all in one place.</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-8">
             {/* 1 */}
-            <div className="flex flex-col items-center text-center">
-              <div className="flex items-center justify-center mb-6 overflow-hidden">
-                <Image src="/Home/1.png" alt="Expert-Led Learning" width={200} height={200} className="object-contain w-full h-full" />
+            <div className="flex flex-col items-center text-center bg-white sm:bg-transparent p-3.5 sm:p-5 lg:p-0 rounded-xl sm:rounded-none border border-slate-100 sm:border-0 shadow-xs sm:shadow-none">
+              <div className="flex items-center justify-center mb-3 sm:mb-4 lg:mb-6 overflow-hidden w-28 h-28 sm:w-32 sm:h-32 lg:w-40 lg:h-40">
+                <Image src="/Home/1.png" alt="Expert-Led Learning" width={280} height={280} className="object-contain w-full h-full" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">Expert-Led Learning</h3>
-              <p className="text-slate-600">Courses taught by industry veterans with thousands of hours of field experience.</p>
+              <h3 className="text-xs sm:text-base lg:text-xl font-semibold mb-1 sm:mb-2 text-slate-900 leading-snug">Expert-Led Learning</h3>
+              <p className="text-slate-600 text-[11px] sm:text-xs lg:text-sm leading-relaxed line-clamp-3 sm:line-clamp-none">Courses taught by industry veterans with thousands of hours of field experience.</p>
             </div>
 
             {/* 2 */}
-            <div className="flex flex-col items-center text-center">
-              <div className="flex items-center justify-center mb-6 overflow-hidden">
-                <Image src="/Home/2.png" alt="Expert-Led Learning" width={200} height={200} className="object-contain w-full h-full" />
+            <div className="flex flex-col items-center text-center bg-white sm:bg-transparent p-3.5 sm:p-5 lg:p-0 rounded-xl sm:rounded-none border border-slate-100 sm:border-0 shadow-xs sm:shadow-none">
+              <div className="flex items-center justify-center mb-3 sm:mb-4 lg:mb-6 overflow-hidden w-28 h-28 sm:w-32 sm:h-32 lg:w-40 lg:h-40">
+                <Image src="/Home/2.png" alt="Practical Skills" width={280} height={280} className="object-contain w-full h-full" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">Practical, Real-World Skills</h3>
-              <p className="text-slate-600">Hands-on projects and simulations designed to mirror actual industry scenarios and workflows.</p>
+              <h3 className="text-xs sm:text-base lg:text-xl font-semibold mb-1 sm:mb-2 text-slate-900 leading-snug">Practical Skills</h3>
+              <p className="text-slate-600 text-[11px] sm:text-xs lg:text-sm leading-relaxed line-clamp-3 sm:line-clamp-none">Hands-on projects and simulations designed to mirror actual industry scenarios.</p>
             </div>
 
             {/* 3 */}
-            <div className="flex flex-col items-center text-center">
-              <div className="flex items-center justify-center mb-6 overflow-hidden">
-                <Image src="/Home/3.png" alt="Expert-Led Learning" width={200} height={200} className="object-contain w-full h-full" />
+            <div className="flex flex-col items-center text-center bg-white sm:bg-transparent p-3.5 sm:p-5 lg:p-0 rounded-xl sm:rounded-none border border-slate-100 sm:border-0 shadow-xs sm:shadow-none">
+              <div className="flex items-center justify-center mb-3 sm:mb-4 lg:mb-6 overflow-hidden w-28 h-28 sm:w-32 sm:h-32 lg:w-40 lg:h-40">
+                <Image src="/Home/3.png" alt="Learner Support" width={240} height={240} className="object-contain w-full h-full" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">Learner Support</h3>
-              <p className="text-slate-600">Dedicated mentors and an active community ready to guide you at every step of your journey.</p>
+              <h3 className="text-xs sm:text-base lg:text-xl font-semibold mb-1 sm:mb-2 text-slate-900 leading-snug">Learner Support</h3>
+              <p className="text-slate-600 text-[11px] sm:text-xs lg:text-sm leading-relaxed line-clamp-3 sm:line-clamp-none">Dedicated mentors and an active community ready to guide you at every step.</p>
             </div>
 
             {/* 4 */}
-            <div className="flex flex-col items-center text-center">
-              <div className="flex items-center justify-center mb-6 overflow-hidden">
-                <Image src="/Home/4.png" alt="Expert-Led Learning" width={200} height={200} className="object-contain w-full h-full" />
+            <div className="flex flex-col items-center text-center bg-white sm:bg-transparent p-3.5 sm:p-5 lg:p-0 rounded-xl sm:rounded-none border border-slate-100 sm:border-0 shadow-xs sm:shadow-none">
+              <div className="flex items-center justify-center mb-3 sm:mb-4 lg:mb-6 overflow-hidden w-28 h-28 sm:w-32 sm:h-32 lg:w-40 lg:h-40">
+                <Image src="/Home/4.png" alt="DGCA Certification" width={240} height={240} className="object-contain w-full h-full" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">DGCA Certification</h3>
-              <p className="text-slate-600">Prepare for and achieve DGCA-recognised certifications that open doors across the aviation sector.</p>
+              <h3 className="text-xs sm:text-base lg:text-xl font-semibold mb-1 sm:mb-2 text-slate-900 leading-snug">DGCA Certification</h3>
+              <p className="text-slate-600 text-[11px] sm:text-xs lg:text-sm leading-relaxed line-clamp-3 sm:line-clamp-none">Prepare for and achieve DGCA-recognised certifications that open doors.</p>
             </div>
-
           </div>
         </div>
       </section>
+
       {/* Tutors Section */}
-      <section className="py-24 bg-slate-50">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="text-center mb-16">
-            <h3 className="text-emerald-500 font-semibold mb-2">Faculties</h3>
-            <h2 className="text-3xl font-bold text-slate-900 sm:text-4xl mb-4">Meet the Heroes</h2>
-            <p className="max-w-2xl mx-auto text-slate-500 text-sm md:text-base leading-relaxed">
+      <section className="py-12 sm:py-24 bg-slate-50">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="text-center mb-10 sm:mb-16">
+            <h3 className="text-emerald-500 font-semibold text-xs sm:text-sm tracking-wider uppercase mb-1 sm:mb-2">Faculties</h3>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 mb-2 sm:mb-4">Meet the Heroes</h2>
+            <p className="max-w-2xl mx-auto text-slate-500 text-xs sm:text-sm md:text-base leading-relaxed">
               On Weekend UX, instructors from all over the world instruct millions of students. <br className="hidden md:block" /> We offer the knowledge and abilities.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
+          <FacultiesSlider
+            tutors={[
               {
                 name: "Vishnu Rohit",
                 role: "Application Support Analyst",
@@ -325,115 +254,102 @@ export default async function Home() {
                 desc: "Former frontend dev for Linear, Coinbase, and Postscript.",
                 image: "/Home/hari-crop.jpeg"
               }
-            ].map((tutor, i) => (
-              <div key={i} className="bg-slate-100/80 rounded-lg p-10 flex flex-col items-center text-center transition-transform hover:-translate-y-1 hover:shadow-sm">
-                <div className="w-35 h-35 rounded-full overflow-hidden mb-5 relative">
-                  <Image src={tutor.image} alt={tutor.name} fill sizes="(max-width: 768px) 140px, 140px" className="object-cover" />
-                </div>
-                <h4 className="font-semibold text-slate-900 text-md md:text-base mb-1">{tutor.name}</h4>
-                <p className="text-emerald-500 text-sm whitespace-pre-line leading-relaxed mb-4">{tutor.role}</p>
-                <p className="text-slate-500 text-sm leading-relaxed mb-6 flex-grow px-2">{tutor.desc}</p>
-
-                <div className="flex items-center gap-4 text-slate-400 mt-auto">
-                  <TwitterIcon className="w-4 h-4 hover:text-emerald-500 cursor-pointer transition-colors" />
-                  <LinkedinIcon className="w-4 h-4 hover:text-emerald-500 cursor-pointer transition-colors" />
-                  <Mail className="w-4 h-4 hover:text-emerald-500 cursor-pointer transition-colors" />
-                </div>
-              </div>
-            ))}
-          </div>
+            ]}
+          />
         </div>
       </section>
+
       {/* Our Success */}
-      <section className="py-24 bg-slate-50">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="text-center mb-20 max-w-2xl mx-auto">
-            <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl mb-6">Our Success</h2>
-            <p className="text-slate-500 text-sm leading-relaxed max-w-lg mx-auto">
-              dgfkdgajkgfsdgjhjsdkghjlhsdlghklsdhgljkglsd ldsghljhwdkls SIGILDWHKJVLGSDLJKHGVJKL SHDGILHSDLKHGK;LSDJ  SDFHGLKSDHLGKHI hdfghek;lgk
+      <section className="py-12 sm:py-24 bg-slate-50">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="text-center mb-10 sm:mb-16 max-w-2xl mx-auto">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-slate-900 mb-3 sm:mb-6">Our Success</h2>
+            <p className="text-slate-500 text-xs sm:text-sm leading-relaxed max-w-lg mx-auto">
+              Empowering learners worldwide through quality education and industry-leading training programs.
             </p>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-8 text-center">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 sm:gap-8 text-center">
             {[
               { num: "15K+", label: "Students" },
-              { num: "100%", label: "Total success rate" },
+              { num: "100%", label: "Success rate" },
               { num: "30+", label: "Courses" },
               { num: "10+", label: "Chief experts" },
-              { num: "8", label: "Years of experience" },
+              { num: "8+", label: "Years experience" },
             ].map((stat, i) => (
-              <div key={i} className="flex flex-col items-center justify-center">
-                <div className="text-5xl font-light tracking-tight bg-gradient-to-r from-brand-600 to-cyan-400 bg-clip-text text-transparent mb-3">{stat.num}</div>
-                <div className="text-slate-700 font-medium text-sm">{stat.label}</div>
+              <div key={i} className={`flex flex-col items-center justify-center p-3 rounded-xl bg-white sm:bg-transparent border border-slate-100 sm:border-0 shadow-xs sm:shadow-none ${i === 4 ? 'col-span-2 sm:col-span-1' : ''}`}>
+                <div className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-brand-600 to-cyan-400 bg-clip-text text-transparent mb-1 sm:mb-3">{stat.num}</div>
+                <div className="text-slate-700 font-medium text-xs sm:text-sm">{stat.label}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
+
       {/* Blog Section */}
-      <section className="py-24 bg-slate-50">
-        <div className="container mx-auto px-4 md:px-6">
-          <div className="text-center mb-16">
-            <h3 className="text-emerald-500 font-semibold mb-2">Blog & News</h3>
-            <h2 className="text-3xl font-bold text-slate-900 sm:text-4xl mb-4">Our recent blogs</h2>
-            <p className="max-w-2xl mx-auto text-slate-500 text-sm md:text-base leading-relaxed">
+      <section className="py-12 sm:py-24 bg-slate-50">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="text-center mb-10 sm:mb-16">
+            <h3 className="text-emerald-500 font-semibold text-xs sm:text-sm tracking-wider uppercase mb-1 sm:mb-2">Blog & News</h3>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 mb-2 sm:mb-4">Our recent blogs</h2>
+            <p className="max-w-2xl mx-auto text-slate-500 text-xs sm:text-sm md:text-base leading-relaxed">
               Stay updated with the latest news, industry insights, and educational resources from our expert instructors.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8 lg:gap-12">
             {/* Left Column - Small Posts */}
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-3 sm:gap-6 lg:gap-8">
               {/* Small Post 1 */}
-              <div className="flex flex-col sm:flex-row gap-6 group cursor-pointer">
-                <div className="w-full sm:w-2/5 aspect-[4/3] relative rounded-lg overflow-hidden shrink-0">
-                  <Image src="/Home/College.webp" alt="Blog" fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
+              <div className="flex flex-row sm:flex-row gap-3 sm:gap-6 bg-white sm:bg-transparent p-3 sm:p-0 rounded-xl sm:rounded-none border border-slate-100 sm:border-0 shadow-xs sm:shadow-none group cursor-pointer items-center sm:items-stretch">
+                <div className="w-28 sm:w-2/5 aspect-[4/3] relative rounded-lg overflow-hidden shrink-0">
+                  <Image src="/Home/College.webp" alt="Blog" fill sizes="(max-width: 768px) 112px, (max-width: 1200px) 50vw, 33vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
                 </div>
-                <div className="flex flex-col justify-center flex-1">
-                  <p className="text-emerald-500 text-sm font-semibold mb-2">November 16, 2014</p>
-                  <h3 className="font-bold text-lg text-slate-900 mb-2 group-hover:text-brand-600 transition-colors">Three Pillars of User Delight</h3>
-                  <p className="text-slate-500 text-sm leading-relaxed mb-4 line-clamp-3">
-                    Delight can be experienced viscerally, behaviourally, and reflectively. A great design is ...
+                <div className="flex flex-col justify-center flex-1 min-w-0">
+                  <p className="text-emerald-600 text-[10px] sm:text-sm font-semibold mb-0.5 sm:mb-2">Nov 16, 2024</p>
+                  <h3 className="font-bold text-xs sm:text-base md:text-lg text-slate-900 mb-1 sm:mb-2 group-hover:text-brand-600 transition-colors line-clamp-2 leading-snug">Three Pillars of User Delight</h3>
+                  <p className="hidden sm:block text-slate-500 text-xs sm:text-sm leading-relaxed mb-3 sm:mb-4 line-clamp-2">
+                    Delight can be experienced viscerally, behaviourally, and reflectively. A great design is intuitive and engaging.
                   </p>
-                  <div className="flex flex-wrap gap-2 mt-auto">
-                    <span className="px-3 py-1 bg-pink-50 text-pink-600 rounded-lg text-[12px] font-medium">Research</span>
-                    <span className="px-3 py-1 bg-blue-50 text-blue-500 rounded-lg text-[12px] font-medium">UI UX</span>
+                  <div className="flex flex-wrap gap-1 sm:gap-2 mt-auto">
+                    <span className="px-2 py-0.5 sm:px-3 sm:py-1 bg-pink-50 text-pink-600 rounded-md sm:rounded-lg text-[10px] sm:text-[12px] font-medium">Research</span>
+                    <span className="px-2 py-0.5 sm:px-3 sm:py-1 bg-blue-50 text-blue-500 rounded-md sm:rounded-lg text-[10px] sm:text-[12px] font-medium">UI UX</span>
                   </div>
                 </div>
               </div>
 
               {/* Small Post 2 */}
-              <div className="flex flex-col sm:flex-row gap-6 group cursor-pointer">
-                <div className="w-full sm:w-2/5 aspect-[4/3] relative rounded-lg overflow-hidden shrink-0">
-                  <Image src="/Home/Health.webp" alt="Blog" fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
+              <div className="flex flex-row sm:flex-row gap-3 sm:gap-6 bg-white sm:bg-transparent p-3 sm:p-0 rounded-xl sm:rounded-none border border-slate-100 sm:border-0 shadow-xs sm:shadow-none group cursor-pointer items-center sm:items-stretch">
+                <div className="w-28 sm:w-2/5 aspect-[4/3] relative rounded-lg overflow-hidden shrink-0">
+                  <Image src="/Home/Health.webp" alt="Blog" fill sizes="(max-width: 768px) 112px, (max-width: 1200px) 50vw, 33vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
                 </div>
-                <div className="flex flex-col justify-center flex-1">
-                  <p className="text-emerald-500 text-sm font-semibold mb-2">September 24, 2017</p>
-                  <h3 className="font-bold text-lg text-slate-900 mb-2 group-hover:text-brand-600 transition-colors">UX Mapping Methods</h3>
-                  <p className="text-slate-500 text-sm leading-relaxed mb-4 line-clamp-3">
-                    Visual-design principles can be applied consistently throughout the process of creating a polished UX map...
+                <div className="flex flex-col justify-center flex-1 min-w-0">
+                  <p className="text-emerald-600 text-[10px] sm:text-sm font-semibold mb-0.5 sm:mb-2">Sep 24, 2024</p>
+                  <h3 className="font-bold text-xs sm:text-base md:text-lg text-slate-900 mb-1 sm:mb-2 group-hover:text-brand-600 transition-colors line-clamp-2 leading-snug">UX Mapping Methods</h3>
+                  <p className="hidden sm:block text-slate-500 text-xs sm:text-sm leading-relaxed mb-3 sm:mb-4 line-clamp-2">
+                    Visual-design principles can be applied consistently throughout the process of creating a polished UX map.
                   </p>
-                  <div className="flex flex-wrap gap-2 mt-auto">
-                    <span className="px-3 py-1 bg-pink-50 text-pink-600 rounded-lg text-[12px] font-medium">Research</span>
-                    <span className="px-3 py-1 bg-blue-50 text-blue-500 rounded-lg text-[12px] font-medium">UI Design</span>
+                  <div className="flex flex-wrap gap-1 sm:gap-2 mt-auto">
+                    <span className="px-2 py-0.5 sm:px-3 sm:py-1 bg-pink-50 text-pink-600 rounded-md sm:rounded-lg text-[10px] sm:text-[12px] font-medium">Research</span>
+                    <span className="px-2 py-0.5 sm:px-3 sm:py-1 bg-blue-50 text-blue-500 rounded-md sm:rounded-lg text-[10px] sm:text-[12px] font-medium">UI Design</span>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Right Column - Large Post */}
-            <div className="flex flex-col group cursor-pointer">
-              <div className="w-full aspect-[16/9] lg:aspect-auto lg:h-[260px] relative rounded-lg overflow-hidden mb-6">
+            <div className="flex flex-col bg-white sm:bg-transparent p-3 sm:p-0 rounded-xl sm:rounded-none border border-slate-100 sm:border-0 shadow-xs sm:shadow-none group cursor-pointer">
+              <div className="w-full aspect-[16/9] sm:aspect-[16/9] lg:h-[260px] relative rounded-lg overflow-hidden mb-2.5 sm:mb-6">
                 <Image src="/Home/School.webp" alt="Blog" fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
               </div>
-              <p className="text-emerald-500 text-sm font-semibold mb-3">March 13, 2014</p>
-              <h3 className="font-bold text-2xl text-slate-900 mb-3 group-hover:text-brand-600 transition-colors">Agile Development Projects and Usability</h3>
-              <p className="text-slate-500 text-sm leading-relaxed mb-6">
+              <p className="text-emerald-600 text-[10px] sm:text-sm font-semibold mb-1 sm:mb-3">Mar 13, 2024</p>
+              <h3 className="font-bold text-sm sm:text-xl lg:text-2xl text-slate-900 mb-1 sm:mb-3 group-hover:text-brand-600 transition-colors leading-snug">Agile Development Projects and Usability</h3>
+              <p className="text-slate-500 text-[11px] sm:text-sm leading-relaxed mb-2.5 sm:mb-6 line-clamp-2 sm:line-clamp-3">
                 Agile methods aim to overcome usability barriers in traditional development, but post new threats to user experience quality.
               </p>
-              <div className="flex flex-wrap gap-2 mt-auto">
-                <span className="px-3 py-1 bg-orange-50 text-orange-500 rounded-full text-[12px] font-medium">Programming</span>
-                <span className="px-3 py-1 bg-blue-50 text-blue-500 rounded-full text-[12px] font-medium">Research</span>
-                <span className="px-3 py-1 bg-pink-50 text-pink-600 rounded-full text-[12px] font-medium">Developments</span>
+              <div className="flex flex-wrap gap-1 sm:gap-2 mt-auto">
+                <span className="px-2 py-0.5 sm:px-3 sm:py-1 bg-orange-50 text-orange-500 rounded-full text-[10px] sm:text-[12px] font-medium">Programming</span>
+                <span className="px-2 py-0.5 sm:px-3 sm:py-1 bg-blue-50 text-blue-500 rounded-full text-[10px] sm:text-[12px] font-medium">Research</span>
+                <span className="px-2 py-0.5 sm:px-3 sm:py-1 bg-pink-50 text-pink-600 rounded-full text-[10px] sm:text-[12px] font-medium">Developments</span>
               </div>
             </div>
           </div>
