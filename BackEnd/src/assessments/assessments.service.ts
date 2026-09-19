@@ -235,4 +235,34 @@ export class AssessmentsService {
   async getSubmissions(assessmentId: string): Promise<AssessmentSubmission[]> {
     return this.assessmentsRepository.getSubmissionsByAssessmentId(assessmentId);
   }
+
+  async getCertificatesForUser(user: any): Promise<any[]> {
+    const userId = user?.id || user?.uid;
+    if (!userId) return [];
+
+    const submissions = await this.assessmentsRepository.getSubmissionsByUserId(userId);
+    const passedSubmissions = submissions.filter((s) => s.passed);
+
+    // Fetch assessments to enrich course titles and metadata
+    const allAssessments = await this.assessmentsRepository.findAll();
+    const assessmentMap = new Map(allAssessments.map((a) => [a.id, a]));
+
+    return passedSubmissions.map((sub) => {
+      const assessment = assessmentMap.get(sub.assessmentId);
+      return {
+        id: `cert_${sub.id}`,
+        submissionId: sub.id,
+        assessmentId: sub.assessmentId,
+        courseTitle: assessment?.courseTitle || assessment?.title || 'Certification of Achievement',
+        recipientName: sub.userName || user?.displayName || user?.name || 'Student',
+        recipientEmail: sub.userEmail || user?.email || '',
+        score: sub.score,
+        issuedDate: sub.completedAt || sub.createdAt || new Date(),
+        certificateNumber: `ASVA2025-${(sub.id || '001234').substring(0, 6).toUpperCase()}`,
+        issuer: 'ASVA (Asia Softlab Virtual Academy)',
+        ceoName: 'Mr.Nishadh S',
+        ceoTitle: 'Academic Director, ASVA',
+      };
+    });
+  }
 }

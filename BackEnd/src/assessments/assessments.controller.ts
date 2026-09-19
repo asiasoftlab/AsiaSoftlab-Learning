@@ -1,16 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  UseGuards,
-  Req,
-  UseInterceptors,
-  UploadedFile,
-} from '@nestjs/common';
+import {Controller,Get,Post,Body,Patch,Param,Delete,UseGuards,Req,UseInterceptors,UploadedFile,} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AssessmentsService } from './assessments.service';
 import { CreateAssessmentDto, UpdateAssessmentDto, SubmitAssessmentDto } from './dto/assessment.dto';
@@ -116,5 +104,11 @@ export class AssessmentsController {
   @Roles('admin', 'instructor')
   getSubmissions(@Param('id') id: string) {
     return this.assessmentsService.getSubmissions(id);
+  }
+
+  @Get('user/my-certificates')
+  @UseGuards(FirebaseAuthGuard)
+  getMyCertificates(@Req() req: any) {
+    return this.assessmentsService.getCertificatesForUser(req.user);
   }
 }

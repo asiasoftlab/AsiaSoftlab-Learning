@@ -4,27 +4,7 @@ import { useEffect, useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { api } from "@/lib/api";
-import {
-  FileText,
-  CheckCircle2,
-  Clock,
-  Search,
-  Plus,
-  Target,
-  Edit,
-  Trash2,
-  Eye,
-  Loader2,
-  X,
-  Upload,
-  Award,
-  HelpCircle,
-  BookOpen,
-  AlertCircle,
-  ChevronRight,
-  Check,
-  Sparkles,
-} from "lucide-react";
+import { FileText, CheckCircle2, Clock, Search, Plus, Target, Edit, Trash2, Eye, Loader2, X, Upload, Award, HelpCircle, BookOpen, AlertCircle, ChevronRight, Check, Sparkles, } from "lucide-react";
 import toast from "react-hot-toast";
 
 interface Course {
@@ -456,9 +436,7 @@ export default function AdminAssessmentsPage() {
       {/* 4 KPI Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 flex-shrink-0">
-            <BookOpen className="w-6 h-6" />
-          </div>
+          
           <div>
             <div className="text-2xl font-bold text-slate-900 leading-tight">{stats.totalCourses}</div>
             <div className="text-xs font-semibold text-slate-600">Total Uploaded Courses</div>
@@ -466,9 +444,7 @@ export default function AdminAssessmentsPage() {
         </div>
 
         <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 flex-shrink-0">
-            <CheckCircle2 className="w-6 h-6" />
-          </div>
+          
           <div>
             <div className="text-2xl font-bold text-slate-900 leading-tight">{stats.withAssessment}</div>
             <div className="text-xs font-semibold text-slate-600">Courses with Assessment</div>
@@ -476,9 +452,7 @@ export default function AdminAssessmentsPage() {
         </div>
 
         <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600 flex-shrink-0">
-            <AlertCircle className="w-6 h-6" />
-          </div>
+          
           <div>
             <div className="text-2xl font-bold text-slate-900 leading-tight">{stats.pendingAssessment}</div>
             <div className="text-xs font-semibold text-slate-600">Pending Assessments</div>
@@ -486,9 +460,7 @@ export default function AdminAssessmentsPage() {
         </div>
 
         <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600 flex-shrink-0">
-            <HelpCircle className="w-6 h-6" />
-          </div>
+          
           <div>
             <div className="text-2xl font-bold text-slate-900 leading-tight">{stats.totalQuestions}</div>
             <div className="text-xs font-semibold text-slate-600">Total Questions Bank</div>
@@ -502,9 +474,9 @@ export default function AdminAssessmentsPage() {
         <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={() => setActiveFilter("all")}
-            className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+            className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
               activeFilter === "all"
-                ? "bg-slate-900 text-white shadow-xs"
+                ? "bg-slate-900 text-white shadow-sm"
                 : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
             }`}
           >
@@ -512,9 +484,9 @@ export default function AdminAssessmentsPage() {
           </button>
           <button
             onClick={() => setActiveFilter("has_assessment")}
-            className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+            className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
               activeFilter === "has_assessment"
-                ? "bg-emerald-600 text-white shadow-xs"
+                ? "bg-emerald-600 text-white shadow-sm"
                 : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
             }`}
           >
@@ -522,9 +494,9 @@ export default function AdminAssessmentsPage() {
           </button>
           <button
             onClick={() => setActiveFilter("missing_assessment")}
-            className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+            className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
               activeFilter === "missing_assessment"
-                ? "bg-amber-600 text-white shadow-xs"
+                ? "bg-amber-600 text-white shadow-sm"
                 : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
             }`}
           >
@@ -538,7 +510,7 @@ export default function AdminAssessmentsPage() {
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="w-full sm:w-auto text-xs bg-white border border-slate-200 rounded-lg px-3 py-1.5 font-medium text-slate-700 focus:outline-none cursor-pointer"
+            className="w-full sm:w-auto text-sm bg-white border border-slate-200 rounded-lg px-3 py-1.5 font-medium text-slate-700 focus:outline-none cursor-pointer"
           >
             <option value="all">All Categories</option>
             {categories.map((cat) => (
@@ -549,14 +521,14 @@ export default function AdminAssessmentsPage() {
           </select>
 
           {/* Search Box */}
-          <div className="relative w-full sm:w-64">
+          <div className="relative w-full sm:w-80">
             <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search courses or assessments..."
-              className="w-full pl-9 pr-3 py-1.5 text-xs bg-white border border-slate-200 rounded-lg text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
+              className="w-full pl-9 pr-3 py-1.5 text-sm bg-white border border-slate-200 rounded-lg text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
             />
             {searchQuery && (
               <button
@@ -592,13 +564,13 @@ export default function AdminAssessmentsPage() {
         <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-xs">
           <div className="overflow-x-auto">
             <table className="w-full text-xs text-left text-slate-600">
-              <thead className="text-xs text-slate-700 uppercase bg-slate-50 border-b border-slate-200">
+              <thead className="text-sm text-slate-700 uppercase bg-slate-50 border-b border-slate-200">
                 <tr>
-                  <th className="px-6 py-4 font-semibold">Uploaded Course</th>
-                  <th className="px-6 py-4 font-semibold">Category & Level</th>
-                  <th className="px-6 py-4 font-semibold">Assessment Status</th>
-                  <th className="px-6 py-4 font-semibold">Quiz Details</th>
-                  <th className="px-6 py-4 font-semibold text-right">Actions</th>
+                  <th className="px-6 py-4 font-semibold w-[35%] min-w-[240px]">Uploaded Course</th>
+                  <th className="px-6 py-4 font-semibold w-[18%] min-w-[140px]">Category & Level</th>
+                  <th className="px-6 py-4 font-semibold w-[20%] min-w-[160px]">Assessment Status</th>
+                  <th className="px-6 py-4 font-semibold w-[17%] min-w-[150px]">Quiz Details</th>
+                  <th className="px-6 py-4 font-semibold w-[17%] min-w-[120px]">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -612,8 +584,8 @@ export default function AdminAssessmentsPage() {
                   return (
                     <tr key={item.id} className="hover:bg-slate-50/80 transition-colors">
                       {/* Course Thumbnail & Title */}
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-3.5">
+                      <td className="px-6 py-4 max-w-[280px]">
+                        <div className="flex items-center gap-3.5 min-w-0">
                           <div className="w-16 h-11 rounded-lg overflow-hidden relative bg-slate-900 flex-shrink-0 border border-slate-200 shadow-inner">
                             {item.thumbnailUrl ? (
                               <Image
@@ -629,11 +601,17 @@ export default function AdminAssessmentsPage() {
                               </div>
                             )}
                           </div>
-                          <div>
-                            <div className="font-bold text-slate-900 text-sm line-clamp-1">
+                          <div className="min-w-0 flex-1">
+                            <div
+                              className="font-bold text-slate-900 text-sm truncate"
+                              title={item.title}
+                            >
                               {item.title}
                             </div>
-                            <div className="text-[11px] text-slate-400 line-clamp-1 mt-0.5">
+                            <div
+                              className="text-[12px] text-slate-400 truncate mt-0.5"
+                              title={item.description || "No description provided."}
+                            >
                               {item.description || "No description provided."}
                             </div>
                           </div>
@@ -641,26 +619,32 @@ export default function AdminAssessmentsPage() {
                       </td>
 
                       {/* Category & Level */}
-                      <td className="px-6 py-4">
-                        <div className="font-medium text-slate-800">{item.category}</div>
-                        <div className="text-[11px] text-slate-400">{item.level || "All Levels"}</div>
+                      <td className="px-6 py-4 max-w-[160px]">
+                        <div className="font-medium text-slate-800 truncate" title={item.category}>
+                          {item.category}
+                        </div>
+                        <div className="text-[12px] text-slate-400 truncate">
+                          {item.level || "All Levels"}
+                        </div>
                       </td>
 
                       {/* Assessment Attached Status */}
-                      <td className="px-6 py-4">
+                      <td className="px-6 py-4 max-w-[180px]">
                         {hasAssessment ? (
-                          <div className="space-y-1">
-                            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                          <div className="space-y-1 min-w-0">
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[12px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                              
                               Assessment Active
                             </span>
-                            <div className="text-[11px] font-medium text-slate-700 line-clamp-1">
+                            <div
+                              className="text-[12px] font-medium text-slate-700 truncate"
+                              title={assessment?.title}
+                            >
                               {assessment?.title}
                             </div>
                           </div>
                         ) : (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-700 border border-amber-200">
-                            <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[12px] font-semibold bg-amber-50 text-amber-700 border border-amber-200">
                             No Assessment Added
                           </span>
                         )}
@@ -673,8 +657,8 @@ export default function AdminAssessmentsPage() {
                             <div className="font-semibold text-slate-800">
                               {qCount} Questions • {assessment.durationMinutes || 30} Mins
                             </div>
-                            <div className="text-[11px] text-slate-500">
-                              Pass Target: <strong className="text-slate-700">{assessment.passingScore || 70}%</strong>
+                            <div className="text-[12px] text-slate-500">
+                              Pass Target : <strong className="text-slate-700">{assessment.passingScore || 70}%</strong>
                             </div>
                           </div>
                         ) : (
@@ -689,9 +673,9 @@ export default function AdminAssessmentsPage() {
                             <button
                               onClick={() => handleOpenPreview(assessment)}
                               title="Preview Assessment Quiz"
-                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer"
+                              className="inline-flex items-center border border-slate-500 gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-700 bg-slate-200 hover:bg-slate-300 transition-colors cursor-pointer"
                             >
-                              <Eye className="w-3.5 h-3.5" />
+                              <Eye className="w-4 h-4" />
                               Preview
                             </button>
                             <button
@@ -717,7 +701,7 @@ export default function AdminAssessmentsPage() {
                             onClick={() => handleOpenCreateForCourse(item)}
                             className="inline-flex items-center gap-1.5 bg-brand-600 hover:bg-brand-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-95"
                           >
-                            <Plus className="w-3.5 h-3.5" />
+                            <Plus className="w-4 h-4" />
                             Add Assessment
                           </button>
                         )}
@@ -734,13 +718,11 @@ export default function AdminAssessmentsPage() {
       {/* ===================== CREATE / EDIT ASSESSMENT MODAL ===================== */}
       {(isCreateModalOpen || isEditModalOpen) && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto animate-fade-in">
-          <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-slate-200">
+          <div className="bg-white rounded-xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-slate-200">
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-slate-50/70">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-brand-100 text-brand-700 flex items-center justify-center font-bold">
-                  <FileText className="w-5 h-5" />
-                </div>
+                
                 <div>
                   <h2 className="text-lg font-bold text-slate-900">
                     {isEditModalOpen ? "Edit Assessment" : "Add Assessment to Course"}

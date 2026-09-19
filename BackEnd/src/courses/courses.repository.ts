@@ -6,14 +6,14 @@ import { Course, CourseLesson } from './entities/course.entity';
 export class CoursesRepository {
   private readonly collectionName = 'courses';
 
-  constructor(private readonly firebaseService: FirebaseService) {}
+  constructor(private readonly firebaseService: FirebaseService) { }
 
   async create(course: Course): Promise<Course> {
     try {
       const db = this.firebaseService.getFirestore();
       const docRef = db.collection(this.collectionName).doc();
       const courseWithId = { ...course, id: docRef.id };
-      
+
       const payload = {
         ...courseWithId,
         createdAt: course.createdAt,
@@ -71,11 +71,11 @@ export class CoursesRepository {
     try {
       const db = this.firebaseService.getFirestore();
       const doc = await db.collection(this.collectionName).doc(id).get();
-      
+
       if (!doc.exists) {
         return null;
       }
-      
+
       const data = doc.data();
       return {
         id: doc.id,
@@ -108,7 +108,7 @@ export class CoursesRepository {
       const db = this.firebaseService.getFirestore();
       const docRef = db.collection(this.collectionName).doc(id);
       const doc = await docRef.get();
-      
+
       if (!doc.exists) {
         throw new NotFoundException('Course not found');
       }
@@ -126,10 +126,10 @@ export class CoursesRepository {
       });
 
       await docRef.update(updatePayload);
-      
+
       const updatedDoc = await docRef.get();
       const data = updatedDoc.data();
-      
+
       return {
         id: updatedDoc.id,
         ...data,
