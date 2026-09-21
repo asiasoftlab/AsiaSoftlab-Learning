@@ -14,6 +14,7 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { PaymentsModule } from './payments/payments.module';
 import { NewsletterModule } from './newsletter/newsletter.module';
 import { AssessmentsModule } from './assessments/assessments.module';
+import { FeedbackModule } from './feedback/feedback.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { AssessmentsModule } from './assessments/assessments.module';
     PaymentsModule,
     NewsletterModule,
     AssessmentsModule,
+    FeedbackModule,
   ],
   controllers: [AppController],
   providers: [AppService],

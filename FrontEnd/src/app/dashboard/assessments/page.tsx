@@ -5,8 +5,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/auth.store";
-import { FileText, CheckCircle2, Clock, BarChart3, Search, ArrowRight, RotateCcw, Target, Loader2, X, Award, AlertCircle, Check, ChevronRight, Sparkles, } from "lucide-react";
+import { FileText, CheckCircle2, Clock, BarChart3, Search, ArrowRight, RotateCcw, Target, Loader2, X, Award, AlertCircle, Check, ChevronRight, Sparkles, Star, MessageSquare } from "lucide-react";
 import { CertificateModal, CertificateData } from "@/components/dashboard/CertificateModal";
+import { CertificateFeedbackModal, FeedbackData } from "@/components/dashboard/CertificateFeedbackModal";
 import toast from "react-hot-toast";
 
 interface Question {
@@ -73,6 +74,7 @@ export default function StudentAssessmentsPage() {
   const [isResultModalOpen, setIsResultModalOpen] = useState(false);
   const [selectedAssessment, setSelectedAssessment] = useState<Assessment | null>(null);
   const [selectedCertificate, setSelectedCertificate] = useState<CertificateData | null>(null);
+  const [feedbackModalData, setFeedbackModalData] = useState<FeedbackData | null>(null);
 
   // Quiz Taker State
   const [quizCurrentIndex, setQuizCurrentIndex] = useState(0);
@@ -853,26 +855,44 @@ export default function StudentAssessmentsPage() {
 
             <div className="flex flex-col gap-2 pt-2">
               {selectedAssessment.userStatus === "completed" && (
-                <button
-                  onClick={() => {
-                    setSelectedCertificate({
-                      id: `cert_${selectedAssessment.id}`,
-                      courseTitle: selectedAssessment.courseTitle || selectedAssessment.title,
-                      recipientName: user?.displayName || "Student",
-                      score: selectedAssessment.userScore || 88,
-                      issuedDate: selectedAssessment.completedAt || selectedAssessment.lastAttemptedAt || new Date(),
-                      certificateNumber: `ASVA2025-${selectedAssessment.id.substring(0, 6).toUpperCase()}`,
-                      issuer: "ASVA (Asia Softlab Virtual Academy)",
-                      ceoName: "Anil Kumar",
-                      ceoTitle: "Academic Director, ASVA",
-                    });
-                    setIsResultModalOpen(false);
-                  }}
-                  className="w-full bg-amber-600 hover:bg-amber-700 text-white py-2.5 rounded-lg text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer"
-                >
-                  <Sparkles className="w-4 h-4 text-yellow-200" />
-                  View & Download Certificate
-                </button>
+                <>
+                  <button
+                    onClick={() => {
+                      setSelectedCertificate({
+                        id: `cert_${selectedAssessment.id}`,
+                        courseTitle: selectedAssessment.courseTitle || selectedAssessment.title,
+                        courseId: selectedAssessment.courseId,
+                        recipientName: user?.displayName || "Student",
+                        score: selectedAssessment.userScore || 88,
+                        issuedDate: selectedAssessment.completedAt || selectedAssessment.lastAttemptedAt || new Date(),
+                        certificateNumber: `ASVA2025-${selectedAssessment.id.substring(0, 6).toUpperCase()}`,
+                        issuer: "ASVA (Asia Softlab Virtual Academy)",
+                        ceoName: "Mr. Nishadh S",
+                        ceoTitle: "Academic Director, ASVA",
+                      });
+                      setIsResultModalOpen(false);
+                    }}
+                    className="w-full bg-amber-600 hover:bg-amber-700 text-white py-2.5 rounded-lg text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <Sparkles className="w-4 h-4 text-yellow-200" />
+                    View & Download Certificate
+                  </button>
+                  <button
+                    onClick={() => {
+                      setFeedbackModalData({
+                        courseTitle: selectedAssessment.courseTitle || selectedAssessment.title,
+                        courseId: selectedAssessment.courseId,
+                        certificateId: `cert_${selectedAssessment.id}`,
+                        certificateNumber: `ASVA2025-${selectedAssessment.id.substring(0, 6).toUpperCase()}`,
+                      });
+                      setIsResultModalOpen(false);
+                    }}
+                    className="w-full bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 py-2.5 rounded-lg text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
+                    Rate Course & Leave Feedback
+                  </button>
+                </>
               )}
               <button
                 onClick={() => setIsResultModalOpen(false)}
@@ -890,6 +910,15 @@ export default function StudentAssessmentsPage() {
         <CertificateModal
           certificate={selectedCertificate}
           onClose={() => setSelectedCertificate(null)}
+        />
+      )}
+
+      {/* Feedback Modal */}
+      {feedbackModalData && (
+        <CertificateFeedbackModal
+          isOpen={!!feedbackModalData}
+          onClose={() => setFeedbackModalData(null)}
+          data={feedbackModalData}
         />
       )}
     </div>

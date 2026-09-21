@@ -1,6 +1,7 @@
 "use client";
-import React, { useRef } from "react";
-import { Award, X, Printer, Globe } from "lucide-react";
+import React, { useRef, useState } from "react";
+import { Award, X, Printer, Globe, Star, MessageSquare } from "lucide-react";
+import { CertificateFeedbackModal } from "./CertificateFeedbackModal";
 
 export interface CertificateData {
   id: string;
@@ -9,6 +10,7 @@ export interface CertificateData {
   score?: number;
   issuedDate: string | Date;
   certificateNumber: string;
+  courseId?: string;
   issuer?: string;
   ceoName?: string;
   ceoTitle?: string;
@@ -21,6 +23,7 @@ interface CertificateModalProps {
 
 export function CertificateModal({ certificate, onClose }: CertificateModalProps) {
   const printRef = useRef<HTMLDivElement>(null);
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const formattedDate = () => {
     try {
       if (!certificate.issuedDate) {
@@ -80,11 +83,18 @@ export function CertificateModal({ certificate, onClose }: CertificateModalProps
     <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 overflow-y-auto animate-in fade-in duration-200">
       <div className="bg-white rounded-2xl max-w-6xl w-full flex flex-col shadow-2xl overflow-hidden border border-slate-200 my-auto">
         {/* Top Control Bar */}
-        <div className="flex items-center justify-between px-6 py-4 bg-slate-900 text-white border-b border-slate-800 print:hidden">
+        <div className="flex flex-wrap items-center justify-between gap-3 px-6 py-4 bg-slate-900 text-white border-b border-slate-800 print:hidden">
           <div className="flex items-center gap-2.5">
             <h2 className="text-base font-bold tracking-tight">ASVA Official Certificate of Completion</h2>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
+            <button
+              onClick={() => setIsFeedbackModalOpen(true)}
+              className="flex items-center gap-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-400/40 px-4 py-2.5 rounded-lg text-sm font-bold transition-all shadow-sm cursor-pointer"
+            >
+              <Star className="w-4 h-4 fill-amber-300 text-amber-300" />
+              <span>Rate & Give Feedback</span>
+            </button>
             <button
               onClick={handlePrint}
               className="flex items-center gap-2 bg-[#002b5b] hover:bg-[#001f42] text-amber-300 border border-amber-400/40 px-5 py-2.5 rounded-lg text-sm font-bold transition-all shadow-sm cursor-pointer"
@@ -328,7 +338,35 @@ export function CertificateModal({ certificate, onClose }: CertificateModalProps
             </div>
           </div>
         </div>
+
+        {/* Bottom Action / Feedback Prompt Bar */}
+        <div className="px-6 py-4 bg-slate-900 text-white border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 print:hidden">
+          <div className="flex items-center gap-2 text-xs text-slate-300">
+            <span>Completed this course? Help us empower future students by sharing your rating & feedback!</span>
+          </div>
+          <button
+            onClick={() => setIsFeedbackModalOpen(true)}
+            className="bg-brand-600 hover:bg-brand-500 text-white px-5 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 shadow-xs cursor-pointer shrink-0"
+          >
+            <MessageSquare className="w-4 h-4" />
+            Rate Course & Leave Feedback
+          </button>
+        </div>
       </div>
+
+      {/* Student Feedback & Rating Modal */}
+      {isFeedbackModalOpen && (
+        <CertificateFeedbackModal
+          isOpen={isFeedbackModalOpen}
+          onClose={() => setIsFeedbackModalOpen(false)}
+          data={{
+            courseTitle: certificate.courseTitle,
+            courseId: certificate.courseId,
+            certificateId: certificate.id,
+            certificateNumber: certificate.certificateNumber,
+          }}
+        />
+      )}
 
       {/* Global font import and print CSS */}
       <style jsx global>{`

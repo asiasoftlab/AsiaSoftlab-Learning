@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/store/auth.store";
-import { Award, Download, Eye, Calendar, CheckCircle2, Search, ArrowRight, Loader2, Sparkles, BookOpen } from "lucide-react";
+import { Award, Download, Eye, Calendar, CheckCircle2, Search, ArrowRight, Loader2, Sparkles, BookOpen, Star, MessageSquare } from "lucide-react";
 import { CertificateModal, CertificateData } from "@/components/dashboard/CertificateModal";
+import { CertificateFeedbackModal } from "@/components/dashboard/CertificateFeedbackModal";
 import Link from "next/link";
 import toast from "react-hot-toast";
 
@@ -65,6 +66,7 @@ export default function CertificatesPage() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCert, setSelectedCert] = useState<CertificateData | null>(null);
+  const [feedbackCert, setFeedbackCert] = useState<CertificateData | null>(null);
 
   useEffect(() => {
     fetchCertificates();
@@ -89,6 +91,7 @@ export default function CertificatesPage() {
         const mapped: CertificateData[] = passedAssessments.map((a: any, idx: number) => ({
           id: `cert_${a.id || idx}`,
           courseTitle: a.courseTitle || a.title,
+          courseId: a.courseId,
           recipientName: user?.displayName || "Student",
           score: a.userScore || 88,
           issuedDate: a.completedAt || a.lastAttemptedAt || new Date(),
@@ -171,12 +174,11 @@ export default function CertificatesPage() {
               key={cert.id}
               className="bg-white rounded-2xl border border-slate-200/90 hover:border-amber-400/80 p-6 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between group relative overflow-hidden"
             >
-              
               <div className="space-y-4">
                 {/* Badge and ID header */}
                 <div className="flex items-center justify-between">
                   <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[12px] font-semibold bg-amber-50 text-amber-700 border border-amber-200">
-                   Verified Certificate
+                    Verified Certificate
                   </span>
                   <span className="text-[12px] font-mono text-slate-400 font-semibold">
                     {cert.certificateNumber}
@@ -209,19 +211,29 @@ export default function CertificatesPage() {
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-6 mt-4 border-t border-slate-100 flex items-center gap-3">
+              <div className="pt-6 mt-4 border-t border-slate-100 space-y-2.5">
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setSelectedCert(cert)}
+                    className="flex-1 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs py-2.5 rounded-lg flex items-center justify-center gap-2 transition-all shadow-xs cursor-pointer"
+                  >
+                    <Eye className="w-4 h-4" /> View Certificate
+                  </button>
+                  <button
+                    onClick={() => setSelectedCert(cert)}
+                    className="bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-800 font-semibold text-xs px-3.5 py-2.5 rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                    title="Print or Download PDF"
+                  >
+                    <Download className="w-4 h-4" /> Download
+                  </button>
+                </div>
+
+                {/* Direct Feedback Button on Card */}
                 <button
-                  onClick={() => setSelectedCert(cert)}
-                  className="flex-1 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs py-2.5 rounded-lg flex items-center justify-center gap-2 transition-all shadow-xs cursor-pointer"
+                  onClick={() => setFeedbackCert(cert)}
+                  className="w-full bg-slate-50 hover:bg-amber-50 border border-slate-200 hover:border-amber-300 text-slate-700 hover:text-amber-800 font-semibold text-xs py-2 rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer"
                 >
-                  <Eye className="w-3.5 h-3.5" /> View Certificate
-                </button>
-                <button
-                  onClick={() => setSelectedCert(cert)}
-                  className="bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-800 font-semibold text-xs px-3.5 py-2.5 rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer"
-                  title="Print or Download PDF"
-                >
-                  <Download className="w-3.5 h-3.5" /> Download
+                  <Star className="w-4 h-4 text-amber-500 fill-amber-400" /> Rate & Leave Feedback
                 </button>
               </div>
             </div>
@@ -234,6 +246,20 @@ export default function CertificatesPage() {
         <CertificateModal
           certificate={selectedCert}
           onClose={() => setSelectedCert(null)}
+        />
+      )}
+
+      {/* Standalone Feedback Modal */}
+      {feedbackCert && (
+        <CertificateFeedbackModal
+          isOpen={!!feedbackCert}
+          onClose={() => setFeedbackCert(null)}
+          data={{
+            courseTitle: feedbackCert.courseTitle,
+            courseId: feedbackCert.courseId,
+            certificateId: feedbackCert.id,
+            certificateNumber: feedbackCert.certificateNumber,
+          }}
         />
       )}
     </div>
