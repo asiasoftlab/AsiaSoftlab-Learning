@@ -189,4 +189,52 @@ export class PaymentsRepository {
       throw new InternalServerErrorException('Failed to fetch all orders');
     }
   }
+
+  async findPaidOrderByUserAndCourse(userId: string, courseId: string): Promise<PaymentOrder | null> {
+    try {
+      const db = this.firebaseService.getFirestore();
+      const snapshot = await db
+        .collection(this.ordersCollection)
+        .where('userId', '==', userId)
+        .where('courseId', '==', courseId)
+        .where('status', '==', 'paid')
+        .limit(1)
+        .get();
+
+      if (snapshot.empty) return null;
+      const doc = snapshot.docs[0];
+      const data = doc.data();
+      return {
+        id: doc.id,
+        ...data,
+        createdAt: data?.createdAt?.toDate ? data.createdAt.toDate() : data?.createdAt,
+        updatedAt: data?.updatedAt?.toDate ? data.updatedAt.toDate() : data?.updatedAt,
+      } as PaymentOrder;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  async findPaidOrdersByUserId(userId: string): Promise<PaymentOrder[]> {
+    try {
+      const db = this.firebaseService.getFirestore();
+      const snapshot = await db
+        .collection(this.ordersCollection)
+        .where('userId', '==', userId)
+        .where('status', '==', 'paid')
+        .get();
+
+      return snapshot.docs.map((doc) => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          ...data,
+          createdAt: data?.createdAt?.toDate ? data.createdAt.toDate() : data?.createdAt,
+          updatedAt: data?.updatedAt?.toDate ? data.updatedAt.toDate() : data?.updatedAt,
+        } as PaymentOrder;
+      });
+    } catch (error) {
+      return [];
+    }
+  }
 }

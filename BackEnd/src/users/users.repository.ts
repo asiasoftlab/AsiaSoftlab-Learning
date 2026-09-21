@@ -45,6 +45,62 @@ export class UsersRepository {
     }
   }
 
+  async findByDisplayName(displayName: string): Promise<User | null> {
+    try {
+      const db = this.firebaseService.getFirestore();
+      const snapshot = await db
+        .collection(this.collectionName)
+        .where('displayName', '==', displayName.trim())
+        .limit(1)
+        .get();
+
+      if (snapshot.empty) {
+        return null;
+      }
+
+      const doc = snapshot.docs[0];
+      const data = doc.data();
+      return {
+        id: doc.id,
+        email: data?.email,
+        displayName: data?.displayName,
+        role: data?.role,
+        createdAt: data?.createdAt?.toDate(),
+        updatedAt: data?.updatedAt?.toDate(),
+      } as User;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  async findByEmail(email: string): Promise<User | null> {
+    try {
+      const db = this.firebaseService.getFirestore();
+      const snapshot = await db
+        .collection(this.collectionName)
+        .where('email', '==', email.toLowerCase().trim())
+        .limit(1)
+        .get();
+
+      if (snapshot.empty) {
+        return null;
+      }
+
+      const doc = snapshot.docs[0];
+      const data = doc.data();
+      return {
+        id: doc.id,
+        email: data?.email,
+        displayName: data?.displayName,
+        role: data?.role,
+        createdAt: data?.createdAt?.toDate(),
+        updatedAt: data?.updatedAt?.toDate(),
+      } as User;
+    } catch (error) {
+      return null;
+    }
+  }
+
   async findAll(): Promise<User[]> {
     try {
       const db = this.firebaseService.getFirestore();

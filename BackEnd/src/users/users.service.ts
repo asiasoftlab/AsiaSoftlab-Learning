@@ -20,6 +20,14 @@ export class UsersService {
     return this.usersRepository.findById(id);
   }
 
+  async findByDisplayName(displayName: string): Promise<User | null> {
+    return this.usersRepository.findByDisplayName(displayName);
+  }
+
+  async findByEmail(email: string): Promise<User | null> {
+    return this.usersRepository.findByEmail(email);
+  }
+
   async findAll(): Promise<User[]> {
     return this.usersRepository.findAll();
   }

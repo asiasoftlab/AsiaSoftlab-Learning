@@ -45,6 +45,17 @@ export class AuthService {
       throw new BadRequestException('Firebase API key is not configured');
     }
 
+    let targetEmail = loginDto.email.trim();
+
+    // If identifier is not an email, lookup email by displayName/username from Firestore
+    if (!targetEmail.includes('@')) {
+      const user = await this.usersService.findByDisplayName(targetEmail);
+      if (!user || !user.email) {
+        throw new UnauthorizedException('Invalid credentials');
+      }
+      targetEmail = user.email;
+    }
+
     try {
       const response = await fetch(
         `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`,
@@ -54,7 +65,7 @@ export class AuthService {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            email: loginDto.email,
+            email: targetEmail,
             password: loginDto.password,
             returnSecureToken: true,
           }),
@@ -67,9 +78,10 @@ export class AuthService {
         throw new UnauthorizedException(data.error?.message || 'Invalid credentials');
       }
 
-      // Create session cookie
-      // Set session expiration to 5 days.
-      const expiresIn = 60 * 60 * 24 * 5 * 1000;
+      // Create session cookie (14 days if rememberMe, otherwise 5 days)
+      const expiresIn = loginDto.rememberMe
+        ? 60 * 60 * 24 * 14 * 1000
+        : 60 * 60 * 24 * 5 * 1000;
       const sessionCookie = await this.firebaseService.getAuth().createSessionCookie(data.idToken, { expiresIn });
 
       return {

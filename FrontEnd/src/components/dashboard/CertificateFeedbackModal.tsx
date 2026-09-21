@@ -222,8 +222,8 @@ export function CertificateFeedbackModal({
                       <Star
                         className={`w-9 h-9 transition-colors ${
                           isFilled
-                            ? "fill-amber-400 text-amber-500 drop-shadow-sm"
-                            : "text-slate-300 hover:text-slate-400"
+                            ? "fill-amber-400 text-amber-400 drop-shadow-sm"
+                            : "text-slate-100 hover:text-slate-100"
                         }`}
                       />
                     </button>

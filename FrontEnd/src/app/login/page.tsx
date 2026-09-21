@@ -85,11 +85,14 @@ export default function LoginPage() {
 
           <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-5">
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-700 block ml-1">User name</label>
-              <input type="text"
-                name="username" placeholder="Enter your User name"
+              <label className="text-sm font-semibold text-slate-700 block ml-1">Email or Username</label>
+              <input
+                type="text"
+                name="username"
+                placeholder="Enter your email or username"
                 className="w-full px-5 py-3 rounded-full bg-white border border-brand-200 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 text-sm transition-all text-slate-900 placeholder:text-slate-400"
-                required />
+                required
+              />
             </div>
 
             <div className="space-y-1.5 relative">

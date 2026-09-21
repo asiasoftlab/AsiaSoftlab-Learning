@@ -34,8 +34,8 @@ export default function CourseDetailsPage() {
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [checkingEnrollment, setCheckingEnrollment] = useState(false);
 
-  // Admin or instructor can watch regardless of enrollment
-  const canAccessCourse = isEnrolled || user?.role === "admin" || user?.role === "instructor";
+  // Admin or instructor can watch regardless of enrollment. Also free courses (price === 0).
+  const canAccessCourse = isEnrolled || (course && (course.price === 0 || course.price === "0")) || user?.role === "admin" || user?.role === "instructor";
 
   useEffect(() => {
     fetchCourse();

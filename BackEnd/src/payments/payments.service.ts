@@ -149,34 +149,27 @@ export class PaymentsService {
        throw new NotFoundException('Order not found');
     }
 
-    // Record verification success (note: actual fulfillment happens via webhook)
-    await this.paymentsRepository.updateOrderStatus(order.id, 'paid', dto.razorpay_payment_id, dto.razorpay_signature);
-
-    // Call processSuccessfulPayment directly for instant frontend enrollment (idempotency protects against webhook duplication)
-    await this.processSuccessfulPayment(dto.razorpay_order_id, dto.razorpay_payment_id, dto.razorpay_signature);
-
-    const enrollment = await this.paymentsRepository.findEnrollment(userId, dto.courseId);
+    // Call processSuccessfulPayment to update status to paid and create enrollment
+    const enrollment = await this.processSuccessfulPayment(order.id, dto.razorpay_payment_id, dto.razorpay_signature);
 
     return {
       success: true,
       message: 'Payment verified and enrollment activated.',
-      enrollment,
+      enrollment: enrollment || (await this.paymentsRepository.findEnrollment(userId, dto.courseId)),
     };
   }
 
-  async processSuccessfulPayment(orderId: string, paymentId?: string, signature?: string) {
-    const order = await this.paymentsRepository.findOrderById(orderId);
+  async processSuccessfulPayment(orderId: string, paymentId?: string, signature?: string): Promise<Enrollment | null> {
+    let order = await this.paymentsRepository.findOrderById(orderId);
+    if (!order) {
+      order = await this.paymentsRepository.findOrderByRazorpayId(orderId);
+    }
     if (!order) {
       throw new NotFoundException('Order not found');
     }
 
-    if (order.status === 'paid') {
-      // Idempotency: order already paid
-      return;
-    }
-
     // 1. Mark order as paid
-    await this.paymentsRepository.updateOrderStatus(orderId, 'paid', paymentId, signature);
+    await this.paymentsRepository.updateOrderStatus(order.id, 'paid', paymentId, signature);
 
     const course = await this.coursesRepository.findById(order.courseId);
     if (!course) {
@@ -186,7 +179,7 @@ export class PaymentsService {
     // 2. Check if user is already enrolled (idempotency at enrollment level)
     const existingEnrollment = await this.paymentsRepository.findEnrollment(order.userId, course.id);
     if (existingEnrollment && existingEnrollment.status === 'active') {
-      return;
+      return existingEnrollment;
     }
 
     // 3. Create student enrollment
@@ -212,7 +205,7 @@ export class PaymentsService {
       updatedAt: new Date(),
     };
 
-    await this.paymentsRepository.createEnrollment(enrollment);
+    const created = await this.paymentsRepository.createEnrollment(enrollment);
 
     // 4. Increment course enrollment count
     try {
@@ -221,6 +214,8 @@ export class PaymentsService {
     } catch (countError) {
       console.error('Failed to increment enrollment count on course:', countError);
     }
+
+    return created;
   }
 
   async getOrderStatus(orderId: string) {
@@ -236,7 +231,35 @@ export class PaymentsService {
   }
 
   async checkEnrollment(userId: string, courseId: string) {
-    const enrollment = await this.paymentsRepository.findEnrollment(userId, courseId);
+    let enrollment = await this.paymentsRepository.findEnrollment(userId, courseId);
+    
+    // Auto-recovery / Self-healing: if enrollment doc is missing, check if a paid order exists for this user & course
+    if (!enrollment || enrollment.status !== 'active') {
+      const paidOrder = await this.paymentsRepository.findPaidOrderByUserAndCourse(userId, courseId);
+      if (paidOrder) {
+        const course = await this.coursesRepository.findById(courseId);
+        const autoEnrollment: Enrollment = {
+          id: `${userId}_${courseId}`,
+          userId,
+          courseId,
+          orderId: paidOrder.id,
+          paymentId: paidOrder.razorpayPaymentId || '',
+          amount: paidOrder.amount || 0,
+          currency: paidOrder.currency || 'INR',
+          status: 'active',
+          studentName: paidOrder.studentDetails?.name || 'Student',
+          studentEmail: paidOrder.studentDetails?.email || '',
+          studentPhone: paidOrder.studentDetails?.phone || '',
+          courseTitle: course?.title || 'Course',
+          courseThumbnailUrl: course?.thumbnailUrl || '',
+          enrolledAt: paidOrder.createdAt || new Date(),
+          updatedAt: new Date(),
+        };
+        await this.paymentsRepository.createEnrollment(autoEnrollment);
+        enrollment = autoEnrollment;
+      }
+    }
+
     return {
       isEnrolled: !!(enrollment && enrollment.status === 'active'),
       enrollment: enrollment || null,
@@ -244,7 +267,35 @@ export class PaymentsService {
   }
 
   async getMyEnrollments(userId: string) {
-    const enrollments = await this.paymentsRepository.findEnrollmentsByUserId(userId);
+    let enrollments = await this.paymentsRepository.findEnrollmentsByUserId(userId);
+    
+    // Check if any paid orders are missing from the enrollments list and auto-enroll
+    const paidOrders = await this.paymentsRepository.findPaidOrdersByUserId(userId);
+    for (const pOrder of paidOrders) {
+      const alreadyInList = enrollments.some((e) => e.courseId === pOrder.courseId);
+      if (!alreadyInList && pOrder.courseId) {
+        const course = await this.coursesRepository.findById(pOrder.courseId);
+        const recoveredEnrollment: Enrollment = {
+          id: `${userId}_${pOrder.courseId}`,
+          userId,
+          courseId: pOrder.courseId,
+          orderId: pOrder.id,
+          paymentId: pOrder.razorpayPaymentId || '',
+          amount: pOrder.amount || 0,
+          currency: pOrder.currency || 'INR',
+          status: 'active',
+          studentName: pOrder.studentDetails?.name || 'Student',
+          studentEmail: pOrder.studentDetails?.email || '',
+          studentPhone: pOrder.studentDetails?.phone || '',
+          courseTitle: course?.title || 'Course',
+          courseThumbnailUrl: course?.thumbnailUrl || '',
+          enrolledAt: pOrder.createdAt || new Date(),
+          updatedAt: new Date(),
+        };
+        await this.paymentsRepository.createEnrollment(recoveredEnrollment);
+        enrollments.push(recoveredEnrollment);
+      }
+    }
     
     // Enrich with full course data if available
     const enriched = await Promise.all(
