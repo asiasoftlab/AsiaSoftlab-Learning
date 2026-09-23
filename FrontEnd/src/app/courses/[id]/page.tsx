@@ -11,6 +11,8 @@ import toast from "react-hot-toast";
 import { useAuthStore } from "@/store/auth.store";
 import dynamic from "next/dynamic";
 
+import SecureVideoPlayer from "@/components/SecureVideoPlayer";
+
 // react-pdf uses browser-only Canvas APIs — must be loaded client-side only
 const SecureDocumentViewer = dynamic(
   () => import("@/components/SecureDocumentViewer").then((m) => m.SecureDocumentViewer),
@@ -245,27 +247,10 @@ export default function CourseDetailsPage() {
                   </div>
                 </div>
               ) : activeLesson && activeLesson.youtubeVideoId ? (
-                <div className="relative w-full h-full bg-black group">
-                  <iframe
-                    className="w-full h-full"
-                    src={`https://www.youtube.com/embed/${activeLesson.youtubeVideoId}?autoplay=0&rel=0&modestbranding=1&iv_load_policy=3&showinfo=0&controls=1&disablekb=1&fs=0`}
-                    title={activeLesson.title}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    sandbox="allow-scripts allow-same-origin allow-presentation"
-                  />
-
-                  {/* Block entire top area (Title, Share, Watch Later) */}
-                  <div className="absolute top-0 left-0 w-full h-24 z-10 bg-transparent"></div>
-
-                  {/* Block right edge (More videos, extra buttons) */}
-                  <div className="absolute top-0 right-0 w-24 h-full z-10 bg-transparent"></div>
-
-                  {/* Block bottom right (Watch on YouTube logo) - leaves room for volume/settings */}
-                  <div className="absolute bottom-10 right-0 w-32 h-20 z-10 bg-transparent"></div>
-
-                  {/* Block bottom left just above controls (Sometimes Share appears here) */}
-                  <div className="absolute bottom-10 left-0 w-48 h-20 z-10 bg-transparent"></div>
-                </div>
+                <SecureVideoPlayer
+                  videoId={activeLesson.youtubeVideoId}
+                  title={activeLesson.title}
+                />
               ) : (
                 <div className="w-full h-full flex flex-col items-center justify-center text-slate-500">
                   <PlayCircle className="h-16 w-16 mb-4 opacity-50" />
