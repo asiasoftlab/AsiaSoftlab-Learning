@@ -10,6 +10,10 @@ export default function AboutPage() {
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-900 mb-4">efwqfqwgfqwfact Us</h1>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">Get in touch wdemy.</p>
         </div>
+        <div className="text-center mb-16">
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-900 mb-4">efwqfqwgfqwfact Us</h1>
+          <p className="text-lg text-slate-600 max-w-2xl mx-auto">Get gjdfygfh fhjfkfg ugfidfhj y.</p>
+        </div>
       </div>
     </div>
   );
