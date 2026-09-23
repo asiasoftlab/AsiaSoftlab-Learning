@@ -23,11 +23,12 @@ export class AuthController {
     const result = await this.authService.login(loginDto);
     
     // Set HTTP-only cookie
+    const isProduction = process.env.NODE_ENV === 'production';
     res.cookie('session', result.sessionCookie, {
       maxAge: result.expiresIn,
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      secure: isProduction,
+      sameSite: isProduction ? 'none' : 'lax',
       path: '/',
     });
 
@@ -47,7 +48,13 @@ export class AuthController {
     if (sessionCookie) {
       await this.authService.logout(sessionCookie);
     }
-    res.clearCookie('session', { path: '/' });
+    const isProduction = process.env.NODE_ENV === 'production';
+    res.clearCookie('session', {
+      path: '/',
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? 'none' : 'lax',
+    });
     return { success: true, message: 'Logged out successfully' };
   }
 

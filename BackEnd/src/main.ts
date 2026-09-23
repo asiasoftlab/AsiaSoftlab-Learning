@@ -16,8 +16,38 @@ async function bootstrap() {
     }),
   );
 
+  const configuredOrigins = process.env.FRONTEND_URL
+    ? process.env.FRONTEND_URL.split(',').map((url) => url.trim().replace(/\/+$/, ''))
+    : [];
+
+  const defaultOrigins = [
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'https://asia-softlab-learning.vercel.app',
+  ];
+
+  const allowedOrigins = [...new Set([...defaultOrigins, ...configuredOrigins])];
+
   app.enableCors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    origin: (origin, callback) => {
+      // Allow requests with no origin (e.g. mobile apps, curl, server-to-server)
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      try {
+        const url = new URL(origin);
+        const isVercel = /\.vercel\.app$/.test(url.hostname);
+        if (allowedOrigins.includes(origin) || allowedOrigins.includes('*') || isVercel) {
+          return callback(null, true);
+        }
+      } catch {
+        // invalid URL
+      }
+
+      // Deny CORS gracefully without throwing an unhandled server exception
+      callback(null, false);
+    },
     credentials: true,
   });
 

@@ -95,9 +95,10 @@ export default async function Home() {
         };
       });
     }
-  } catch (error) {
-    console.error("Failed to fetch latest courses for homepage:", error);
+  } catch (error: any) {
+    console.warn("Notice: Could not pre-fetch courses at build time:", error?.response?.status || error?.message, "(using fallback courses)");
   }
+
 
   return (
     <div className="flex flex-col w-full">

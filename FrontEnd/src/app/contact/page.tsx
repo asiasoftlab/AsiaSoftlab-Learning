@@ -1,18 +1,10 @@
-export default function AboutPage() {
+export default function ContactPage() {
   return (
     <div className="bg-slate-50 min-h-screen py-16">
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-900 mb-4">Contact Us</h1>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">Get in touch with Asia Softlab Virtual Academy.</p>
-        </div>
-        <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-900 mb-4">efwqfqwgfqwfact Us</h1>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">Get in touch wdemy.</p>
-        </div>
-        <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-900 mb-4">efwqfqwgfqwfact Us</h1>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">Get gjdfygfh fhjfkfg ugfidfhj y.</p>
         </div>
       </div>
     </div>
