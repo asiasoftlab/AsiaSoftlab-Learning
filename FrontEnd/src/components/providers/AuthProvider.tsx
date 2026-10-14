@@ -45,7 +45,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } else if (!isAuth && isProtectedPath) {
         router.replace("/login");
       } else if (isAuth && isUserAuthPath) {
-        router.replace("/");
+        if (userRole === 'admin') {
+          router.replace("/admin");
+        } else {
+          router.replace("/dashboard");
+        }
       } else if (isAuth && isAdminPath && userRole !== 'admin') {
         router.replace("/dashboard");
       }

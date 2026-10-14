@@ -5,6 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { User, LayoutDashboard, BookOpen, Layers, MessageSquare, CalendarDays, Award, Settings, LifeBuoy, LogOut, ClipboardList } from "lucide-react";
 import { useAuthStore } from "@/store/auth.store";
+import { api } from "@/lib/api";
 
 const navItems = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -25,6 +26,16 @@ const secondaryNavItems = [
 export function DashboardSidebar() {
   const pathname = usePathname();
   const { user, logout } = useAuthStore();
+
+  const handleLogout = async () => {
+    try {
+      await api.post('/auth/logout');
+    } catch (e) {
+      console.error('Logout error:', e);
+    } finally {
+      logout();
+    }
+  };
 
   return (
     <aside className="w-64 bg-white border-r border-slate-200 flex flex-col h-full hidden lg:flex fixed inset-y-0 z-50">
@@ -92,7 +103,7 @@ export function DashboardSidebar() {
             </p>
           </div>
           <button
-            onClick={logout}
+            onClick={handleLogout}
             className="text-slate-400 hover:text-red-500 transition-colors"
             title="Logout"
           >

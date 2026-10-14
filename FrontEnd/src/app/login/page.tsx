@@ -3,13 +3,15 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import { api, getApiError } from "@/lib/api";
 import { useAuthStore } from "@/store/auth.store";
 import toast from "react-hot-toast";
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const setAuth = useAuthStore((state) => state.setAuth);
   
   const [showPassword, setShowPassword] = useState(false);
@@ -28,9 +30,29 @@ export default function LoginPage() {
 
     try {
       const response = await api.post("/auth/login", { email, password, rememberMe });
-      setAuth(response.data.user);
+      
+      // Attempt to get the latest authenticated user profile
+      let authenticatedUser = response.data?.user;
+      try {
+        const meRes = await api.get("/auth/me");
+        if (meRes.data?.user) {
+          authenticatedUser = meRes.data.user;
+        }
+      } catch {
+        // Fallback to response.data.user
+      }
+
+      setAuth(authenticatedUser);
       toast.success("Successfully logged in!");
-      router.push("/");
+
+      const redirectUrl = searchParams.get("redirect");
+      if (redirectUrl) {
+        router.push(redirectUrl);
+      } else if (authenticatedUser?.role === "admin") {
+        router.push("/admin");
+      } else {
+        router.push("/dashboard");
+      }
     } catch (err) {
       const errorMsg = getApiError(err);
       setError(errorMsg);
@@ -155,5 +177,17 @@ export default function LoginPage() {
 
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-[#f8f9fa]">
+        <Loader2 className="w-8 h-8 animate-spin text-brand-600" />
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   );
 }

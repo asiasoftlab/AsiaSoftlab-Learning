@@ -82,7 +82,7 @@ export function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/opportunities" className="hover:text-white transition-colors">
+                  <Link href="/opportunity" className="hover:text-white transition-colors">
                     Solutions
                   </Link>
                 </li>
@@ -92,7 +92,7 @@ export function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/pricing" className="hover:text-white transition-colors">
+                  <Link href="/courses" className="hover:text-white transition-colors">
                     Pricing
                   </Link>
                 </li>
@@ -111,12 +111,12 @@ export function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/careers" className="hover:text-white transition-colors">
+                  <Link href="/opportunity" className="hover:text-white transition-colors">
                     Careers
                   </Link>
                 </li>
                 <li className="flex items-center gap-2">
-                  <Link href="/press" className="hover:text-white transition-colors">
+                  <Link href="/about" className="hover:text-white transition-colors">
                     Press
                   </Link>
                   <span className="text-[10px] font-semibold bg-white text-slate-900 px-1.5 py-0.2 rounded-full">

@@ -22,7 +22,10 @@ export class AuthController {
   async login(@Body() loginDto: LoginDto, @Res({ passthrough: true }) res: Response) {
     const result = await this.authService.login(loginDto);
     
-    // Set HTTP-only cookie
+    // Determine user profile and role
+    const userProfile = await this.usersService.findById(result.userId);
+
+    // Set HTTP-only cookie with cross-origin support (SameSite=None, Secure=true)
     const isProduction = process.env.NODE_ENV === 'production';
     res.cookie('session', result.sessionCookie, {
       maxAge: result.expiresIn,
@@ -38,6 +41,8 @@ export class AuthController {
       user: {
         id: result.userId,
         email: result.email,
+        displayName: userProfile?.displayName,
+        role: userProfile?.role || 'student',
       }
     };
   }
