@@ -27,11 +27,13 @@ export class AuthController {
 
     // Set HTTP-only cookie with cross-origin support (SameSite=None, Secure=true)
     const isProduction = process.env.NODE_ENV === 'production';
+    const isSecure = isProduction || process.env.FRONTEND_URL?.includes('https://');
+
     res.cookie('session', result.sessionCookie, {
       maxAge: result.expiresIn,
       httpOnly: true,
-      secure: isProduction,
-      sameSite: isProduction ? 'none' : 'lax',
+      secure: isSecure,
+      sameSite: isSecure ? 'none' : 'lax',
       path: '/',
     });
 
@@ -54,11 +56,13 @@ export class AuthController {
       await this.authService.logout(sessionCookie);
     }
     const isProduction = process.env.NODE_ENV === 'production';
+    const isSecure = isProduction || process.env.FRONTEND_URL?.includes('https://');
+
     res.clearCookie('session', {
       path: '/',
       httpOnly: true,
-      secure: isProduction,
-      sameSite: isProduction ? 'none' : 'lax',
+      secure: isSecure,
+      sameSite: isSecure ? 'none' : 'lax',
     });
     return { success: true, message: 'Logged out successfully' };
   }
