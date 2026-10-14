@@ -17,46 +17,59 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   useEffect(() => {
+    let isMounted = true;
+
     const checkAuth = async () => {
-      let isAuth = false;
-      let userRole = null;
       try {
         const response = await api.get("/auth/me");
-        if (response.data.success && response.data.user) {
-          setAuth(response.data.user);
-          userRole = response.data.user.role;
-          isAuth = true;
-        } else {
+        if (isMounted) {
+          if (response.data?.success && response.data?.user) {
+            setAuth(response.data.user);
+          } else {
+            setAuth(null);
+          }
+        }
+      } catch {
+        if (isMounted) {
           setAuth(null);
         }
-      } catch (error) {
-        setAuth(null);
       } finally {
-        setLoading(false);
-      }
-
-      // Handle Redirects after resolution
-      const isProtectedPath = protectedPaths.some(p => pathname.startsWith(p));
-      const isAdminPath = pathname.startsWith('/admin') && !pathname.startsWith('/admin-login');
-      const isUserAuthPath = pathname.startsWith('/login') || pathname.startsWith('/register');
-
-      if (!isAuth && isAdminPath) {
-        router.replace("/admin-login");
-      } else if (!isAuth && isProtectedPath) {
-        router.replace("/login");
-      } else if (isAuth && isUserAuthPath) {
-        if (userRole === 'admin') {
-          router.replace("/admin");
-        } else {
-          router.replace("/dashboard");
+        if (isMounted) {
+          setLoading(false);
         }
-      } else if (isAuth && isAdminPath && userRole !== 'admin') {
-        router.replace("/dashboard");
       }
     };
 
     checkAuth();
-  }, [setAuth, setLoading, pathname, router]);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [setAuth, setLoading]);
+
+  // Handle route protection separately whenever auth state or pathname changes
+  useEffect(() => {
+    if (isLoading) return;
+
+    const isProtectedPath = protectedPaths.some((p) => pathname.startsWith(p));
+    const isAdminPath = pathname.startsWith('/admin') && !pathname.startsWith('/admin-login');
+    const isUserAuthPath = pathname.startsWith('/login') || pathname.startsWith('/register');
+    const userRole = useAuthStore.getState().user?.role;
+
+    if (!isAuthenticated && isAdminPath) {
+      router.replace("/admin-login");
+    } else if (!isAuthenticated && isProtectedPath) {
+      router.replace("/login");
+    } else if (isAuthenticated && isUserAuthPath) {
+      if (userRole === 'admin') {
+        router.replace("/admin");
+      } else {
+        router.replace("/dashboard");
+      }
+    } else if (isAuthenticated && isAdminPath && userRole !== 'admin') {
+      router.replace("/dashboard");
+    }
+  }, [isAuthenticated, isLoading, pathname, router]);
 
   const isProtectedPath = protectedPaths.some(p => pathname.startsWith(p)) || (pathname.startsWith('/admin') && !pathname.startsWith('/admin-login'));
   
