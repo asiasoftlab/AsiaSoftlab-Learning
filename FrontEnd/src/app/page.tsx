@@ -254,6 +254,12 @@ export default async function Home() {
                 role: "Co-op & Internships Program\n& Operations Manager",
                 desc: "Former frontend dev for Linear, Coinbase, and Postscript.",
                 image: "/Home/hari-crop.jpeg"
+              },
+              {
+                name: "Harikrishnan",
+                role: "Software Engineer",
+                desc: "Former frontend dev for Linear, Coinbase, and Postscript.",
+                image: "/Home/hari-crop.jpeg"
               }
             ]}
           />

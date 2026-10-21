@@ -41,7 +41,7 @@ export function DashboardSidebar() {
     <aside className="w-64 bg-white border-r border-slate-200 flex flex-col h-full hidden lg:flex fixed inset-y-0 z-50">
       <div className="h-24 flex items-center px-6 border-b border-slate-200">
         <Link href="/" className="flex items-center gap-2">
-          <Image src="/Home/logo ASVA.png" alt="AsiaSoftlab Virtual Academy Logo" width={360} height={40} className="object-contain" priority />
+          <Image src="/Home/logo ASVA.png" alt="AsiaSoftlab Virtual Academy Logo" width={360} height={40} style={{ width: "auto", height: "auto" }} className="object-contain" priority />
         </Link>
       </div>
 

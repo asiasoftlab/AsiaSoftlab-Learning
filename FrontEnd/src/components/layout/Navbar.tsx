@@ -42,6 +42,7 @@ export function Navbar() {
             alt="Asia Softlab Virtual Academy" 
             width={280} 
             height={100} 
+            style={{ width: "auto", height: "auto" }}
             className="object-contain h-10 sm:h-14 md:h-[80px] lg:h-[100px] w-auto"
             priority
           />

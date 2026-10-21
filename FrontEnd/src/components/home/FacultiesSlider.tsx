@@ -59,14 +59,16 @@ export default function FacultiesSlider({ tutors }: { tutors: Tutor[] }) {
       onTouchEnd={() => setTimeout(() => setIsPaused(false), 2000)}
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
-      className="flex lg:grid lg:grid-cols-4 gap-3.5 sm:gap-6 overflow-x-auto lg:overflow-x-visible pb-4 pt-1 -mx-4 sm:-mx-6 lg:mx-0 px-4 sm:px-6 lg:px-0 no-scrollbar"
+      className="flex lg:grid lg:grid-cols-[repeat(auto-fit,minmax(240px,1fr))] justify-center gap-4 sm:gap-6 overflow-x-auto lg:overflow-x-visible pb-4 pt-1 -mx-4 sm:-mx-6 lg:mx-0 px-4 sm:px-6 lg:px-0 no-scrollbar"
       style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
     >
       {infiniteTutors.map((tutor, i) => (
         <div
-          key={i} className={`faculty-card-item shrink-0 ${i >= tutors.length ? "flex lg:hidden" : "flex"} w-[170px] sm:w-[220px] lg:w-auto lg:h-[300px] [perspective:1000px] group`}>
+          key={i} 
+          className={`faculty-card-item shrink-0 ${i >= tutors.length ? "flex lg:hidden" : "flex"} w-[170px] sm:w-[220px] lg:w-full lg:max-w-[280px] lg:mx-auto h-[290px] sm:h-[310px] lg:h-[320px] [perspective:1000px] group`}
+        >
           {/* Flip Container for Webview (Desktop >= 1024px) / Normal Card for Mobile */}
-          <div className="relative w-full h-full transition-transform duration-1000 ease-[cubic-bezier(0.4,0,0.2,1)] [transform-style:preserve-3d] lg:group-hover:[transform:rotateY(180deg)]">
+          <div className="relative w-full h-full transition-transform duration-700 ease-[cubic-bezier(0.4,0,0.2,1)] [transform-style:preserve-3d] lg:group-hover:[transform:rotateY(180deg)]">
             
             {/* FRONT SIDE (Visible on Mobile & Default Desktop) */}
             <div className="w-full h-full bg-white lg:bg-slate-100/90 p-3 sm:p-5 lg:p-6 flex flex-col items-center text-center shadow-xs lg:shadow-sm border border-slate-100 lg:border-slate-200/80 [backface-visibility:hidden]">
