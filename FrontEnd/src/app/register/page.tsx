@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -45,7 +44,6 @@ export default function RegisterPage() {
 
         {/* Left Side - Image */}
         <div className="relative w-full md:w-1/2 h-64 md:h-auto hidden md:block">
-          <Image src="/Home/School.webp" alt="Students in classroom" fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-10">
             <h2 className="text-3xl font-bold text-white mb-2">Start Your Journey.</h2>
             <p className="text-white/80 text-sm">Join thousands of students learning emerging technologies and practical industry skills.</p>
@@ -55,14 +53,7 @@ export default function RegisterPage() {
         {/* Right Side - Form */}
         <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col items-center justify-center">
           <div className="flex flex-col items-center mb-6">
-            <Image 
-              src="/Home/ASVA_logo.png" 
-              alt="Asia Softlab Virtual Academy" 
-              width={280} 
-              height={90} 
-              style={{ width: "auto", height: "auto" }}
-              className="mb-4 h-20 w-auto object-contain"
-            />
+           
             <h2 className="text-xl font-bold text-slate-800 text-center">Welcome!</h2>
           </div>
 

@@ -15,9 +15,11 @@ async function bootstrap() {
     }),
   );
 
-  // Trust proxy for Nginx / reverse proxy deployment on AWS EC2
-  const expressApp = app.getHttpAdapter().getInstance();
-  expressApp.set('trust proxy', 1);
+  // Enable trust proxy when running behind reverse proxy (e.g. Nginx, Cloudflare, load balancers)
+  if (process.env.NODE_ENV === 'production' || process.env.TRUST_PROXY === 'true') {
+    const expressApp = app.getHttpAdapter().getInstance();
+    expressApp.set('trust proxy', 1);
+  }
 
   const configuredOrigins = process.env.FRONTEND_URL
     ? process.env.FRONTEND_URL.split(',').map((url) => url.trim().replace(/\/+$/, ''))
@@ -26,7 +28,6 @@ async function bootstrap() {
   const defaultOrigins = [
     'http://localhost:3000',
     'http://localhost:3001',
-    'https://asia-softlab-learning.vercel.app',
   ];
 
   const allowedOrigins = [...new Set([...defaultOrigins, ...configuredOrigins])];
@@ -38,14 +39,8 @@ async function bootstrap() {
         return callback(null, true);
       }
 
-      try {
-        const url = new URL(origin);
-        const isVercel = /\.vercel\.app$/.test(url.hostname);
-        if (allowedOrigins.includes(origin) || allowedOrigins.includes('*') || isVercel) {
-          return callback(null, true);
-        }
-      } catch {
-        // invalid URL
+      if (allowedOrigins.includes(origin) || allowedOrigins.includes('*')) {
+        return callback(null, true);
       }
 
       // Deny CORS gracefully without throwing an unhandled server exception

@@ -181,8 +181,8 @@ export default async function Home() {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-8">
             {/* 1 */}
             <div className="flex flex-col items-center text-center bg-white sm:bg-transparent p-3.5 sm:p-5 lg:p-0 rounded-xl sm:rounded-none border border-slate-100 sm:border-0 shadow-xs sm:shadow-none">
-              <div className="flex items-center justify-center mb-3 sm:mb-4 lg:mb-6 overflow-hidden w-28 h-28 sm:w-32 sm:h-32 lg:w-40 lg:h-40">
-                <Image src="/Home/1.png" alt="Expert-Led Learning" width={280} height={280} className="object-contain w-full h-full" />
+              <div className="flex items-center justify-center mb-3 sm:mb-4 lg:mb-6 overflow-hidden w-40 h-40 sm:w-44 sm:h-44 lg:w-52 lg:h-52">
+                <Image src="/Home/1.png" alt="Expert-Led Learning" width={360} height={360} className="object-contain w-full h-full" />
               </div>
               <h3 className="text-xs sm:text-base lg:text-xl font-semibold mb-1 sm:mb-2 text-slate-900 leading-snug">Expert-Led Learning</h3>
               <p className="text-slate-600 text-[11px] sm:text-xs lg:text-sm leading-relaxed line-clamp-3 sm:line-clamp-none">Courses taught by industry veterans with thousands of hours of field experience.</p>
@@ -190,8 +190,8 @@ export default async function Home() {
 
             {/* 2 */}
             <div className="flex flex-col items-center text-center bg-white sm:bg-transparent p-3.5 sm:p-5 lg:p-0 rounded-xl sm:rounded-none border border-slate-100 sm:border-0 shadow-xs sm:shadow-none">
-              <div className="flex items-center justify-center mb-3 sm:mb-4 lg:mb-6 overflow-hidden w-28 h-28 sm:w-32 sm:h-32 lg:w-40 lg:h-40">
-                <Image src="/Home/2.png" alt="Practical Skills" width={280} height={280} className="object-contain w-full h-full" />
+              <div className="flex items-center justify-center mb-3 sm:mb-4 lg:mb-6 overflow-hidden w-40 h-40 sm:w-44 sm:h-44 lg:w-52 lg:h-52">
+                <Image src="/Home/2.png" alt="Practical Skills" width={360} height={360} className="object-contain w-full h-full" />
               </div>
               <h3 className="text-xs sm:text-base lg:text-xl font-semibold mb-1 sm:mb-2 text-slate-900 leading-snug">Practical Skills</h3>
               <p className="text-slate-600 text-[11px] sm:text-xs lg:text-sm leading-relaxed line-clamp-3 sm:line-clamp-none">Hands-on projects and simulations designed to mirror actual industry scenarios.</p>
@@ -199,8 +199,8 @@ export default async function Home() {
 
             {/* 3 */}
             <div className="flex flex-col items-center text-center bg-white sm:bg-transparent p-3.5 sm:p-5 lg:p-0 rounded-xl sm:rounded-none border border-slate-100 sm:border-0 shadow-xs sm:shadow-none">
-              <div className="flex items-center justify-center mb-3 sm:mb-4 lg:mb-6 overflow-hidden w-28 h-28 sm:w-32 sm:h-32 lg:w-40 lg:h-40">
-                <Image src="/Home/3.png" alt="Learner Support" width={240} height={240} className="object-contain w-full h-full" />
+              <div className="flex items-center justify-center mb-3 sm:mb-4 lg:mb-6 overflow-hidden w-40 h-40 sm:w-44 sm:h-44 lg:w-52 lg:h-52">
+                <Image src="/Home/3.png" alt="Learner Support" width={360} height={360} className="object-contain w-full h-full" />
               </div>
               <h3 className="text-xs sm:text-base lg:text-xl font-semibold mb-1 sm:mb-2 text-slate-900 leading-snug">Learner Support</h3>
               <p className="text-slate-600 text-[11px] sm:text-xs lg:text-sm leading-relaxed line-clamp-3 sm:line-clamp-none">Dedicated mentors and an active community ready to guide you at every step.</p>
@@ -208,8 +208,8 @@ export default async function Home() {
 
             {/* 4 */}
             <div className="flex flex-col items-center text-center bg-white sm:bg-transparent p-3.5 sm:p-5 lg:p-0 rounded-xl sm:rounded-none border border-slate-100 sm:border-0 shadow-xs sm:shadow-none">
-              <div className="flex items-center justify-center mb-3 sm:mb-4 lg:mb-6 overflow-hidden w-28 h-28 sm:w-32 sm:h-32 lg:w-40 lg:h-40">
-                <Image src="/Home/4.png" alt="DGCA Certification" width={240} height={240} className="object-contain w-full h-full" />
+              <div className="flex items-center justify-center mb-3 sm:mb-4 lg:mb-6 overflow-hidden w-40 h-40 sm:w-44 sm:h-44 lg:w-52 lg:h-52">
+                <Image src="/Home/4.png" alt="DGCA Certification" width={360} height={360} className="object-contain w-full h-full" />
               </div>
               <h3 className="text-xs sm:text-base lg:text-xl font-semibold mb-1 sm:mb-2 text-slate-900 leading-snug">DGCA Certification</h3>
               <p className="text-slate-600 text-[11px] sm:text-xs lg:text-sm leading-relaxed line-clamp-3 sm:line-clamp-none">Prepare for and achieve DGCA-recognised certifications that open doors.</p>
