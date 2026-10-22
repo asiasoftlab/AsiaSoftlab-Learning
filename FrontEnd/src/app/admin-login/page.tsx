@@ -91,10 +91,9 @@ export default function AdminLoginPage() {
           
           <div className="flex flex-col items-center mb-2">
             <img 
-              src="/Home/ASVA_logo.png" 
+              src="/Home/logo_ASVA.png" 
               alt="Asia Softlab Virtual Academy" 
-              style={{ width: "auto", height: "auto" }}
-              className="h-20 w-auto object-contain mb-4 relative z-10"
+              className="h-12 w-auto object-contain mb-4 relative z-10"
             />
             <h2 className="relative z-10 text-3xl font-bold text-slate-800 tracking-tight">Admin Portal</h2>
           </div>

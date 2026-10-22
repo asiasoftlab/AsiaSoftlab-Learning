@@ -207,7 +207,7 @@ function CheckoutContent() {
         currency: currency || "INR",
         name: "Asia Softlab Virtual Academy",
         description: `Enrollment for ${course.title}`,
-        image: "/Home/logo ASVA.png",
+        image: "/Home/logo_ASVA.png",
         order_id: orderId,
         handler: async function (response: any) {
           // Trigger backend verification

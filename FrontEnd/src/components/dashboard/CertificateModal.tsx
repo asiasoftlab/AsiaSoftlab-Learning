@@ -182,7 +182,7 @@ export function CertificateModal({ certificate, onClose }: CertificateModalProps
             {/* Faint Tree / Logo Watermark in Right Background */}
             <div className="absolute top-16 w-full h-[500px] pointer-events-none opacity-[0.08] z-0 flex items-center justify-center">
               <img
-                src="/Home/logo ASVA.png"
+                src="/Home/logo_ASVA.png"
                 alt=""
                 className="w-full h-auto object-contain"
               />
@@ -190,10 +190,10 @@ export function CertificateModal({ certificate, onClose }: CertificateModalProps
 
             {/* ================= TOP SECTION ================= */}
             <div className="pt-8 px-12 flex justify-between items-start z-10">
-              {/* Brand Logo & Name from /Home/logo ASVA.png */}
+              {/* Brand Logo & Name from /Home/logo_ASVA.png */}
               <div className="flex items-center">
                 <img
-                  src="/Home/logo ASVA.png"
+                  src="/Home/logo_ASVA.png"
                   alt="Asia Softlab Virtual Academy"
                   className="h-16 sm:h-18 w-auto object-contain"
                 />

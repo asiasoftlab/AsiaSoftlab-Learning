@@ -53,12 +53,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <aside className="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col">
           <div className="h-32 border-b border-slate-200 flex items-center justify-center px-6">
             <Image 
-              src="/Home/logo ASVA.png" 
+              src="/Home/logo_ASVA.png" 
               alt="Asia Softlab Virtual Academy" 
               width={200} 
-              height={200} 
-              style={{ width: "auto", height: "200px" }}
-              className="object-contain"
+              height={50} 
+              className="h-12 w-auto object-contain"
+              priority
             />
           </div>
           <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
@@ -116,7 +116,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <header className="h-32 bg-white border-b border-slate-200 flex items-center px-6 lg:px-10 justify-between">
             <div className="flex items-center gap-4">
               <div className="md:hidden flex items-center">
-                <Image src="/Home/ASVA_logo.png" alt="Asia Softlab Virtual Academy" width={150} height={50} style={{ width: "auto", height: "50px" }}className="object-contain"/>
+                <Image src="/Home/logo_ASVA.png" alt="Asia Softlab Virtual Academy" width={160} height={40} className="h-9 w-auto object-contain" priority />
               </div>
               <div>
                 <h1 className="mb-2 text-xl font-bold text-slate-800">
