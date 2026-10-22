@@ -64,10 +64,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (userRole === 'admin') {
         router.replace("/admin");
       } else {
-        router.replace("/dashboard");
+        router.replace("/");
       }
     } else if (isAuthenticated && isAdminPath && userRole !== 'admin') {
-      router.replace("/dashboard");
+      router.replace("/");
     }
   }, [isAuthenticated, isLoading, pathname, router]);
 

@@ -46,12 +46,19 @@ function LoginForm() {
       toast.success("Successfully logged in!");
 
       const redirectUrl = searchParams.get("redirect");
+      const isAdmin = authenticatedUser?.role === "admin";
+
       if (redirectUrl) {
-        router.push(redirectUrl);
-      } else if (authenticatedUser?.role === "admin") {
+        const isAdminTarget = redirectUrl.startsWith("/admin") && !redirectUrl.startsWith("/admin-login");
+        if (isAdminTarget && !isAdmin) {
+          router.push("/");
+        } else {
+          router.push(redirectUrl);
+        }
+      } else if (isAdmin) {
         router.push("/admin");
       } else {
-        router.push("/dashboard");
+        router.push("/");
       }
     } catch (err) {
       const errorMsg = getApiError(err);
