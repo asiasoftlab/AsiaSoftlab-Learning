@@ -158,27 +158,27 @@ export default function CourseDetailsPage() {
   };
 
   return (
-    <div className="bg-slate-50 min-h-screen py-10">
-      <div className="container mx-auto px-4 md:px-6">
+    <div className="bg-slate-50 min-h-screen py-6 sm:py-8 md:py-10">
+      <div className="container mx-auto px-4 sm:px-6">
 
-        <Link href="/courses" className="inline-flex items-center gap-2 text-slate-500 hover:text-brand-600 transition-colors mb-6 font-medium text-sm">
+        <Link href="/courses" className="inline-flex items-center gap-2 text-slate-500 hover:text-brand-600 transition-colors mb-4 sm:mb-6 font-medium text-xs sm:text-sm">
           <ArrowLeft className="h-4 w-4" /> Back to Courses
         </Link>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
 
           {/* Main Content Area: Video Player & Description */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-4 sm:space-y-6">
 
             {/* Video Player */}
-            <div className="bg-black rounded-2xl overflow-hidden shadow-xl aspect-video relative">
+            <div className="bg-black rounded-xl sm:rounded-2xl overflow-hidden shadow-xl aspect-video min-h-[240px] sm:min-h-0 relative">
               {checkingEnrollment ? (
                 <div className="w-full h-full flex flex-col items-center justify-center text-slate-400 bg-slate-900 p-6 text-center">
                   <Loader2 className="h-10 w-10 animate-spin text-brand-500 mb-3" />
                   <p className="text-sm">Checking enrollment status...</p>
                 </div>
               ) : !isAuthenticated ? (
-                <div className="relative w-full h-full flex items-center justify-center md:justify-end text-center p-6 md:pr-12 overflow-hidden">
+                <div className="relative w-full h-full flex items-center justify-center md:justify-end text-center p-4 sm:p-6 md:pr-12 overflow-hidden">
                   <Image
                     src="/Courses/course-locked-bg.png"
                     alt="Course Preview"
@@ -188,19 +188,19 @@ export default function CourseDetailsPage() {
                     priority
                   />
 
-                  <div className="relative z-10 flex flex-col items-center max-w-sm w-full px-7 py-8 rounded-2xl bg-slate-950/40 backdrop-blur-xl border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
-                    <div className="w-14 h-14 rounded-lg bg-white/15 backdrop-blur-md flex items-center justify-center mb-3.5 shadow-inner border border-white/25">
-                      <Lock className="h-7 w-7 text-red-400" />
+                  <div className="relative z-10 flex flex-col items-center max-w-xs sm:max-w-sm w-full p-4 sm:px-7 sm:py-8 rounded-xl sm:rounded-2xl bg-slate-950/70 sm:bg-slate-950/40 backdrop-blur-md border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+                    <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-lg bg-white/15 backdrop-blur-md flex items-center justify-center mb-2 sm:mb-3.5 shadow-inner border border-white/25">
+                      <Lock className="h-5 w-5 sm:h-7 sm:w-7 text-red-400" />
                     </div>
-                    <h3 className="text-xl md:text-2xl font-bold text-white mb-2 tracking-tight">Member Access Only</h3>
-                    <p className="text-xs md:text-sm text-slate-200/90 mb-6 leading-relaxed">
+                    <h3 className="text-base sm:text-xl md:text-2xl font-bold text-white mb-1 sm:mb-2 tracking-tight">Member Access Only</h3>
+                    <p className="text-[11px] sm:text-xs md:text-sm text-slate-200/90 mb-3 sm:mb-6 leading-relaxed line-clamp-2 sm:line-clamp-none">
                       Please log in to your account to access the video lectures, documents, and course syllabus.
                     </p>
                     <button
                       onClick={() => router.push(`/login?redirect=/courses/${id}`)}
-                      className="inline-flex items-center gap-2 bg-brand-600/90 hover:bg-brand-500 text-white px-7 py-3 rounded-lg font-bold transition-all shadow-lg hover:shadow-brand-500/30 hover:scale-[1.02] active:scale-[0.98] cursor-pointer w-full justify-center"
+                      className="inline-flex items-center gap-1.5 sm:gap-2 bg-brand-600 hover:bg-brand-500 text-white px-5 sm:px-7 py-2.5 sm:py-3 rounded-lg sm:rounded-xl text-xs sm:text-sm font-bold transition-all shadow-lg hover:shadow-brand-500/30 hover:scale-[1.02] active:scale-[0.98] cursor-pointer w-full justify-center"
                     >
-                      Log in to Watch <ArrowRight className="h-4 w-4" />
+                      Log in to Watch <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                     </button>
                   </div>
                 </div>
@@ -220,27 +220,27 @@ export default function CourseDetailsPage() {
                   <div className="absolute inset-0 bg-black/10" />
 
                   {/* Locked Content */}
-                  <div className="absolute inset-0 z-10 flex items-center justify-center md:justify-end px-6 md:pr-12">
-                    <div className="flex flex-col items-center max-w-sm w-full px-6 py-7 rounded-xl bg-slate-950/40 backdrop-blur-xs border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.5)] -translate-y-10 sm:-translate-y-16">
-                      <div className="w-14 h-14 rounded-lg bg-green-500/20 backdrop-blur-md flex items-center justify-center mb-3.5 border border-green-400/30">
-                        <Lock className="h-7 w-7 text-green-500" />
+                  <div className="absolute inset-0 z-10 flex items-center justify-center md:justify-end p-4 sm:p-6 md:pr-12">
+                    <div className="flex flex-col items-center max-w-xs sm:max-w-sm w-full p-4 sm:px-6 sm:py-7 rounded-xl bg-slate-950/70 sm:bg-slate-950/40 backdrop-blur-md border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+                      <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-lg bg-emerald-500/20 backdrop-blur-md flex items-center justify-center mb-2 sm:mb-3.5 border border-emerald-400/30">
+                        <Lock className="h-5 w-5 sm:h-7 sm:w-7 text-emerald-400" />
                       </div>
 
-                      <h3 className="text-xl md:text-2xl font-bold text-white mb-2 tracking-tight">
+                      <h3 className="text-base sm:text-xl md:text-2xl font-bold text-white mb-1 sm:mb-2 tracking-tight">
                         Course Locked
                       </h3>
 
-                      <p className="text-xs md:text-sm text-slate-200/90 mb-6 leading-relaxed text-center">
+                      <p className="text-[11px] sm:text-xs md:text-sm text-slate-200/90 mb-3 sm:mb-6 leading-relaxed text-center line-clamp-2 sm:line-clamp-none">
                         You must enroll in this course to unlock and watch the video
                         lessons and access study materials.
                       </p>
 
                       <button
                         onClick={handleEnrollClick}
-                        className="inline-flex items-center gap-2 bg-brand-600/90 hover:bg-brand-600 text-white px-7 py-3 rounded-xl font-bold transition-all shadow-lg hover:shadow-brand-500/30 hover:scale-[1.02] active:scale-[0.98] cursor-pointer w-full justify-center"
+                        className="inline-flex items-center gap-1.5 sm:gap-2 bg-brand-600 hover:bg-brand-500 text-white px-5 sm:px-7 py-2.5 sm:py-3 rounded-lg sm:rounded-xl text-xs sm:text-sm font-bold transition-all shadow-lg hover:shadow-brand-500/30 hover:scale-[1.02] active:scale-[0.98] cursor-pointer w-full justify-center"
                       >
                         Enroll Now to Unlock
-                        <ArrowRight className="h-4 w-4" />
+                        <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                       </button>
 
                     </div>
@@ -260,7 +260,7 @@ export default function CourseDetailsPage() {
             </div>
 
             {/* Course Title & Meta */}
-            <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+            <div className="bg-white rounded-xl border border-slate-200 p-4 sm:p-6 shadow-sm">
               <div className="flex flex-wrap items-center gap-2 mb-3">
                 <span className="bg-emerald-50 text-emerald-600 px-2.5 py-1 rounded-md text-xs font-bold tracking-wide uppercase">
                   {course.category || "Uncategorized"}
@@ -269,9 +269,9 @@ export default function CourseDetailsPage() {
                   {course.level || "All Levels"}
                 </span>
               </div>
-              <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4">{course.title}</h1>
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 mb-3 sm:mb-4">{course.title}</h1>
 
-              <div className="flex flex-wrap items-center gap-6 text-sm text-slate-600 pb-6 border-b border-slate-100">
+              <div className="flex flex-wrap items-center gap-3 sm:gap-6 text-xs sm:text-sm text-slate-600 pb-4 sm:pb-6 border-b border-slate-100">
                 <div className="flex items-center gap-2">
                   <Star className="h-5 w-5 text-amber-400 fill-amber-400" />
                   <span className="font-semibold text-slate-800">{(course.averageRating || 0).toFixed(1)}</span>
@@ -301,7 +301,7 @@ export default function CourseDetailsPage() {
                     </svg>
                     Supporting Documents for {activeLesson.title}
                   </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
                     {activeLesson.documents.map((doc: any) => (
                       <button
                         key={doc.id}
@@ -354,7 +354,7 @@ export default function CourseDetailsPage() {
           <div className="space-y-6">
 
             {/* Action Card */}
-            <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+            <div className="bg-white rounded-xl border border-slate-200 p-4 sm:p-6 shadow-sm">
               <div className="flex items-center gap-3 mb-6">
                 <div className="text-3xl font-bold text-emerald-600">₹{course.price || 0}</div>
                 {course.originalPrice && course.originalPrice > course.price && (
@@ -397,7 +397,7 @@ export default function CourseDetailsPage() {
             </div>
 
             {/* Course Content / Curriculum */}
-            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm flex flex-col h-[calc(100vh-20rem)] sticky top-24">
+            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm flex flex-col max-h-[420px] lg:max-h-none lg:h-[calc(100vh-18rem)] lg:sticky lg:top-24">
               <div className="px-5 py-4 border-b border-slate-100 bg-slate-50 shrink-0 flex items-center gap-2.5">
                 <svg className="w-5 h-5 text-brand-500 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                   <polygon points="5,3 19,12 5,21" />
@@ -466,15 +466,15 @@ export default function CourseDetailsPage() {
         </div>
 
         {/* Recommended for you Section */}
-        <div className="mt-20 border-t border-slate-200 pt-16 mb-10">
-          <div className="flex items-center justify-between mb-10">
-            <h2 className="text-2xl font-bold text-slate-900">Recommended for you</h2>
-            <Link href="/courses" className="text-brand-500 font-semibold text-sm hover:text-brand-600">
+        <div className="mt-12 sm:mt-16 md:mt-20 border-t border-slate-200 pt-8 sm:pt-12 md:pt-16 mb-8">
+          <div className="flex items-center justify-between mb-6 sm:mb-8">
+            <h2 className="text-xl sm:text-2xl font-bold text-slate-900">Recommended for you</h2>
+            <Link href="/courses" className="text-brand-500 font-semibold text-xs sm:text-sm hover:text-brand-600">
               See all
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative cursor-pointer">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 relative cursor-pointer">
             {[1, 2, 3, 4].map((item) => (
               <div key={item} className="bg-white rounded-xl p-4 shadow-sm border border-slate-100 flex flex-col hover:shadow-md transition-shadow">
                 <div className="relative h-40 w-full rounded-xl overflow-hidden mb-4">

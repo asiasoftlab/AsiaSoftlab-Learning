@@ -57,7 +57,7 @@ export function Navbar() {
         </Link>
 
         {/* Search Bar (XL and above) */}
-        <div className="hidden xl:flex items-center border rounded-full px-4 py-2 w-[340px] 2xl:w-[400px] bg-slate-50 border-slate-200 mr-6 focus-within:ring-2 focus-within:ring-brand-500/20 focus-within:border-brand-500 transition-all">
+        <div className="hidden xl:flex items-center border rounded-sm px-4 py-2 w-[340px] 2xl:w-[400px] bg-slate-50 border-slate-200 mr-6 focus-within:ring-2 focus-within:ring-brand-500/20 focus-within:border-brand-500 transition-all">
           <Search className="h-4 w-4 text-slate-400 mr-2.5 shrink-0" />
           <input
             type="text"
@@ -116,7 +116,7 @@ export function Navbar() {
                 </Button>
               </Link>
               <Link href="/register">
-                <Button size="sm" className="rounded-full px-5 shadow-sm font-semibold">
+                <Button size="sm" className="rounded-lg px-6 font-semibold">
                   Get Started
                 </Button>
               </Link>
