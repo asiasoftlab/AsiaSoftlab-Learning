@@ -15,7 +15,7 @@ export function AdminRoute({ children }: { children: React.ReactNode }) {
       if (!isAuthenticated) {
         router.replace("/admin-login");
       } else if (user?.role !== "admin") {
-        router.replace("/admin-login");
+        router.replace("/");
       }
     }
   }, [isLoading, isAuthenticated, user, router]);

@@ -25,7 +25,7 @@ export class AuthController {
     // Determine user profile and role
     const userProfile = await this.usersService.findById(result.userId);
 
-    // Set HTTP-only cookie with cross-origin support (SameSite=None, Secure=true)
+    // Set HTTP-only cookie for same-origin proxy architecture (SameSite=Lax, Secure=true in production)
     const isProduction = process.env.NODE_ENV === 'production';
     const isSecure = isProduction || process.env.FRONTEND_URL?.includes('https://');
 
@@ -33,7 +33,7 @@ export class AuthController {
       maxAge: result.expiresIn,
       httpOnly: true,
       secure: isSecure,
-      sameSite: isSecure ? 'none' : 'lax',
+      sameSite: 'lax',
       path: '/',
     });
 
@@ -62,7 +62,7 @@ export class AuthController {
       path: '/',
       httpOnly: true,
       secure: isSecure,
-      sameSite: isSecure ? 'none' : 'lax',
+      sameSite: 'lax',
     });
     return { success: true, message: 'Logged out successfully' };
   }
