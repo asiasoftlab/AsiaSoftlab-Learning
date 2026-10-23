@@ -80,38 +80,42 @@ export function CertificateModal({ certificate, onClose }: CertificateModalProps
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 overflow-y-auto animate-in fade-in duration-200">
-      <div className="bg-white rounded-2xl max-w-6xl w-full flex flex-col shadow-2xl overflow-hidden border border-slate-200 my-auto">
+    <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-xs flex items-center justify-center p-1.5 sm:p-4 overflow-y-auto animate-in fade-in duration-150">
+      <div className="bg-white rounded-xl sm:rounded-2xl max-w-6xl w-full flex flex-col shadow-2xl overflow-hidden border border-slate-200 my-auto">
         {/* Top Control Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-3 px-6 py-4 bg-slate-900 text-white border-b border-slate-800 print:hidden">
-          <div className="flex items-center gap-2.5">
-            <h2 className="text-base font-bold tracking-tight">ASVA Official Certificate of Completion</h2>
+        <div className="flex flex-wrap items-center justify-between gap-2 px-3 sm:px-5 py-2.5 sm:py-3 bg-slate-900 text-white border-b border-slate-800 print:hidden">
+          <div className="flex items-center gap-2 min-w-0">
+            <h2 className="text-xs sm:text-sm font-bold tracking-tight truncate">ASVA Certificate of Completion</h2>
           </div>
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             <button
               onClick={() => setIsFeedbackModalOpen(true)}
-              className="flex items-center gap-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-400/40 px-4 py-2.5 rounded-lg text-sm font-bold transition-all shadow-sm cursor-pointer"
+              className="flex items-center gap-1.5 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-400/40 px-2.5 sm:px-3 py-1.5 rounded-md text-[11px] sm:text-xs font-semibold transition-all shadow-xs cursor-pointer"
             >
-              <Star className="w-4 h-4 fill-amber-300 text-amber-300" />
-              <span>Rate & Give Feedback</span>
+              <Star className="w-3.5 h-3.5 fill-amber-300 text-amber-300" />
+              <span>Feedback</span>
             </button>
             <button
               onClick={handlePrint}
-              className="flex items-center gap-2 bg-[#002b5b] hover:bg-[#001f42] text-amber-300 border border-amber-400/40 px-5 py-2.5 rounded-lg text-sm font-bold transition-all shadow-sm cursor-pointer"
+              className="flex items-center gap-1.5 bg-[#002b5b] hover:bg-[#001f42] text-amber-300 border border-amber-400/40 px-2.5 sm:px-3 py-1.5 rounded-md text-[11px] sm:text-xs font-semibold transition-all shadow-xs cursor-pointer"
             >
-              Print / Save as PDF
+              <span>Print / PDF</span>
             </button>
             <button
               onClick={onClose}
-              className="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800 transition-colors cursor-pointer"
+              className="text-slate-400 hover:text-white p-1 rounded-md hover:bg-slate-800 transition-colors cursor-pointer"
+              aria-label="Close"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4" />
             </button>
           </div>
         </div>
 
         {/* Certificate Preview Wrapper */}
-        <div className="p-4 sm:p-8 bg-slate-200/70 overflow-x-auto flex justify-center items-center">
+        <div className="p-2 sm:p-6 bg-slate-200/70 overflow-x-auto flex flex-col items-center">
+          <p className="text-[10px] text-slate-500 mb-2 sm:hidden self-start">
+            Scroll horizontally to preview full certificate:
+          </p>
           {/* Main Certificate Container (A4 Aspect Ratio: 1040px x 735px) */}
           <div
             ref={printRef}

@@ -62,7 +62,7 @@ export function ActiveCourseCard({
   const colors = colorMap[colorScheme];
 
   return (
-    <Card className={`overflow-hidden border-0 relative ${!thumbnailUrl ? `bg-gradient-to-br ${colors.bgGradient}` : 'bg-slate-900'} rounded-2xl min-h-[280px] flex flex-col`}>
+    <Card className={`overflow-hidden border-0 relative ${!thumbnailUrl ? `bg-gradient-to-br ${colors.bgGradient}` : 'bg-slate-900'} rounded-xl sm:rounded-2xl min-h-[160px] sm:min-h-[210px] flex flex-col shadow-xs`}>
       {thumbnailUrl ? (
         <>
           <img 
@@ -70,49 +70,49 @@ export function ActiveCourseCard({
             alt={title} 
             className="absolute inset-0 w-full h-full object-cover opacity-60" 
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/15 pointer-events-none" />
         </>
       ) : (
         <>
           {/* Abstract decorative shape in background */}
-          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none"></div>
-          <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full blur-xl -ml-10 -mb-10 pointer-events-none"></div>
+          <div className="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
+          <div className="absolute bottom-0 left-0 w-20 h-20 sm:w-24 sm:h-24 bg-white/10 rounded-full blur-lg pointer-events-none"></div>
         </>
       )}
 
-      <div className="p-6 relative z-10 flex flex-col h-full flex-1">
-        <div className="flex justify-between items-start mb-6">
-          <div className="h-12 w-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center flex-shrink-0">
-            <MonitorPlay className="h-6 w-6 text-white" />
+      <div className="p-3 sm:p-4.5 relative z-10 flex flex-col h-full flex-1 justify-between gap-2.5">
+        <div className="flex justify-between items-center gap-2">
+          <div className="h-7 w-7 sm:h-9 sm:w-9 rounded-lg bg-white/20 backdrop-blur-sm flex items-center justify-center shrink-0">
+            <MonitorPlay className="h-3.5 w-3.5 sm:h-4.5 sm:w-4.5 text-white" />
           </div>
           {courseId ? (
             <Link href={`/courses/${courseId}`}>
-              <Button variant="ghost" className="bg-white/90 hover:bg-white text-slate-800 rounded-full text-xs font-medium px-4 h-8 cursor-pointer">
-                Continue Learning
+              <Button variant="ghost" className="bg-white/95 hover:bg-white text-slate-900 rounded-full text-[10px] sm:text-xs font-semibold px-2.5 sm:px-3 h-6 sm:h-7 cursor-pointer shadow-xs">
+                Continue
               </Button>
             </Link>
           ) : (
-            <Button variant="ghost" className="bg-white/90 hover:bg-white text-slate-800 rounded-full text-xs font-medium px-4 h-8">
-              Continue Learning
+            <Button variant="ghost" className="bg-white/95 hover:bg-white text-slate-900 rounded-full text-[10px] sm:text-xs font-semibold px-2.5 sm:px-3 h-6 sm:h-7 shadow-xs">
+              Continue
             </Button>
           )}
         </div>
 
-        <div className="mb-8 mt-auto">
-          <h3 className="text-xl font-bold text-white mb-2 line-clamp-2 leading-tight">
+        <div className="my-auto py-0.5">
+          <h3 className="text-xs sm:text-sm md:text-base font-bold text-white mb-0.5 line-clamp-1 sm:line-clamp-2 leading-snug">
             {title}
           </h3>
-          <p className="text-white/80 text-sm line-clamp-1">
+          <p className="text-white/80 text-[10px] sm:text-xs line-clamp-1 font-medium">
             Last Lesson: {lastLesson}
           </p>
         </div>
 
-        <div className="mt-auto">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-white/90">In progress</span>
-            <span className="text-sm font-bold text-white">{progress}%</span>
+        <div>
+          <div className="flex items-center justify-between mb-1 text-[10px] sm:text-xs">
+            <span className="font-medium text-white/90">In progress</span>
+            <span className="font-bold text-white">{progress}%</span>
           </div>
-          <div className={`h-2 w-full rounded-full ${colors.progressBg} overflow-hidden`}>
+          <div className={`h-1.5 sm:h-2 w-full rounded-full ${colors.progressBg} overflow-hidden`}>
             <div 
               className={`h-full rounded-full ${colors.progressFill}`}
               style={{ width: `${progress}%` }}

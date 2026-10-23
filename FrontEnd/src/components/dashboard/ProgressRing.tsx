@@ -14,8 +14,8 @@ interface ProgressRingProps {
 
 export function ProgressRing({
   progress,
-  size = 160,
-  strokeWidth = 16,
+  size = 120,
+  strokeWidth = 10,
   completedColor = "#4f46e5", // Indigo 600
   inProgressColor = "#0ea5e9", // Sky 500
   notStartedColor = "#2dd4bf", // Teal 400
@@ -32,7 +32,7 @@ export function ProgressRing({
   const notStartedDash = (notStartedPercent / 100) * circumference;
 
   return (
-    <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
+    <div className="relative flex items-center justify-center shrink-0" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="transform -rotate-90">
         {/* Not Started Segment */}
         <circle
@@ -75,9 +75,9 @@ export function ProgressRing({
       </svg>
       
       {/* Center Text */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-3xl font-bold text-slate-900">{progress}%</span>
-        <span className="text-xs text-slate-500 font-medium">Overall Progress</span>
+      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+        <span className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">{progress}%</span>
+        <span className="text-[9px] sm:text-[10px] text-slate-400 font-medium">Overall</span>
       </div>
     </div>
   );
