@@ -75,11 +75,18 @@ api.interceptors.response.use(
 
 export const getApiError = (error: unknown): string => {
   if (axios.isAxiosError(error)) {
+    const backendMessage = error.response?.data?.message;
+    if (backendMessage && typeof backendMessage === 'string') {
+      return backendMessage;
+    }
+    if (Array.isArray(backendMessage) && backendMessage.length > 0) {
+      return backendMessage.join(', ');
+    }
     const status = error.response?.status;
     if (status === 502 || status === 503 || status === 504) {
-      return 'The server is currently warming up. Please try again in a moment.';
+      return 'The server is currently warming up or temporarily unavailable. Please try again in a moment.';
     }
-    return error.response?.data?.message || error.message;
+    return error.message || 'An unexpected error occurred';
   }
   return 'An unexpected error occurred';
 };
