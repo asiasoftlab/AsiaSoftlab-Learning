@@ -7,13 +7,9 @@ export default function proxy(request: NextRequest) {
 
   // Paths that require authenticated student/user access
   const protectedPaths = ['/dashboard', '/courses/enrolled', '/profile'];
-  
-  // Paths for unauthenticated users only
-  const authPaths = ['/login', '/register'];
 
-  const isProtectedPath = protectedPaths.some(p => path.startsWith(p));
+  const isProtectedPath = protectedPaths.some((p) => path.startsWith(p));
   const isAdminPath = path.startsWith('/admin') && !path.startsWith('/admin-login');
-  const isAuthPath = authPaths.some(p => path.startsWith(p));
 
   // If user is trying to access a protected student path without a session
   if (isProtectedPath && !session) {
@@ -29,11 +25,7 @@ export default function proxy(request: NextRequest) {
     return NextResponse.redirect(adminLoginUrl);
   }
 
-  // If user is trying to access login/register while already authenticated
-  if (isAuthPath && session) {
-    return NextResponse.redirect(new URL('/', request.url));
-  }
-
+  // Do not redirect away from /login on unverified session string to prevent redirect loops
   return NextResponse.next();
 }
 

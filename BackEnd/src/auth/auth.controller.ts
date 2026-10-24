@@ -69,10 +69,18 @@ export class AuthController {
 
   @UseGuards(FirebaseAuthGuard)
   @Get('me')
-  async getMe(@Req() req: any) {
+  async getMe(@Req() req: any, @Res({ passthrough: true }) res: Response) {
     // req.user contains the decoded Firebase token
     const user = await this.usersService.findById(req.user.uid);
     if (!user) {
+      const isProduction = process.env.NODE_ENV === 'production';
+      const isSecure = isProduction || process.env.FRONTEND_URL?.includes('https://');
+      res.clearCookie('session', {
+        path: '/',
+        httpOnly: true,
+        secure: isSecure,
+        sameSite: 'lax',
+      });
       throw new UnauthorizedException('User not found');
     }
     return {

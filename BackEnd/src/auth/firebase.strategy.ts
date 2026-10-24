@@ -24,6 +24,17 @@ export class FirebaseStrategy extends PassportStrategy(Strategy, 'firebase') {
       }
       return decodedToken; // This becomes req.user
     } catch (error) {
+      const res = (req as any).res;
+      if (res && typeof res.clearCookie === 'function') {
+        const isProduction = process.env.NODE_ENV === 'production';
+        const isSecure = isProduction || process.env.FRONTEND_URL?.includes('https://');
+        res.clearCookie('session', {
+          path: '/',
+          httpOnly: true,
+          secure: isSecure,
+          sameSite: 'lax',
+        });
+      }
       throw new UnauthorizedException('Invalid Firebase Session');
     }
   }

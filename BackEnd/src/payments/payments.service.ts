@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, BadRequestException, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, InternalServerErrorException, ServiceUnavailableException, Logger } from '@nestjs/common';
 import { PaymentsRepository } from './payments.repository';
 import { CoursesRepository } from '../courses/courses.repository';
 import { CreateOrderDto } from './dto/create-order.dto';
@@ -10,19 +10,39 @@ import * as crypto from 'crypto';
 
 @Injectable()
 export class PaymentsService {
+  private readonly logger = new Logger(PaymentsService.name);
+
   constructor(
     private readonly paymentsRepository: PaymentsRepository,
     private readonly coursesRepository: CoursesRepository,
   ) {}
 
+  isConfigured(): boolean {
+    const key_id = process.env.RAZORPAY_KEY_ID;
+    const key_secret = process.env.RAZORPAY_KEY_SECRET;
+    return Boolean(
+      key_id &&
+      key_id.trim() !== '' &&
+      key_id !== 'rzp_test_placeholder_key' &&
+      key_secret &&
+      key_secret.trim() !== '' &&
+      key_secret !== 'placeholder_secret'
+    );
+  }
+
   private getRazorpayClient(): Razorpay {
-    const key_id = process.env.RAZORPAY_KEY_ID || 'rzp_test_placeholder_key';
-    const key_secret = process.env.RAZORPAY_KEY_SECRET || 'placeholder_secret';
+    if (!this.isConfigured()) {
+      throw new ServiceUnavailableException(
+        'Razorpay payment gateway is not configured. Please set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in the environment.',
+      );
+    }
+    const key_id = process.env.RAZORPAY_KEY_ID!;
+    const key_secret = process.env.RAZORPAY_KEY_SECRET!;
     return new Razorpay({ key_id, key_secret });
   }
 
   getPublicKey(): string {
-    return process.env.RAZORPAY_KEY_ID || 'rzp_test_placeholder_key';
+    return process.env.RAZORPAY_KEY_ID || '';
   }
 
   async createOrder(userId: string, dto: CreateOrderDto) {
@@ -98,14 +118,37 @@ export class PaymentsService {
         },
       };
     } catch (error: any) {
-      console.error('Razorpay order creation error:', error);
-      throw new InternalServerErrorException(
-        error?.error?.description || error?.message || 'Failed to create Razorpay payment order',
-      );
+      if (
+        error instanceof NotFoundException ||
+        error instanceof BadRequestException ||
+        error instanceof ServiceUnavailableException
+      ) {
+        throw error;
+      }
+      this.logger.error(`Razorpay order creation error: ${error?.error?.description || error?.message || 'Unknown error'}`);
+      
+      const isAuthOrConfigError =
+        error?.statusCode === 401 ||
+        error?.statusCode === 400 ||
+        error?.error?.code === 'BAD_REQUEST_ERROR';
+
+      if (isAuthOrConfigError) {
+        throw new ServiceUnavailableException(
+          'Payment service is unavailable due to gateway authentication error. Please verify Razorpay credentials in Render environment variables.',
+        );
+      }
+
+      throw new InternalServerErrorException('Failed to create Razorpay payment order');
     }
   }
 
   async verifyPayment(userId: string, dto: VerifyPaymentDto) {
+    if (!this.isConfigured()) {
+      throw new ServiceUnavailableException(
+        'Razorpay payment gateway is not configured. Please set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in the environment.',
+      );
+    }
+
     // 1. Check if user is already enrolled (idempotency)
     const existingEnrollment = await this.paymentsRepository.findEnrollment(userId, dto.courseId);
     if (existingEnrollment && existingEnrollment.status === 'active') {
@@ -123,7 +166,7 @@ export class PaymentsService {
     }
 
     // 2. Verify Razorpay cryptographic signature
-    const secret = process.env.RAZORPAY_KEY_SECRET || 'placeholder_secret';
+    const secret = process.env.RAZORPAY_KEY_SECRET!;
     const text = `${dto.razorpay_order_id}|${dto.razorpay_payment_id}`;
     const generatedSignature = crypto.createHmac('sha256', secret).update(text).digest('hex');
 

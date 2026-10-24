@@ -34,11 +34,51 @@ const baseURL = getBaseUrl();
 export const api = axios.create({
   baseURL,
   withCredentials: true, // Crucial for sending/receiving HTTP-only cookies
+  timeout: 45000, // 45 seconds timeout to accommodate Render cold starts
 });
 
+// Cold-start resilience: safely retry idempotent GET requests when encountering gateway errors (502/503/504) or network timeouts
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const config = error.config;
+    if (!config) {
+      return Promise.reject(error);
+    }
+
+    const method = (config.method || 'get').toLowerCase();
+    const isIdempotent = method === 'get' || method === 'head';
+    const status = error.response?.status;
+    const isGatewayOrNetworkError =
+      status === 502 ||
+      status === 503 ||
+      status === 504 ||
+      error.code === 'ECONNABORTED' ||
+      error.message?.includes('Network Error');
+
+    // Never retry non-idempotent methods (e.g. POST, PUT, DELETE) to prevent duplicate payments or operations
+    if (isIdempotent && isGatewayOrNetworkError) {
+      config._retryCount = config._retryCount || 0;
+      const maxRetries = 2;
+
+      if (config._retryCount < maxRetries) {
+        config._retryCount += 1;
+        const delayMs = config._retryCount === 1 ? 1500 : 3000;
+        await new Promise((resolve) => setTimeout(resolve, delayMs));
+        return api(config);
+      }
+    }
+
+    return Promise.reject(error);
+  },
+);
 
 export const getApiError = (error: unknown): string => {
   if (axios.isAxiosError(error)) {
+    const status = error.response?.status;
+    if (status === 502 || status === 503 || status === 504) {
+      return 'The server is currently warming up. Please try again in a moment.';
+    }
     return error.response?.data?.message || error.message;
   }
   return 'An unexpected error occurred';

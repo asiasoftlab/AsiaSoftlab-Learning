@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState, useMemo, Suspense } from "react";
-import { Clock, ArrowUpRight, Star, Loader2, Search, X, BookOpen, Sparkles } from "lucide-react";
-import { api } from "@/lib/api";
+import { Clock, ArrowUpRight, Star, Loader2, Search, X, BookOpen, Sparkles, AlertCircle, RefreshCw } from "lucide-react";
+import { api, getApiError } from "@/lib/api";
 import Link from "next/link";
 import Image from "next/image";
 import toast from "react-hot-toast";
@@ -14,6 +14,7 @@ function CoursesContent() {
 
   const [courses, setCourses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
 
@@ -36,13 +37,17 @@ function CoursesContent() {
 
   const fetchCourses = async () => {
     try {
+      setLoading(true);
+      setError(null);
       const response = await api.get("/courses");
       // Filter out Drafts/Unpublished on frontend just in case backend sends all
       const published = response.data.filter((c: any) => c.status === "Published");
       setCourses(published);
-    } catch (error) {
-      console.error("Failed to fetch courses:", error);
-      toast.error("Failed to load course catalog.");
+    } catch (err: any) {
+      console.error("Failed to fetch courses:", err);
+      const msg = getApiError(err) || "Failed to load course catalog.";
+      setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -176,7 +181,24 @@ function CoursesContent() {
         </div>
 
         {/* Courses Grid */}
-        {filteredCourses.length === 0 ? (
+        {error ? (
+          <div className="text-center py-12 sm:py-16 md:py-20 bg-white rounded-2xl border border-rose-200/80 shadow-sm px-4">
+            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-rose-50 text-rose-500 flex items-center justify-center mx-auto mb-3 sm:mb-4">
+              <AlertCircle className="h-6 w-6 text-rose-500" />
+            </div>
+            <h3 className="text-base sm:text-lg font-bold text-slate-800">Unable to load courses</h3>
+            <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-sm mx-auto">
+              {error}
+            </p>
+            <button
+              onClick={() => fetchCourses()}
+              className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-brand-600 text-white hover:bg-brand-700 text-xs sm:text-sm font-semibold transition-colors cursor-pointer shadow-sm"
+            >
+              <RefreshCw className="h-4 w-4" />
+              Try Again
+            </button>
+          </div>
+        ) : filteredCourses.length === 0 ? (
           <div className="text-center py-12 sm:py-16 md:py-20 bg-white rounded-2xl border border-slate-200/80 shadow-sm px-4">
             <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-3 sm:mb-4">
               <BookOpen className="h-6 w-6 text-slate-400" />
@@ -191,7 +213,7 @@ function CoursesContent() {
                   setSelectedCategory("All");
                   setSearchQuery("");
                 }}
-                className="mt-4 px-4 py-2 rounded-lg bg-brand-50 text-brand-600 hover:bg-brand-100 text-xs sm:text-sm font-semibold transition-colors"
+                className="mt-4 px-4 py-2 rounded-lg bg-brand-50 text-brand-600 hover:bg-brand-100 text-xs sm:text-sm font-semibold transition-colors cursor-pointer"
               >
                 Clear all filters
               </button>
