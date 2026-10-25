@@ -5,11 +5,18 @@ import { Course, CourseLesson } from './entities/course.entity';
 @Injectable()
 export class CoursesRepository {
   private readonly collectionName = 'courses';
+  private cachedCourses: { data: Course[]; expiresAt: number } | null = null;
+  private readonly CACHE_TTL_MS = 60 * 1000; // 60-second in-memory cache for fast response times
 
   constructor(private readonly firebaseService: FirebaseService) { }
 
+  private invalidateCache(): void {
+    this.cachedCourses = null;
+  }
+
   async create(course: Course): Promise<Course> {
     try {
+      this.invalidateCache();
       const db = this.firebaseService.getFirestore();
       const docRef = db.collection(this.collectionName).doc();
       const courseWithId = { ...course, id: docRef.id };
@@ -35,10 +42,14 @@ export class CoursesRepository {
   }
 
   async findAll(): Promise<Course[]> {
+    if (this.cachedCourses && Date.now() < this.cachedCourses.expiresAt) {
+      return this.cachedCourses.data;
+    }
+
     try {
       const db = this.firebaseService.getFirestore();
       const snapshot = await db.collection(this.collectionName).orderBy('createdAt', 'desc').get();
-      return snapshot.docs.map(doc => {
+      const courses = snapshot.docs.map(doc => {
         const data = doc.data();
         return {
           id: doc.id,
@@ -62,6 +73,13 @@ export class CoursesRepository {
           updatedAt: data.updatedAt?.toDate(),
         } as Course;
       });
+
+      this.cachedCourses = {
+        data: courses,
+        expiresAt: Date.now() + this.CACHE_TTL_MS,
+      };
+
+      return courses;
     } catch (error) {
       throw new InternalServerErrorException('Failed to retrieve courses');
     }
@@ -126,6 +144,7 @@ export class CoursesRepository {
       });
 
       await docRef.update(updatePayload);
+      this.invalidateCache();
 
       const updatedDoc = await docRef.get();
       const data = updatedDoc.data();
@@ -144,6 +163,7 @@ export class CoursesRepository {
 
   async remove(id: string): Promise<void> {
     try {
+      this.invalidateCache();
       const db = this.firebaseService.getFirestore();
       await db.collection(this.collectionName).doc(id).delete();
     } catch (error) {

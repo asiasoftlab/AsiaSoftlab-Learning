@@ -1,10 +1,17 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import cookieParser from 'cookie-parser';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, Logger } from '@nestjs/common';
 
 async function bootstrap() {
+  const bootStart = Date.now();
+  const logger = new Logger('Bootstrap');
+  logger.log(`Starting bootstrap (Process uptime: ${Math.round(process.uptime() * 1000)}ms)`);
+
+  const createStart = Date.now();
   const app = await NestFactory.create(AppModule, { rawBody: true });
+  const createDuration = Date.now() - createStart;
+  logger.log(`NestFactory.create(AppModule) completed in ${createDuration}ms`);
 
   app.use(cookieParser());
   app.useGlobalPipes(
@@ -49,7 +56,13 @@ async function bootstrap() {
     credentials: true,
   });
 
-  await app.listen(process.env.PORT ?? 3001);
+  const listenStart = Date.now();
+  const port = process.env.PORT ?? 3001;
+  await app.listen(port);
+  const listenDuration = Date.now() - listenStart;
+  const totalDuration = Date.now() - bootStart;
+
+  logger.log(`Server listening on port ${port} (listen: ${listenDuration}ms, total bootstrap: ${totalDuration}ms)`);
 }
 bootstrap();
 
