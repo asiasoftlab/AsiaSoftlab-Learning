@@ -340,19 +340,31 @@ export class PaymentsService {
       }
     }
     
-    // Enrich with full course data if available
+    // Enrich with full course data and student progress if available
     const enriched = await Promise.all(
       enrollments.map(async (enr) => {
         try {
           const course = await this.coursesRepository.findById(enr.courseId);
+          const progData = await this.paymentsRepository.getCourseProgress(userId, enr.courseId);
+          const completedLessonIds: string[] = progData?.completedLessonIds || [];
+          const sortedLessons = course?.lessons ? [...course.lessons].sort((a, b) => (a.order || 0) - (b.order || 0)) : [];
+          const validCompleted = completedLessonIds.filter((id: string) => sortedLessons.some((l: any) => l.id === id));
+          const progressPercentage = sortedLessons.length > 0 ? Math.round((validCompleted.length / sortedLessons.length) * 100) : 0;
+          const nextLesson = sortedLessons.find((l: any) => !completedLessonIds.includes(l.id)) || (sortedLessons.length > 0 ? sortedLessons[sortedLessons.length - 1] : null);
+
           return {
             ...enr,
             course: course || null,
+            progress: progressPercentage,
+            completedLessonsCount: validCompleted.length,
+            totalLessonsCount: sortedLessons.length,
+            lastLessonTitle: nextLesson ? nextLesson.title : 'Course Completed',
           };
         } catch {
           return {
             ...enr,
             course: null,
+            progress: 0,
           };
         }
       }),

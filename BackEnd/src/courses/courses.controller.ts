@@ -113,5 +113,38 @@ export class CoursesController {
   ) {
     return this.coursesService.getLessonDocumentAccessUrl(courseId, lessonId, documentId, req.user);
   }
+
+  // Student Course Progress & Sequential Unlocking Endpoints
+  @Get(':id/progress')
+  @UseGuards(FirebaseAuthGuard)
+  getCourseProgress(@Param('id') courseId: string, @Req() req: any) {
+    return this.coursesService.getCourseProgress(courseId, req.user);
+  }
+
+  @Post(':id/lessons/:lessonId/complete')
+  @UseGuards(FirebaseAuthGuard)
+  completeLesson(
+    @Param('id') courseId: string,
+    @Param('lessonId') lessonId: string,
+    @Req() req: any
+  ) {
+    return this.coursesService.completeLesson(courseId, lessonId, req.user);
+  }
+
+  @Get(':id/lessons/:lessonId/access')
+  @UseGuards(FirebaseAuthGuard)
+  checkLessonAccess(
+    @Param('id') courseId: string,
+    @Param('lessonId') lessonId: string,
+    @Req() req: any
+  ) {
+    return this.coursesService.checkLessonAccess(courseId, lessonId, req.user);
+  }
+
+  @Get(':id/certificate')
+  @UseGuards(FirebaseAuthGuard)
+  getCourseCertificate(@Param('id') courseId: string, @Req() req: any) {
+    return this.coursesService.getCourseCertificate(courseId, req.user);
+  }
 }
 

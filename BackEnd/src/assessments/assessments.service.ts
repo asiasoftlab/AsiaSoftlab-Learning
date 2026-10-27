@@ -247,12 +247,13 @@ export class AssessmentsService {
     const allAssessments = await this.assessmentsRepository.findAll();
     const assessmentMap = new Map(allAssessments.map((a) => [a.id, a]));
 
-    return passedSubmissions.map((sub) => {
+    const assessmentCerts = passedSubmissions.map((sub) => {
       const assessment = assessmentMap.get(sub.assessmentId);
       return {
         id: `cert_${sub.id}`,
         submissionId: sub.id,
         assessmentId: sub.assessmentId,
+        courseId: assessment?.courseId,
         courseTitle: assessment?.courseTitle || assessment?.title || 'Certification of Achievement',
         recipientName: sub.userName || user?.displayName || user?.name || 'Student',
         recipientEmail: sub.userEmail || user?.email || '',
@@ -264,5 +265,22 @@ export class AssessmentsService {
         ceoTitle: 'Academic Director, ASVA',
       };
     });
+
+    const courseCerts = await this.assessmentsRepository.findCourseCertificatesByUserId(userId);
+    const formattedCourseCerts = courseCerts.map((c) => ({
+      id: c.id,
+      courseId: c.courseId,
+      courseTitle: c.courseTitle,
+      recipientName: c.recipientName || user?.displayName || user?.name || 'Student',
+      recipientEmail: c.recipientEmail || user?.email || '',
+      score: 100,
+      issuedDate: c.issuedDate || c.createdAt || new Date(),
+      certificateNumber: c.certificateNumber || `ASVA-CRS-${c.id.slice(-4).toUpperCase()}`,
+      issuer: c.issuer || 'ASVA (Asia Softlab Virtual Academy)',
+      ceoName: c.ceoName || 'Mr.Nishadh S',
+      ceoTitle: c.ceoTitle || 'Academic Director, ASVA',
+    }));
+
+    return [...formattedCourseCerts, ...assessmentCerts];
   }
 }

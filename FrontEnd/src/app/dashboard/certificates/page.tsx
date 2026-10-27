@@ -155,13 +155,19 @@ export default function CertificatesPage() {
           <div>
             <h3 className="text-lg font-bold text-slate-800">No Certificates Earned Yet</h3>
             <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto leading-relaxed">
-              Complete any enrolled course and score 70% or higher on its assessment to unlock your official certificate!
+              Complete all lessons in any enrolled course or pass an assessment to earn your official verifiable certificate of completion!
             </p>
           </div>
-          <div className="pt-2">
+          <div className="pt-2 flex flex-wrap items-center justify-center gap-2">
+            <Link
+              href="/dashboard/courses"
+              className="inline-flex items-center gap-1.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs px-4 py-2 rounded-lg shadow-sm transition-all"
+            >
+              <BookOpen className="w-3.5 h-3.5" /> Continue My Courses
+            </Link>
             <Link
               href="/dashboard/assessments"
-              className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs px-5 py-2.5 rounded-lg shadow-sm transition-all"
+              className="inline-flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs px-4 py-2 rounded-lg transition-all"
             >
               Take an Assessment <ArrowRight className="w-3.5 h-3.5" />
             </Link>

@@ -237,4 +237,15 @@ export class PaymentsRepository {
       return [];
     }
   }
+
+  async getCourseProgress(userId: string, courseId: string): Promise<any> {
+    try {
+      const db = this.firebaseService.getFirestore();
+      const doc = await db.collection('course_progress').doc(`${userId}_${courseId}`).get();
+      return doc.exists ? doc.data() : null;
+    } catch {
+      return null;
+    }
+  }
 }
+

@@ -1,15 +1,18 @@
-import { Injectable, NotFoundException, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, NotFoundException, InternalServerErrorException, ForbiddenException, BadRequestException } from '@nestjs/common';
 import { CoursesRepository } from './courses.repository';
+import { CourseProgressRepository } from './course-progress.repository';
 import { CreateCourseDto, UpdateCourseDto } from './dto/course.dto';
 import { Course } from './entities/course.entity';
+import { CourseProgress, CourseCertificate } from './entities/course-progress.entity';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { StorageService } from '../storage/storage.service';
-import { v4 as uuidv4 } from 'uuid';
+import * as crypto from 'crypto';
 
 @Injectable()
 export class CoursesService {
   constructor(
     private readonly coursesRepository: CoursesRepository,
+    private readonly courseProgressRepository: CourseProgressRepository,
     private readonly cloudinaryService: CloudinaryService,
     private readonly storageService: StorageService
   ) {}
@@ -105,7 +108,7 @@ export class CoursesService {
     const lessonIndex = course.lessons.findIndex(l => l.id === lessonId);
     if (lessonIndex === -1) throw new NotFoundException('Lesson not found');
 
-    const documentId = uuidv4();
+    const documentId = crypto.randomUUID();
     // Unique key for R2
     const fileKey = `courses/${courseId}/lessons/${lessonId}/docs/${documentId}-${file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
 
@@ -145,19 +148,327 @@ export class CoursesService {
     return { success: true };
   }
 
+  async checkAccessOrThrow(course: Course, user: any): Promise<boolean> {
+    const userId = user?.uid || user?.id;
+    const isAdminOrInstructor = user?.role === 'admin' || user?.role === 'instructor';
+    const isFree = course.price === 0 || (course.price as any) === '0';
+
+    if (isAdminOrInstructor || isFree) {
+      return true;
+    }
+
+    if (!userId) {
+      throw new ForbiddenException('Authentication required to access this course content');
+    }
+
+    const isEnrolled = await this.courseProgressRepository.checkUserEnrollment(userId, course.id);
+    if (!isEnrolled) {
+      throw new ForbiddenException('You must be enrolled in this course to access its lessons and materials');
+    }
+
+    return true;
+  }
+
+  async getCourseProgress(courseId: string, user: any) {
+    const course = await this.findOne(courseId);
+    const userId = user?.uid || user?.id;
+    const isAdminOrInstructor = user?.role === 'admin' || user?.role === 'instructor';
+    const isFree = course.price === 0 || (course.price as any) === '0';
+
+    const isEnrolled = isAdminOrInstructor || isFree || (userId ? await this.courseProgressRepository.checkUserEnrollment(userId, courseId) : false);
+
+    if (!isEnrolled) {
+      return {
+        isEnrolled: false,
+        canAccess: false,
+        courseId,
+        totalLessons: (course.lessons || []).length,
+        completedLessonIds: [],
+        unlockedLessonIds: [],
+        isCompleted: false,
+        progressPercentage: 0,
+        certificateAvailable: false,
+        nextLessonId: null,
+      };
+    }
+
+    const sortedLessons = [...(course.lessons || [])].sort((a, b) => (a.order || 0) - (b.order || 0));
+
+    let progress: CourseProgress | null = null;
+    if (userId) {
+      progress = await this.courseProgressRepository.findByUserAndCourse(userId, courseId);
+      if (!progress) {
+        progress = {
+          id: `${userId}_${courseId}`,
+          userId,
+          courseId,
+          completedLessonIds: [],
+          isCompleted: false,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        };
+        await this.courseProgressRepository.saveProgress(progress);
+      }
+    }
+
+    const completedLessonIds = progress?.completedLessonIds || [];
+
+    // Compute unlocked lessons sequentially
+    let unlockedLessonIds: string[] = [];
+    if (isAdminOrInstructor) {
+      unlockedLessonIds = sortedLessons.map((l) => l.id);
+    } else {
+      if (sortedLessons.length > 0) {
+        // Lesson 1 is always unlocked
+        unlockedLessonIds.push(sortedLessons[0].id);
+
+        // Lesson i is unlocked only if lesson i-1 is completed
+        for (let i = 1; i < sortedLessons.length; i++) {
+          const prevLesson = sortedLessons[i - 1];
+          if (completedLessonIds.includes(prevLesson.id)) {
+            unlockedLessonIds.push(sortedLessons[i].id);
+          } else {
+            // Sequential gate: cannot skip ahead
+            break;
+          }
+        }
+      }
+    }
+
+    const validCompleted = completedLessonIds.filter((id) => sortedLessons.some((l) => l.id === id));
+    const progressPercentage = sortedLessons.length > 0 ? Math.round((validCompleted.length / sortedLessons.length) * 100) : 0;
+    const isCompleted = sortedLessons.length > 0 && validCompleted.length === sortedLessons.length;
+
+    if (isCompleted && (!progress || !progress.isCompleted) && userId) {
+      progress = {
+        ...progress!,
+        isCompleted: true,
+        completedAt: progress?.completedAt || new Date(),
+      };
+      await this.courseProgressRepository.saveProgress(progress);
+      await this.issueCourseCertificate(course, user, progress.completedAt);
+    }
+
+    const nextUncompletedLesson = sortedLessons.find((l) => !completedLessonIds.includes(l.id));
+
+    return {
+      isEnrolled: true,
+      canAccess: true,
+      courseId,
+      totalLessons: sortedLessons.length,
+      completedLessonIds,
+      unlockedLessonIds,
+      isCompleted,
+      completedAt: progress?.completedAt || null,
+      progressPercentage,
+      certificateAvailable: isCompleted,
+      nextLessonId: nextUncompletedLesson?.id || (sortedLessons.length > 0 ? sortedLessons[sortedLessons.length - 1].id : null),
+    };
+  }
+
+  async completeLesson(courseId: string, lessonId: string, user: any) {
+    const course = await this.findOne(courseId);
+    await this.checkAccessOrThrow(course, user);
+
+    const userId = user?.uid || user?.id;
+    if (!userId) {
+      throw new ForbiddenException('User authentication required');
+    }
+
+    const sortedLessons = [...(course.lessons || [])].sort((a, b) => (a.order || 0) - (b.order || 0));
+    const lessonIdx = sortedLessons.findIndex((l) => l.id === lessonId);
+    if (lessonIdx === -1) {
+      throw new NotFoundException('Lesson not found in this course');
+    }
+
+    let progress = await this.courseProgressRepository.findByUserAndCourse(userId, courseId);
+    if (!progress) {
+      progress = {
+        id: `${userId}_${courseId}`,
+        userId,
+        courseId,
+        completedLessonIds: [],
+        isCompleted: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+    }
+
+    const isAdminOrInstructor = user?.role === 'admin' || user?.role === 'instructor';
+
+    // Backend validation: sequentially verify previous lesson completion
+    if (!isAdminOrInstructor && lessonIdx > 0) {
+      const prevLesson = sortedLessons[lessonIdx - 1];
+      if (!progress.completedLessonIds.includes(prevLesson.id)) {
+        throw new BadRequestException(
+          `Cannot complete this lesson out of sequence. You must successfully complete "${prevLesson.title}" before completing this lesson.`,
+        );
+      }
+    }
+
+    // Add to completed lessons
+    if (!progress.completedLessonIds.includes(lessonId)) {
+      progress.completedLessonIds.push(lessonId);
+    }
+    progress.lastAccessedLessonId = lessonId;
+
+    const validCompleted = progress.completedLessonIds.filter((id) => sortedLessons.some((l) => l.id === id));
+    const isCompleted = sortedLessons.length > 0 && validCompleted.length === sortedLessons.length;
+
+    let certificate: CourseCertificate | null = null;
+    if (isCompleted) {
+      progress.isCompleted = true;
+      progress.completedAt = progress.completedAt || new Date();
+      certificate = await this.issueCourseCertificate(course, user, progress.completedAt);
+    }
+
+    await this.courseProgressRepository.saveProgress(progress);
+
+    // Compute updated unlocked lessons
+    let unlockedLessonIds: string[] = [];
+    if (isAdminOrInstructor) {
+      unlockedLessonIds = sortedLessons.map((l) => l.id);
+    } else {
+      if (sortedLessons.length > 0) {
+        unlockedLessonIds.push(sortedLessons[0].id);
+        for (let i = 1; i < sortedLessons.length; i++) {
+          if (progress.completedLessonIds.includes(sortedLessons[i - 1].id)) {
+            unlockedLessonIds.push(sortedLessons[i].id);
+          } else {
+            break;
+          }
+        }
+      }
+    }
+
+    const progressPercentage = sortedLessons.length > 0 ? Math.round((validCompleted.length / sortedLessons.length) * 100) : 0;
+    const nextUncompleted = sortedLessons.find((l) => !progress?.completedLessonIds.includes(l.id));
+
+    return {
+      success: true,
+      message: isCompleted ? 'Course completed! Certificate is now available.' : 'Lesson marked as completed.',
+      courseId,
+      lessonId,
+      completedLessonIds: progress.completedLessonIds,
+      unlockedLessonIds,
+      isCompleted,
+      progressPercentage,
+      certificateAvailable: isCompleted,
+      nextLessonId: nextUncompleted?.id || null,
+      certificate,
+    };
+  }
+
+  async checkLessonAccess(courseId: string, lessonId: string, user: any) {
+    const course = await this.findOne(courseId);
+    await this.checkAccessOrThrow(course, user);
+
+    const sortedLessons = [...(course.lessons || [])].sort((a, b) => (a.order || 0) - (b.order || 0));
+    const lessonIdx = sortedLessons.findIndex((l) => l.id === lessonId);
+    if (lessonIdx === -1) {
+      throw new NotFoundException('Lesson not found in this course');
+    }
+
+    const targetLesson = sortedLessons[lessonIdx];
+    const isAdminOrInstructor = user?.role === 'admin' || user?.role === 'instructor';
+
+    if (!isAdminOrInstructor && lessonIdx > 0) {
+      const userId = user?.uid || user?.id;
+      const progress = await this.courseProgressRepository.findByUserAndCourse(userId, courseId);
+      const prevLesson = sortedLessons[lessonIdx - 1];
+
+      if (!progress || !progress.completedLessonIds.includes(prevLesson.id)) {
+        throw new ForbiddenException(
+          `This lesson is locked. You must complete "${prevLesson.title}" first to unlock access.`,
+        );
+      }
+    }
+
+    return {
+      allowed: true,
+      lessonId: targetLesson.id,
+      title: targetLesson.title,
+      youtubeVideoId: targetLesson.youtubeVideoId,
+      duration: targetLesson.duration,
+      documents: targetLesson.documents || [],
+    };
+  }
+
+  async issueCourseCertificate(course: Course, user: any, completedAt?: Date): Promise<CourseCertificate> {
+    const userId = user?.uid || user?.id;
+    if (!userId) {
+      throw new ForbiddenException('User identification missing');
+    }
+
+    const existing = await this.courseProgressRepository.findCertificate(userId, course.id);
+    if (existing) {
+      return existing;
+    }
+
+    const cleanCoursePart = course.id.replace(/[^a-zA-Z0-9]/g, '').slice(-4).toUpperCase() || 'CRS1';
+    const cleanUserPart = userId.replace(/[^a-zA-Z0-9]/g, '').slice(-4).toUpperCase() || 'STU1';
+    const certNumber = `ASVA-${cleanCoursePart}-${cleanUserPart}`;
+
+    const newCertificate: CourseCertificate = {
+      id: `cert_course_${course.id}_${userId}`,
+      courseId: course.id,
+      courseTitle: course.title,
+      userId,
+      recipientName: user?.displayName || user?.name || 'Student',
+      recipientEmail: user?.email || '',
+      certificateNumber: certNumber,
+      issuedDate: completedAt || new Date(),
+      issuer: 'ASVA (Asia Softlab Virtual Academy)',
+      ceoName: 'Mr.Nishadh S',
+      ceoTitle: 'Academic Director, ASVA',
+      createdAt: new Date(),
+    };
+
+    return this.courseProgressRepository.saveCertificate(newCertificate);
+  }
+
+  async getCourseCertificate(courseId: string, user: any): Promise<CourseCertificate> {
+    const course = await this.findOne(courseId);
+    await this.checkAccessOrThrow(course, user);
+
+    const userId = user?.uid || user?.id;
+    if (!userId) {
+      throw new ForbiddenException('Authentication required');
+    }
+
+    const sortedLessons = [...(course.lessons || [])].sort((a, b) => (a.order || 0) - (b.order || 0));
+    const progress = await this.courseProgressRepository.findByUserAndCourse(userId, courseId);
+
+    const allCompleted =
+      sortedLessons.length > 0 &&
+      progress &&
+      sortedLessons.every((l) => progress.completedLessonIds.includes(l.id));
+
+    if (!allCompleted) {
+      throw new ForbiddenException(
+        'Course certificate is locked. You must complete every lesson in this course before accessing or generating your certificate.',
+      );
+    }
+
+    return this.issueCourseCertificate(course, user, progress?.completedAt);
+  }
+
   async getLessonDocumentAccessUrl(courseId: string, lessonId: string, documentId: string, user: any) {
     const course = await this.findOne(courseId);
-    const lesson = course.lessons.find(l => l.id === lessonId);
+    await this.checkAccessOrThrow(course, user);
+
+    // Verify sequential unlocking for the lesson containing the document
+    await this.checkLessonAccess(courseId, lessonId, user);
+
+    const lesson = course.lessons.find((l) => l.id === lessonId);
     if (!lesson || !lesson.documents) throw new NotFoundException('Lesson or documents not found');
 
-    const document = lesson.documents.find(d => d.id === documentId);
+    const document = lesson.documents.find((d) => d.id === documentId);
     if (!document) throw new NotFoundException('Document not found');
-
-    // In a real app, verify enrollment here. Since auth rules are basic right now, we assume if they hit this, and they are logged in, we check if they are student or admin.
-    // Assuming enrollment check will be done at the controller or service layer based on `user.id`
 
     const signedUrl = await this.storageService.getSignedUrl(document.fileKey, 300); // 5 minutes
     return { url: signedUrl, fileType: document.fileType, filename: document.filename };
   }
 }
+
 

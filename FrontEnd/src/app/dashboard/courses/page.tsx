@@ -20,10 +20,10 @@ export default function MyCoursesPage() {
           id: item.courseId,
           title: item.course?.title || item.courseTitle,
           thumbnailUrl: item.course?.thumbnailUrl || item.courseThumbnailUrl,
-          lastLesson: item.course?.lessons?.[0]?.title 
+          lastLesson: item.lastLessonTitle || (item.course?.lessons?.[0]?.title 
             ? `Lesson 1: ${item.course.lessons[0].title}` 
-            : "Course Materials Ready",
-          progress: 0,
+            : "Course Materials Ready"),
+          progress: typeof item.progress === "number" ? item.progress : 0,
         }));
         setCourses(mapped);
       } catch (error) {

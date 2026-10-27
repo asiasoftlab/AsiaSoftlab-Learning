@@ -1,19 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import {
-  Play,
-  Pause,
-  RotateCcw,
-  RotateCw,
-  Volume2,
-  VolumeX,
-  Volume1,
-  Maximize,
-  Minimize,
-  Loader2,
-  Settings,
-  Check,
+import {Play,Pause,RotateCcw,RotateCw,Volume2,VolumeX,Volume1,Maximize,Minimize,Loader2,Settings,Check,
 } from "lucide-react";
 
 interface SecureVideoPlayerProps {
@@ -55,7 +43,6 @@ export default function SecureVideoPlayer({
   const [showSpeedMenu, setShowSpeedMenu] = useState(false);
   const [showControls, setShowControls] = useState(true);
   const [isDraggingSeek, setIsDraggingSeek] = useState(false);
-
   const hideControlsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const timeUpdateIntervalRef = useRef<NodeJS.Timeout | null>(null);
 

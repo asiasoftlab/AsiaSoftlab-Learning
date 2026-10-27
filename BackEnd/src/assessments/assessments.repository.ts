@@ -279,4 +279,22 @@ export class AssessmentsRepository {
     await batch.commit();
     return results;
   }
+
+  async findCourseCertificatesByUserId(userId: string): Promise<any[]> {
+    try {
+      const db = this.firebaseService.getFirestore();
+      const snapshot = await db.collection('course_certificates').where('userId', '==', userId).get();
+      return snapshot.docs.map((doc) => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          ...data,
+          issuedDate: data?.issuedDate?.toDate ? data.issuedDate.toDate() : data?.issuedDate,
+        };
+      });
+    } catch (error) {
+      return [];
+    }
+  }
 }
+
