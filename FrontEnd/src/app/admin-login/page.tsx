@@ -1,5 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import { Eye, EyeOff, Loader2, ShieldCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { api, getApiError } from "@/lib/api";
@@ -89,12 +91,17 @@ export default function AdminLoginPage() {
           {/* Subtle gradient glow in header */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-32 bg-brand-500/10 rounded-full blur-2xl"></div>
           
-          <div className="flex flex-col items-center mb-2">
-            <img 
-              src="/Home/logo_ASVA.png" 
-              alt="Asia Softlab Virtual Academy" 
-              className="h-12 w-auto object-contain mb-4 relative z-10"
-            />
+          <div className="flex flex-col items-center mb-3">
+            <Link href="/" className="mb-4 relative z-10 group focus:outline-none" title="Back to ASVA Home">
+              <Image 
+                src="/Home/logo_ASVA.png" 
+                alt="Asia Softlab Virtual Academy" 
+                width={320} 
+                height={90} 
+                className="h-16 sm:h-20 w-auto max-w-[240px] sm:max-w-[270px] object-contain group-hover:opacity-90 transition-opacity"
+                priority
+              />
+            </Link>
             <h2 className="relative z-10 text-3xl font-bold text-slate-800 tracking-tight">Admin Portal</h2>
           </div>
           <p className="relative z-10 text-slate-500 mt-2 text-sm">Sign in to access the management dashboard</p>

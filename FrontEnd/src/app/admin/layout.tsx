@@ -51,15 +51,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <div className="flex h-screen bg-slate-50">
         {/* Sidebar */}
         <aside className="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col">
-          <div className="h-32 border-b border-slate-200 flex items-center justify-center px-6">
-            <Image 
-              src="/Home/logo_ASVA.png" 
-              alt="Asia Softlab Virtual Academy" 
-              width={200} 
-              height={50} 
-              className="h-12 w-auto object-contain"
-              priority
-            />
+          <div className="h-32 border-b border-slate-200 flex items-center justify-center px-4">
+            <Link href="/admin" className="flex items-center justify-center w-full focus:outline-none group">
+              <Image 
+                src="/Home/logo_ASVA.png" 
+                alt="Asia Softlab Virtual Academy" 
+                width={280} 
+                height={80} 
+                className="w-auto h-20 max-w-[210px] object-contain group-hover:opacity-90 transition-opacity"
+                priority
+              />
+            </Link>
           </div>
           <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
             <Link href="/admin" className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${pathname === '/admin' ? 'bg-brand-50 text-brand-600' : 'hover:bg-slate-50 text-slate-700 hover:text-brand-600'}`}>
@@ -115,9 +117,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <main className="flex-1 flex flex-col overflow-hidden">
           <header className="h-32 bg-white border-b border-slate-200 flex items-center px-6 lg:px-10 justify-between">
             <div className="flex items-center gap-4">
-              <div className="md:hidden flex items-center">
-                <Image src="/Home/logo_ASVA.png" alt="Asia Softlab Virtual Academy" width={160} height={40} className="h-9 w-auto object-contain" priority />
-              </div>
+              <Link href="/admin" className="md:hidden flex items-center focus:outline-none">
+                <Image
+                  src="/Home/logo_ASVA.png"
+                  alt="Asia Softlab Virtual Academy"
+                  width={200}
+                  height={50}
+                  className="h-12 w-auto max-w-[150px] object-contain"
+                  priority
+                />
+              </Link>
               <div>
                 <h1 className="mb-2 text-xl font-bold text-slate-800">
                   {mounted ? getGreeting() : "Welcome"}, Admin

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { BookOpen, Map, Target, Award, PlayCircle, ShieldCheck, Clock, CheckCircle2, ArrowUpRight, Star, Globe, Mail } from "lucide-react";
@@ -122,13 +122,24 @@ export default async function Home() {
             Learn practical drone technology, surveying, mapping, ROV systems, and emerging technologies through expert-led online courses designed for industry professionals.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto max-w-xs sm:max-w-none">
-            <Link href="/courses" className="w-full sm:w-auto">
-              <Button size="lg" className="w-full sm:w-auto text-sm sm:text-base h-11 sm:h-12 px-6 shadow-md shadow-brand-500/20">Explore Courses</Button>
+            <Link
+              href="/courses"
+              className={buttonVariants({
+                size: 'lg',
+                className: 'w-full sm:w-auto text-sm sm:text-base h-11 sm:h-12 px-6 shadow-md shadow-brand-500/20',
+              })}
+            >
+              Explore Courses
             </Link>
-            <Link href="/register" className="w-full sm:w-auto">
-              <Button size="lg" variant="outline" className="w-full sm:w-auto text-sm sm:text-base h-11 sm:h-12 px-6 bg-transparent text-white border-white/80 hover:bg-white/10 hover:text-white">
-                Start Learning
-              </Button>
+            <Link
+              href="/register"
+              className={buttonVariants({
+                size: 'lg',
+                variant: 'outline',
+                className: 'w-full sm:w-auto text-sm sm:text-base h-11 sm:h-12 px-6 bg-transparent text-white border-white/80 hover:bg-white/10 hover:text-white',
+              })}
+            >
+              Start Learning
             </Link>
           </div>
         </div>

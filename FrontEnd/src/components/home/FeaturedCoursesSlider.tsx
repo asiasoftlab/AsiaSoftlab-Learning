@@ -121,6 +121,7 @@ export default function FeaturedCoursesSlider({ courses }: { courses: CourseItem
             <button
               key={i}
               type="button"
+              suppressHydrationWarning
               aria-label={`Go to slide ${i + 1}`}
               onClick={() => scrollToIndex(i)}
               className={`cursor-pointer transition-all duration-300 rounded-full ${
@@ -132,10 +133,11 @@ export default function FeaturedCoursesSlider({ courses }: { courses: CourseItem
           ))}
         </div>
 
-        <Link href="/courses" className="w-auto">
-          <button className="border border-slate-200 text-slate-700 hover:bg-slate-100 active:bg-slate-200 font-medium rounded-md px-4 py-1.5 sm:px-6 sm:py-2 text-xs sm:text-sm transition-colors shadow-2xs">
-            Explore All Courses
-          </button>
+        <Link
+          href="/courses"
+          className="border border-slate-200 text-slate-700 hover:bg-slate-100 active:bg-slate-200 font-medium rounded-md px-4 py-1.5 sm:px-6 sm:py-2 text-xs sm:text-sm transition-colors shadow-2xs inline-block text-center"
+        >
+          Explore All Courses
         </Link>
       </div>
     </>

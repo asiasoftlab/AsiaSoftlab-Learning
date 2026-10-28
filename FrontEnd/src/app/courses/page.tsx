@@ -32,8 +32,15 @@ function CoursesContent() {
         "regulatory": "Regulatory Training",
       };
       setSelectedCategory(slugMap[categoryParam] || categoryParam);
+    } else {
+      setSelectedCategory("All");
     }
-  }, [categoryParam]);
+
+    const q = searchParams.get("search") || searchParams.get("q");
+    if (q !== null) {
+      setSearchQuery(q);
+    }
+  }, [categoryParam, searchParams]);
 
   const fetchCourses = async () => {
     try {

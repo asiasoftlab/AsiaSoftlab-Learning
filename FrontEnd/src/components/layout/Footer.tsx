@@ -233,6 +233,7 @@ export function Footer() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email"
                     disabled={isSubmitting}
+                    suppressHydrationWarning
                     className="w-full bg-transparent text-xs text-white placeholder-slate-400 focus:outline-none py-1.5 px-1 min-w-0"
                     required
                   />
@@ -240,6 +241,7 @@ export function Footer() {
                     type="submit"
                     disabled={isSubmitting}
                     aria-label="Subscribe"
+                    suppressHydrationWarning
                     className="shrink-0 p-1.5 rounded-md bg-brand-600 hover:bg-brand-500 text-white transition-colors disabled:opacity-50"
                   >
                     {isSubmitting ? (
